@@ -1,4 +1,4 @@
 #!/bin/bash
 cd "$(dirname "$0")/.." || exit 111
 
-yarn --prefer-offline || exit 111
+shellcheck ./script/*
