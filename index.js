@@ -5,6 +5,8 @@ module.exports = (robot) => {
   require('new-issue-welcome')(robot)
   require('new-pr-welcome')(robot)
   require('request-info')(robot)
+  require('unfurl')(robot)
+  require('probot-app-todos')(robot)
 
   console.log('Yay, the app was loaded!')
 
