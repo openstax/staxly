@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$(npm bin)/nodemon --exec "LOG_LEVEL=trace npm start" || exit 111
