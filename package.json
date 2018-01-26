@@ -4,18 +4,21 @@
   "description": "",
   "author": "Philip Schatz <phil@cnx.org>",
   "license": "ISC",
-  "repository": "https://github.com/philschatz/staxbot.git",
+  "repository": "https://github.com/openstax/staxbot.git",
   "scripts": {
     "start": "probot run ./index.js",
     "test": "jest && standard"
   },
   "dependencies": {
-    "nodemon": "^1.14.11",
-    "probot": "^5.0.0",
+    "autolabeler": "github:probot/autolabeler",
     "first-pr-merge": "github:behaviorbot/first-pr-merge",
     "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
     "new-pr-welcome": "github:behaviorbot/new-pr-welcome",
-    "request-info": "github:behaviorbot/request-info"
+    "nodemon": "^1.14.11",
+    "probot": "^5.0.0",
+    "probot-app-todos": "^1.0.5",
+    "request-info": "github:behaviorbot/request-info",
+    "unfurl": "github:probot/unfurl"
   },
   "devDependencies": {
     "jest": "^21.2.1",
@@ -29,14 +32,6 @@
   "standard": {
     "env": [
       "jest"
-    ]
-  },
-  "probot": {
-    "plugins": [
-      "first-pr-merge",
-      "new-issue-welcome",
-      "new-pr-welcome",
-      "request-info"
     ]
   }
 }
