@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "nodemon": "^1.14.11",
-    "probot": "^5.0.0"
+    "probot": "^5.0.0",
+    "first-pr-merge": "github:behaviorbot/first-pr-merge",
+    "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
+    "new-pr-welcome": "github:behaviorbot/new-pr-welcome",
+    "request-info": "github:behaviorbot/request-info"
   },
   "devDependencies": {
     "jest": "^21.2.1",
@@ -25,6 +29,14 @@
   "standard": {
     "env": [
       "jest"
+    ]
+  },
+  "probot": {
+    "plugins": [
+      "first-pr-merge",
+      "new-issue-welcome",
+      "new-pr-welcome",
+      "request-info"
     ]
   }
 }
