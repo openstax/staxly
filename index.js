@@ -1,5 +1,6 @@
 module.exports = (robot) => {
   // Plugins that we use
+  require('./src/slack-api')(robot)
   require('autolabeler')(robot)
   require('first-pr-merge')(robot)
   require('new-issue-welcome')(robot)
@@ -13,6 +14,16 @@ module.exports = (robot) => {
   robot.on('push', async (context) => {
     console.log('pushed code')
   })
+
+  // React with a :wave: when a new message contains "staxbot" or when an edited message contains "staxbot"
+  async function waveWhenMentioned({text, ts, channel}, slackWeb) {
+    if (/staxbot/.test(text)) {
+      // React with a :wave: whenever `staxbot` is mentioned
+      await slackWeb.reactions.add('wave', {channel: channel, timestamp: ts})
+    }
+  }
+  robot.onSlack('message.', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
+  robot.onSlack('message_changed', async ({payload: message, slackWeb}) => waveWhenMentioned({text: message.message.text, ts: message.message.ts, channel: message.channel}, slackWeb))
 
   // robot.on('issues.opened', async (context) => {
   //   // `context` extracts information from the event, which can be passed to
