@@ -1,5 +1,5 @@
 const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|book-tools> bar"
-const CRITSIT_PREFIX_REGEXP = /^[xy]\-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
+const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
 module.exports = (robot) => {
   // Plugins that we use
@@ -21,7 +21,7 @@ module.exports = (robot) => {
   //
   // React with a :wave: when a new message contains "staxbot" or when an edited message contains "staxbot"
   //
-  async function waveWhenMentioned({text, ts, channel}, slackWeb) {
+  async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
     if (/staxbot/.test(text)) {
       // React with a :wave: whenever `staxbot` is mentioned
       await slackWeb.reactions.add('wave', {channel: channel, timestamp: ts})
@@ -30,12 +30,10 @@ module.exports = (robot) => {
   robot.slackAdapter.on('message.', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
   robot.slackAdapter.on('message_changed', async ({payload: message, slackWeb}) => waveWhenMentioned({text: message.message.text, ts: message.message.ts, channel: message.channel}, slackWeb))
 
-
   //
   // When a user (not a bot) mentions a channel then add a message in that channel letting them know they were referenced
   //
   robot.slackAdapter.on('message.', async ({payload: message, slack, slackWeb}) => {
-    const channelIds = []
     let match
 
     // Ignore any messages that the bot has posted (infinite loops)
@@ -72,7 +70,6 @@ module.exports = (robot) => {
       }
     }
   })
-
 
   // robot.on('issues.opened', async (context) => {
   //   // `context` extracts information from the event, which can be passed to

@@ -7,7 +7,7 @@
   "repository": "https://github.com/openstax/staxbot.git",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "jest && standard"
+    "test": "jest && standard --fix"
   },
   "dependencies": {
     "@slack/client": "^3.16.0",

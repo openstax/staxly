@@ -24,16 +24,15 @@ module.exports = (robot) => {
   if (!SLACK_BOT_TOKEN) {
     robot.log.error('SLACK_BOT_TOKEN missing, skipping Slack integration')
     process.exit(111)
-    return
   }
 
-  function emit(name, payload) {
+  function emit (name, payload) {
     const value = {
       payload,
       slack: SlackAPI,
-      slackWeb: SlackWebAPI,
+      slackWeb: SlackWebAPI
     }
-    robot.log.trace(`slack_event ${name}`, name === 'authenticated' ? '(too_long_to_show_in_logs)': payload)
+    robot.log.trace(`slack_event ${name}`, name === 'authenticated' ? '(too_long_to_show_in_logs)' : payload)
     return events.emit(name, value).then(() => {
       if (payload && payload.subtype) { // "connected" does not have a payload
         return events.emit(`${payload.subtype}`, value)
@@ -41,7 +40,6 @@ module.exports = (robot) => {
         return events.emit(`${name}.`, value)
       }
     })
-
   }
 
   robot.log.trace('Slack connecting...')
@@ -53,37 +51,36 @@ module.exports = (robot) => {
   let rtmBrain
 
   robot.slackAdapter = new class SlackAdapter {
-    on(name, callback) {
+    on (name, callback) {
       events.on(name, callback)
     }
-    getBrain() {
+    getBrain () {
       return rtmBrain
     }
-    isMe(userId) {
+    isMe (userId) {
       return rtmBrain.self.id === userId
     }
-    myName() {
+    myName () {
       return rtmBrain.self.name
     }
-    isMemberOfChannel(channelId) {
+    isMemberOfChannel (channelId) {
       return this.getChannelById(channelId).is_member
     }
-    getChannelById(channelId) {
+    getChannelById (channelId) {
       const channel = rtmBrain.channels.filter(({id}) => id === channelId)[0]
       if (!channel) {
         throw new Error(`BUG: Invalid channel id: "${channelId}"`)
       }
       return channel
     }
-    getUserById(userId) {
+    getUserById (userId) {
       const user = rtmBrain.users.filter(({id}) => id === userId)[0]
       if (!user) {
         throw new Error(`BUG: Invalid user id: "${userId}"`)
       }
       return user
     }
-    getMessageTimestamp(message) {
-      let ts
+    getMessageTimestamp (message) {
       switch (message.subtype) {
         case 'message_changed':
           return message.message.ts
@@ -95,7 +92,7 @@ module.exports = (robot) => {
           throw new Error(`BUG: Cannot get timestamp for a deleted message. Well, I can but you should not be doing things based on deleted messages`)
       }
     }
-    async addReaction(reactionEmoji, message) {
+    async addReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
       try {
         return await SlackWebAPI.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
@@ -104,12 +101,11 @@ module.exports = (robot) => {
         robot.log.trace(`Slack already reacted to the message`)
       }
     }
-    async removeReaction(reactionEmoji, message) {
+    async removeReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
-      return await SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
+      return SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
     }
-
-  }
+  }()
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
   SlackAPI.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
@@ -132,5 +128,5 @@ module.exports = (robot) => {
   }
 
   // now connect
-  SlackAPI.connect('https://slack.com/api/rtm.connect');
-};
+  SlackAPI.connect('https://slack.com/api/rtm.connect')
+}
