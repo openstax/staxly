@@ -1,0 +1,3 @@
+#!/bin/bash
+
+"$(npm bin)/nodemon" --exec "npm start" || exit 111

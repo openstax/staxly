@@ -50,14 +50,67 @@ module.exports = (robot) => {
   const events = new EventEmitter()
   const SlackAPI = new RtmClient(SLACK_BOT_TOKEN)
   const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
+  let rtmBrain
 
-  robot.onSlack = function(name, callback) {
-    events.on(name, callback)
+  robot.slackAdapter = new class SlackAdapter {
+    on(name, callback) {
+      events.on(name, callback)
+    }
+    getBrain() {
+      return rtmBrain
+    }
+    isMe(userId) {
+      return rtmBrain.self.id === userId
+    }
+    myName() {
+      return rtmBrain.self.name
+    }
+    isMemberOfChannel(channelId) {
+      return this.getChannelById(channelId).is_member
+    }
+    getChannelById(channelId) {
+      const channel = rtmBrain.channels.filter(({id}) => id === channelId)[0]
+      if (!channel) {
+        throw new Error(`BUG: Invalid channel id: "${channelId}"`)
+      }
+      return channel
+    }
+    getUserById(userId) {
+      const user = rtmBrain.users.filter(({id}) => id === userId)[0]
+      if (!user) {
+        throw new Error(`BUG: Invalid user id: "${userId}"`)
+      }
+      return user
+    }
+    getMessageTimestamp(message) {
+      let ts
+      switch (message.subtype) {
+        case 'message_changed':
+          return message.message.ts
+        case undefined:
+          return message.ts
+        case 'message_deleted':
+        case 'deleted':
+        default:
+          throw new Error(`BUG: Cannot get timestamp for a deleted message. Well, I can but you should not be doing things based on deleted messages`)
+      }
+    }
+    async addReaction(reactionEmoji, message) {
+      const ts = this.getMessageTimestamp(message)
+      return await SlackWebAPI.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
+    }
+    async removeReaction(reactionEmoji, message) {
+      const ts = this.getMessageTimestamp(message)
+      return await SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
+    }
+
   }
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
   SlackAPI.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
     robot.log.trace('Slack successfully authenticated')
+    rtmBrain = rtmStartData
+    debugger
     emit('authenticated', rtmStartData)
   })
 
