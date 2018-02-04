@@ -97,7 +97,12 @@ module.exports = (robot) => {
     }
     async addReaction(reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
-      return await SlackWebAPI.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
+      try {
+        return await SlackWebAPI.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
+      } catch (err) {
+        // already reacted
+        robot.log.trace(`Slack already reacted to the message`)
+      }
     }
     async removeReaction(reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
@@ -110,7 +115,6 @@ module.exports = (robot) => {
   SlackAPI.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
     robot.log.trace('Slack successfully authenticated')
     rtmBrain = rtmStartData
-    debugger
     emit('authenticated', rtmStartData)
   })
 
