@@ -20,11 +20,11 @@ module.exports = (robot) => {
   })
 
   //
-  // React with a :wave: when a new message contains "staxbot" or when an edited message contains "staxbot"
+  // React with a :wave: when a new message contains "staxly" or when an edited message contains "staxly"
   //
   async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
-    if (/staxbot/.test(text)) {
-      // React with a :wave: whenever `staxbot` is mentioned
+    if (/staxly/.test(text)) {
+      // React with a :wave: whenever `staxly` is mentioned
       await slackWeb.reactions.add('wave', {channel: channel, timestamp: ts})
     }
   }
@@ -69,7 +69,7 @@ module.exports = (robot) => {
       } else {
         const sender = robot.slackAdapter.getUserById(message.user)
         robot.log(`Asking ${sender.name} (${message.user}) to invite me to ${channelName} because I have not been invited yet`)
-        await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @staxbot #${channelName}\` into the Slack text box below.\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxbot/issues/new`)
+        await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @staxly #${channelName}\` into the Slack text box below.\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxly/issues/new`)
         try {
           await robot.slackAdapter.addReaction('robot_face', message)
         } catch (err) {
@@ -117,7 +117,7 @@ module.exports = (robot) => {
     if (reviewRequests.length === 0) {
       if (slackUser) {
         robot.log(`Notifying ${senderLogin} that they opened a Pull Request with no reviewers`)
-        await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxbot or create an Issue for discussion.`)
+        await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxly or create an Issue for discussion.`)
       } else {
         robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
       }

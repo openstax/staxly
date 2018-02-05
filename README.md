@@ -1,4 +1,4 @@
-# staxbot
+# staxly
 
 > a GitHub App built with [probot](https://github.com/probot/probot) that runs a bot with plugins used by OpenStax
 

@@ -1,10 +1,10 @@
 {
-  "name": "staxbot",
+  "name": "staxly",
   "version": "1.0.0",
   "description": "",
   "author": "Philip Schatz <phil@cnx.org>",
   "license": "ISC",
-  "repository": "https://github.com/openstax/staxbot.git",
+  "repository": "https://github.com/openstax/staxly.git",
   "scripts": {
     "start": "probot run ./index.js",
     "test": "jest && standard --fix"
