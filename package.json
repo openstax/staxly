@@ -18,6 +18,7 @@
     "nodemon": "^1.14.11",
     "probot": "^5.0.0",
     "probot-app-todos": "^1.0.5",
+    "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
     "unfurl": "github:probot/unfurl"
   },
