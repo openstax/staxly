@@ -64,7 +64,7 @@ module.exports = (robot) => {
       } else {
         const sender = robot.slackAdapter.getUserById(message.user)
         robot.log(`Asking ${sender.name} (${message.user}) to invite me to ${channelName} because I have not been invited yet`)
-        await robot.slackAdapter.sendMessage(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @staxbot #${channelName}\` into the Slack text box below.\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxbot/issues/new`)
+        await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @staxbot #${channelName}\` into the Slack text box below.\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxbot/issues/new`)
         await robot.slackAdapter.addReaction('robot_face', message)
       }
     }
@@ -82,28 +82,38 @@ module.exports = (robot) => {
 
   // If someone submits a Pull Request check if it has a reviewer
   function getSlackUserByGithubIdOrNull(githubId) {
-    return robot.slackAdapter.getBrain().users.filter(user => githubId === user.profile.fields['Xf0MQDURNX'].value)[0]
+    return robot.slackAdapter.getBrain().users.filter(user => {
+      const {fields} = user.profile
+      if (fields) { // Not all users have fields
+        const gitHubField = fields['Xf0MQDURNX']
+        if (gitHubField) {
+          return githubId === gitHubField.value
+        } else {
+          return false
+        }
+      }
+    })[0]
   }
-  robot.on('pull_request.opened', async ({payload, github}) => {
-    debugger
-    const {number, url} = payload.pull_request
+  async function notifySlackUserWhenPullRequestOpened({payload, github}) {
+    const {number, html_url} = payload.pull_request
     const {name, owner: {login}} = payload.repository
     const senderLogin = payload.sender.login
-    const reviewRequests = await github.pullRequests.getReviewRequests({
+    const {data: {users: reviewRequests}} = await github.pullRequests.getReviewRequests({
       owner: login,
       repo: name,
       number: number
     })
-    robot.log(reviewRequests)
 
     const slackUser = getSlackUserByGithubIdOrNull(senderLogin)
-    if (slackUser) {
-      slackUser.id
-      await robot.slackAdapter.sendMessage(slackUser.id, `:wave: Hello. I noticed you submitted a Pull Request at ${url}. Help me do something smart about it (or disable it) by editing my code at https://github.com/openstax/staxbot or creating an Issue for discussion.`)
+    if (slackUser && reviewRequests.length === 0) {
+      await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${html_url} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxbot or create an Issue for discussion.`)
     } else {
       robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
     }
-  })
+
+  }
+  robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
+  robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
 
   // For more information on building apps:
   // https://probot.github.io/docs/
