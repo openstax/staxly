@@ -81,7 +81,7 @@ module.exports = (robot) => {
   // })
 
   // If someone submits a Pull Request check if it has a reviewer
-  function getSlackUserByGithubIdOrNull(githubId) {
+  function getSlackUserByGithubIdOrNull (githubId) {
     return robot.slackAdapter.getBrain().users.filter(user => {
       const {fields} = user.profile
       if (fields) { // Not all users have fields
@@ -94,8 +94,8 @@ module.exports = (robot) => {
       }
     })[0]
   }
-  async function notifySlackUserWhenPullRequestOpened({payload, github}) {
-    const {number, html_url} = payload.pull_request
+  async function notifySlackUserWhenPullRequestOpened ({payload, github}) {
+    const {number, html_url: htmlUrl} = payload.pull_request
     const {name, owner: {login}} = payload.repository
     const senderLogin = payload.sender.login
     const {data: {users: reviewRequests}} = await github.pullRequests.getReviewRequests({
@@ -106,11 +106,10 @@ module.exports = (robot) => {
 
     const slackUser = getSlackUserByGithubIdOrNull(senderLogin)
     if (slackUser && reviewRequests.length === 0) {
-      await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${html_url} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxbot or create an Issue for discussion.`)
+      await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxbot or create an Issue for discussion.`)
     } else {
       robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
     }
-
   }
   robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
   robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
