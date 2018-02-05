@@ -105,6 +105,10 @@ module.exports = (robot) => {
       const ts = this.getMessageTimestamp(message)
       return SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
     }
+    async sendDM (userId, message) {
+      const {channel: {id: dmChannelId}} = await SlackWebAPI.im.open(userId)
+      await SlackAPI.sendMessage(message, dmChannelId)
+    }
   }()
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
