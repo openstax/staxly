@@ -57,7 +57,11 @@ module.exports = (robot) => {
         const linkTs = message.ts.split('.')
         const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${channelId}/p${linkTs[0]}${linkTs[1]}`
         await slack.sendMessage(`This channel was mentioned in <#${message.channel}> at ${permalink}`, channelId)
-        await robot.slackAdapter.addReaction('link', message)
+        try {
+          await robot.slackAdapter.addReaction('link', message)
+        } catch (err) {
+          // ignore if we already reacted
+        }
       } else if (CRITSIT_PREFIX_REGEXP.test(channelName)) {
         // Don't invite the bot to critsit channels. They are faar to common and only last for a little while
         robot.log.trace(`Ignoring invite request to critsit channel #${channelName}`)
@@ -65,7 +69,11 @@ module.exports = (robot) => {
         const sender = robot.slackAdapter.getUserById(message.user)
         robot.log(`Asking ${sender.name} (${message.user}) to invite me to ${channelName} because I have not been invited yet`)
         await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @staxbot #${channelName}\` into the Slack text box below.\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxbot/issues/new`)
-        await robot.slackAdapter.addReaction('robot_face', message)
+        try {
+          await robot.slackAdapter.addReaction('robot_face', message)
+        } catch (err) {
+          // ignore if we already reacted
+        }
       }
     }
   })
