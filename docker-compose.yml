@@ -1,0 +1,9 @@
+version: '3'
+services:
+  probot:
+    build: .
+    command: ./script/start
+    env_file: .env
+    volumes:
+      - .:/app
+      - /app/node_modules
