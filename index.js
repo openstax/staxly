@@ -56,7 +56,7 @@ module.exports = (robot) => {
         robot.log(`Posting to ${channelName}`)
         // Construct the permalink
         const linkTs = message.ts.split('.')
-        const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${channelId}/p${linkTs[0]}${linkTs[1]}`
+        const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${message.channel}/p${linkTs[0]}${linkTs[1]}`
         await slack.sendMessage(`This channel was mentioned in <#${message.channel}> at ${permalink}`, channelId)
         try {
           await robot.slackAdapter.addReaction('link', message)
