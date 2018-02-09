@@ -2,7 +2,7 @@ version: '3'
 services:
   probot:
     build: .
-    command: ./script/start
+    command: npm start
     env_file: .env
     volumes:
       - .:/app

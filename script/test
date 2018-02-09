@@ -1,5 +1,0 @@
-#!/bin/bash
-cd "$(dirname "$0")/.." || exit 111
-
-npm test || exit 111
-shellcheck ./script/* || exit 111
