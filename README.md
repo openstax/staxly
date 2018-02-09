@@ -4,13 +4,19 @@
 
 # Setup
 
-## Install dependencies
+## Install Docker and Docker Compose
 
-`./script/setup` or `npm install`
+> Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/).
 
-## Run the bot
+## Copy the .env.example file and fill in the correct values.
 
-`./script/start` or `npm start` or for verbose logging use `./script/debug`.
+> Ensure you have downloaded the private key file provided by GitHub
+
+    $ cp .env.example .env
+
+## Run Docker Compose:
+
+    $ docker-compose up
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this app.
 
