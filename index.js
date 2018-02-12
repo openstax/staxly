@@ -17,7 +17,7 @@ module.exports = (robot) => {
   console.log('Yay, the app was loaded!')
 
   robot.on('push', async (context) => {
-    robot.log('pushed code. TODO: Do something smart instead of just logging')
+    robot.log('pushed code.')
   })
 
   //
