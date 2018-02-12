@@ -20,7 +20,8 @@
     "probot-app-todos": "^1.0.5",
     "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
-    "unfurl": "github:probot/unfurl"
+    "unfurl": "github:probot/unfurl",
+    "wip-bot": "^2.1.0"
   },
   "devDependencies": {
     "jest": "^21.2.1",

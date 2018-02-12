@@ -12,6 +12,7 @@ module.exports = (robot) => {
   require('unfurl')(robot)
   require('probot-app-todos')(robot)
   require('release-notifier')(robot)
+  require('wip-bot')(robot)
 
   console.log('Yay, the app was loaded!')
 
