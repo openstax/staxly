@@ -105,9 +105,9 @@ module.exports = (robot) => {
       const ts = this.getMessageTimestamp(message)
       return SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
     }
-    async sendDM (userId, message) {
+    async sendDM (userId, message, options) {
       const {channel: {id: dmChannelId}} = await SlackWebAPI.im.open(userId)
-      await SlackAPI.sendMessage(message, dmChannelId)
+      await SlackAPI.sendMessage(message, dmChannelId, options)
     }
   }()
 
