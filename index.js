@@ -2,6 +2,8 @@ const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|b
 const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
 module.exports = (robot) => {
+  robot.events.setMaxListeners(100) // Since we use multiple plugins
+
   // Plugins that we use
   require('./src/slack-api')(robot)
   require('autolabeler')(robot)
@@ -57,7 +59,7 @@ module.exports = (robot) => {
         robot.log(`Posting to ${channelName}`)
         // Construct the permalink
         const linkTs = message.ts.split('.')
-        const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${channelId}/p${linkTs[0]}${linkTs[1]}`
+        const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${message.channel}/p${linkTs[0]}${linkTs[1]}`
         await slack.sendMessage(`This channel was mentioned in <#${message.channel}> at ${permalink}`, channelId)
         try {
           await robot.slackAdapter.addReaction('link', message)
