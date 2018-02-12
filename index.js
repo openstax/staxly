@@ -117,7 +117,7 @@ module.exports = (robot) => {
     if (reviewRequests.length === 0) {
       if (slackUser) {
         robot.log(`Notifying ${senderLogin} that they opened a Pull Request with no reviewers`)
-        await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxly or create an Issue for discussion.`)
+        await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxly or create an Issue for discussion.`, {unfurl_links: false})
       } else {
         robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
       }
