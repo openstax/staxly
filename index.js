@@ -22,17 +22,17 @@ module.exports = (robot) => {
     robot.log('pushed code.')
   })
 
-  //
-  // React with a :wave: when a new message contains "staxly" or when an edited message contains "staxly"
-  //
-  async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
-    if (/staxly/.test(text)) {
-      // React with a :wave: whenever `staxly` is mentioned
-      await slackWeb.reactions.add('wave', {channel: channel, timestamp: ts})
-    }
-  }
-  robot.slackAdapter.on('message.', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
-  robot.slackAdapter.on('message_changed', async ({payload: message, slackWeb}) => waveWhenMentioned({text: message.message.text, ts: message.message.ts, channel: message.channel}, slackWeb))
+  // //
+  // // React with a :wave: when a new message contains "staxly" or when an edited message contains "staxly"
+  // //
+  // async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
+  //   if (/staxly/.test(text)) {
+  //     // React with a :wave: whenever `staxly` is mentioned
+  //     await slackWeb.reactions.add('wave', {channel: channel, timestamp: ts})
+  //   }
+  // }
+  // robot.slackAdapter.on('message.', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
+  // robot.slackAdapter.on('message_changed', async ({payload: message, slackWeb}) => waveWhenMentioned({text: message.message.text, ts: message.message.ts, channel: message.channel}, slackWeb))
 
   //
   // When a user (not a bot) mentions a channel then add a message in that channel letting them know they were referenced
