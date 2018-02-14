@@ -2,6 +2,8 @@ const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|b
 const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
 module.exports = (robot) => {
+  robot.events.setMaxListeners(100) // Since we use multiple plugins
+
   // Plugins that we use
   require('./src/slack-api')(robot)
   require('autolabeler')(robot)
@@ -12,11 +14,12 @@ module.exports = (robot) => {
   require('unfurl')(robot)
   require('probot-app-todos')(robot)
   require('release-notifier')(robot)
+  require('wip-bot')(robot)
 
   console.log('Yay, the app was loaded!')
 
   robot.on('push', async (context) => {
-    robot.log('pushed code. TODO: Do something smart instead of just logging')
+    robot.log('pushed code.')
   })
 
   //
