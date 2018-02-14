@@ -26,7 +26,7 @@ module.exports = (robot) => {
   // React with a :table_tennis_paddle_and_ball: when a new message contains "staxly ping"
   //
   async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
-    if (/staxly\ ping/.test(text)) {
+    if (/staxly ping/.test(text)) {
       await slackWeb.reactions.add('table_tennis_paddle_and_ball', {channel: channel, timestamp: ts})
     }
   }
