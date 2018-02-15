@@ -11,6 +11,8 @@ These are features coded into the bot:
 - Reminder to add a Pull Request Reviewer
 - React when a user types `staxly ping` (verify the bot is up)
 
+See [Issues](https://github.com/openstax/staxly/issues) for feature requests.
+
 ## Plugins
 
 These are 3rd-party plugins that are included in this bot:
@@ -29,15 +31,14 @@ These are 3rd-party plugins that are included in this bot:
 
 # What do you think of this bot?
 
-A bot would... (click one of the bars to vote)
+A bot would... (click one of the bars to vote and check out the [Issues](https://github.com/openstax/staxly/issues) to see proposals)
 
-[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/waste%20developer%20time)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/waste%20developer%20time/vote)
-[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/not%20help%20my%20problems)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/not%20help%20my%20problems/vote)
-[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/maybe%20help%3F)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/maybe%20help%3F/vote)
 [![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/definitely%20help)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/definitely%20help/vote)
-[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/meh)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/meh/vote)
+[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/maybe%20help%3F)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/maybe%20help%3F/vote)
+[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/not%20help%20my%20problems)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/not%20help%20my%20problems/vote)
+[![](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/waste%20developer%20time)](https://api.gh-polls.com/poll/01C5RWFV2ZS0A6XTREM3Y69ETN/waste%20developer%20time/vote)
 
-If it is doing something wrong or you would like it to do something else, check out the Issues.
+If it is doing something wrong or you would like it to do something else, check out the [Issues](https://github.com/openstax/staxly/issues).
 
 # Dev Setup
 
