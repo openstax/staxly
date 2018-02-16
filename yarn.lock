@@ -2858,7 +2858,7 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-js-yaml@^3.5.1, js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
+js-yaml@^3.10.0, js-yaml@^3.5.1, js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
   dependencies:
@@ -3868,6 +3868,12 @@ probot-app-todos@^1.0.5:
 "probot-attachments@github:probot/attachments":
   version "1.0.0"
   resolved "https://codeload.github.com/probot/attachments/tar.gz/bfeb5d0e9def50c5cd69cbbaf1db1687b38cc5d2"
+
+probot-config@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/probot-config/-/probot-config-0.1.0.tgz#b6ef11ccc468e7f28e06deb68b34e093b7c7e88e"
+  dependencies:
+    js-yaml "^3.10.0"
 
 probot@^2.0.0:
   version "2.0.0"

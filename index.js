@@ -6,6 +6,7 @@ module.exports = (robot) => {
 
   // Plugins that we use
   require('./src/slack-api')(robot)
+  require('./src/auto-cards')(robot)
   require('autolabeler')(robot)
   require('first-pr-merge')(robot)
   require('new-issue-welcome')(robot)
