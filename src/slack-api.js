@@ -16,17 +16,28 @@
 const {RtmClient, WebClient, CLIENT_EVENTS, RTM_EVENTS} = require('@slack/client')
 const EventEmitter = require('promise-events')
 
-const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN || ''
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
+const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 
 module.exports = (robot) => {
   if (!SLACK_BOT_TOKEN) {
     robot.log.error('SLACK_BOT_TOKEN missing, skipping Slack integration')
     process.exit(111)
   }
+  if (!SLACK_GITHUB_INSTALL_ID) {
+    robot.log.error('SLACK_GITHUB_INSTALL_ID missing. This is needed to know which authentication to use when creating GitHub Issues/Cards. It can be found in the probot trace output for /installations when LOG_LEVEL=trace')
+    process.exit(111)
+  }
 
-  function emit (name, payload) {
+  let authenticatedGitHubClient
+
+  async function emit (name, payload) {
+    if (!authenticatedGitHubClient) {
+      authenticatedGitHubClient = await robot.auth(SLACK_GITHUB_INSTALL_ID)
+    }
     const value = {
       payload,
+      github: authenticatedGitHubClient,
       slack: SlackAPI,
       slackWeb: SlackWebAPI
     }
@@ -78,6 +89,17 @@ module.exports = (robot) => {
       }
       return user
     }
+    getGithubUserBySlackUserIdOrNull (slackUserId) {
+      const slackUser = this.getUserById(slackUserId)
+      const {fields} = slackUser.profile
+      if (fields) { // Not all users have fields
+        const githubField = fields['Xf0MQDURNX']
+        if (githubField) {
+          return githubField.value
+        }
+      }
+    }
+
     getMessageTimestamp (message) {
       switch (message.subtype) {
         case 'message_changed':
@@ -90,6 +112,23 @@ module.exports = (robot) => {
           throw new Error(`BUG: Cannot get timestamp for a deleted message. Well, I can but you should not be doing things based on deleted messages`)
       }
     }
+    getMessagePermalink (channelId, messageTs) {
+      return `https://${this.getBrain().team.domain}.slack.com/archives/${channelId}/p${messageTs.replace('.', '')}`
+    }
+    convertTextToGitHub (text) {
+      const USER_REGEXP = /<@([^>]*)/
+      let match
+      while ((match = USER_REGEXP.exec(text)) != null) {
+        const slackUserId = match[1]
+        const githubUserId = this.getGithubUserBySlackUserIdOrNull(slackUserId)
+        if (githubUserId) {
+          text = text.replace(`<@${slackUserId}>`, `@${githubUserId}`)
+        } else {
+          text = text.replace(`<@${slackUserId}>`, `${this.getUserById(slackUserId).name}`)
+        }
+      }
+      return text
+    }
     async addReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
       try {
@@ -97,6 +136,7 @@ module.exports = (robot) => {
       } catch (err) {
         // already reacted
         robot.log.trace(`Slack already reacted to the message`)
+        robot.log.trace(err)
       }
     }
     async removeReaction (reactionEmoji, message) {
