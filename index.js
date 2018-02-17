@@ -57,8 +57,7 @@ module.exports = (robot) => {
         // This bot is already in the channel so post there
         robot.log(`Posting to ${channelName}`)
         // Construct the permalink
-        const linkTs = message.ts.split('.')
-        const permalink = `https://${robot.slackAdapter.getBrain().team.domain}.slack.com/archives/${message.channel}/p${linkTs[0]}${linkTs[1]}`
+        const permalink = robot.slackAdapter.getMessagePermalink(message.channel, message.ts)
         await slack.sendMessage(`This channel was mentioned in <#${message.channel}> at ${permalink}`, channelId)
         try {
           await robot.slackAdapter.addReaction('link', message)
@@ -81,52 +80,82 @@ module.exports = (robot) => {
     }
   })
 
-  // robot.on('issues.opened', async (context) => {
-  //   // `context` extracts information from the event, which can be passed to
-  //   // GitHub API calls. This will return:
-  //   //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
-  //   const params = context.issue({body: 'Hello World!'})
+  // If a slack user reacts to a message with :evergreen_tree: in a channel
+  // that is associated with a Project then automatically create a Note card
+  // with the contents of the Slack message and a link to the Slack message
   //
-  //   // Post a comment on the issue
-  //   return context.github.issues.createComment(params)
-  // })
+  // See https://api.slack.com/methods/conversations.history#retrieving_a_single_message
+  const SLACK_CARD_CREATION = JSON.parse(process.env['CARD_CREATION_JSON'])
+  robot.slackAdapter.on('reaction_added', async ({payload, github, slack, slackWeb}) => {
+    const {reaction, item} = payload
+    if ((reaction === 'evergreen_tree' || reaction === 'github') && item.type === 'message') {
+      // retrieve the message
+      const theMessage = (await slackWeb.api.makeAPICall('channels.history', {channel: item.channel, latest: item.ts, inclusive: true, count: 1})).messages[0]
+      const {reactions, text: messageText} = theMessage
 
-  // If someone submits a Pull Request check if it has a reviewer
-  function getSlackUserByGithubIdOrNull (githubId) {
-    return robot.slackAdapter.getBrain().users.filter(user => {
-      const {fields} = user.profile
-      if (fields) { // Not all users have fields
-        const gitHubField = fields['Xf0MQDURNX']
-        if (gitHubField) {
-          return githubId === gitHubField.value
-        } else {
-          return false
-        }
+      // Check if the message already has a check mark on it
+      const linkReaction = reactions.filter((reaction) => reaction.name === 'link')[0]
+      if (linkReaction) { // Should check if we were the one to add the checkmark
+        return // already processed
       }
-    })[0]
-  }
-  async function notifySlackUserWhenPullRequestOpened ({payload, github}) {
-    const {number, html_url: htmlUrl} = payload.pull_request
-    const {name, owner: {login}} = payload.repository
-    const senderLogin = payload.sender.login
-    const {data: {users: reviewRequests}} = await github.pullRequests.getReviewRequests({
-      owner: login,
-      repo: name,
-      number: number
-    })
 
-    const slackUser = getSlackUserByGithubIdOrNull(senderLogin)
-    if (reviewRequests.length === 0) {
-      if (slackUser) {
-        robot.log(`Notifying ${senderLogin} that they opened a Pull Request with no reviewers`)
-        await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxly or create an Issue for discussion.`)
-      } else {
-        robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
+      const channel = robot.slackAdapter.getChannelById(item.channel)
+      const slackCardConfig = SLACK_CARD_CREATION.filter(({slackChannel}) => slackChannel === channel.name)[0]
+      if (channel && slackCardConfig) {
+        // Create a new Note Card on the Project
+        const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)
+
+        // Convert the messageText so that usernames and channelnames are not in Slack-ese (`<@U12345>`)
+        const escapedText = robot.slackAdapter.convertTextToGitHub(messageText)
+        const noteBody = `${escapedText}
+
+[Slack Link](${permalink})`
+
+        const project = (await github.projects.getOrgProjects({org: slackCardConfig.githubProjectOrg})).data.filter(({number}) => slackCardConfig.githubProjectNumber)[0]
+        const projectColumn = (await github.projects.getProjectColumns({project_id: project.id})).data[0]
+        await github.projects.createProjectCard({column_id: projectColumn.id, note: noteBody})
+
+        robot.slackAdapter.addReaction('link', {channel: channel.id, ts: theMessage.ts})
       }
     }
-  }
-  robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
-  robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
+  })
+
+  // // If someone submits a Pull Request check if it has a reviewer
+  // function getSlackUserByGithubIdOrNull (githubId) {
+  //   return robot.slackAdapter.getBrain().users.filter(user => {
+  //     const {fields} = user.profile
+  //     if (fields) { // Not all users have fields
+  //       const gitHubField = fields['Xf0MQDURNX']
+  //       if (gitHubField) {
+  //         return githubId === gitHubField.value
+  //       } else {
+  //         return false
+  //       }
+  //     }
+  //   })[0]
+  // }
+  // async function notifySlackUserWhenPullRequestOpened ({payload, github}) {
+  //   const {number, html_url: htmlUrl} = payload.pull_request
+  //   const {name, owner: {login}} = payload.repository
+  //   const senderLogin = payload.sender.login
+  //   const {data: {users: reviewRequests}} = await github.pullRequests.getReviewRequests({
+  //     owner: login,
+  //     repo: name,
+  //     number: number
+  //   })
+  //
+  //   const slackUser = getSlackUserByGithubIdOrNull(senderLogin)
+  //   if (reviewRequests.length === 0) {
+  //     if (slackUser) {
+  //       robot.log(`Notifying ${senderLogin} that they opened a Pull Request with no reviewers`)
+  //       await robot.slackAdapter.sendDM(slackUser.id, `I noticed you submitted a Pull Request at ${htmlUrl} but did not include any reviewers. *Consider adding a reviewer*.\n\n You can edit my code at https://github.com/openstax/staxly or create an Issue for discussion.`)
+  //     } else {
+  //       robot.log(`Could not find slack user with GitHub id ${senderLogin}. Ask them to update their profile`)
+  //     }
+  //   }
+  // }
+  // robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
+  // robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
 
   // For more information on building apps:
   // https://probot.github.io/docs/

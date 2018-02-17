@@ -6,6 +6,7 @@
 
 These are features coded into the bot:
 
+- automatically create a Card when a user reacts with a `:github:` and link to the slack chat
 - link-back : When someone mentions a channel in a message, that channel gets a link back to the original message
   - This is useful for notifying multiple groups, or casually asking for help
 - Reminder to add a Pull Request Reviewer
