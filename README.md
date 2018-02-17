@@ -19,7 +19,7 @@ These are 3rd-party plugins that are included in this bot:
 
 - [autolabeler](https://github.com/probot/autolabeler): Automatically label Issues and Pull Requests based on logic in the `.github/config.yml` file
 - [wip-bot](https://github.com/gr2m/wip-bot): Mark a Pull Request as unmergeable when `WIP` is in the PR title
-- [probot-app-todos](https://github.com/uber-workflow/probot-app-todos): Help create Issues when code contains a "TODO"
+- [probot-app-todos](https://github.com/uber-workflow/probot-app-todos): Help create Issues when code contains a "TO DO" (no spaces)
 - [release-notifier](https://github.com/release-notifier/release-notifier): When a tag is created add a comment on the Pull Request denoting which release it was included in
 - [request-info](https://github.com/behaviorbot/request-info): Ask for additional information when a Pull Request description is empty
 - [first-pr-merge](https://github.com/behaviorbot/first-pr-merge): Welcome new contributors

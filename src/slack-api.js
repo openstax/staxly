@@ -9,8 +9,6 @@
 // - 'message.message_changed' : only listen to edited events
 // - 'message.' : only listen to new messages (no subtype)
 //
-// TODO: Maybe we should just use the subtype since the JSON structure is different for the main type
-//
 // Modified from https://github.com/grrowl/probot-slack/blob/master/index.js
 // since probot no longer supports robot.on('slack.message')
 // because probot events assume a payload which contains the GitHub installation id
