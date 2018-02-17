@@ -6,15 +6,34 @@
 
 These are features coded into the bot:
 
-- automatically create a Card when a user reacts with a `:github:` and link to the slack chat
-- link-back : When someone mentions a channel in a message, that channel gets a link back to the original message
-  - This is useful for notifying multiple groups, or casually asking for help
-- Reminder to add a Pull Request Reviewer
-- React when a user types `staxly ping` (verify the bot is up)
+### Automatically create a Card when a user reacts to a Slack message ([#18](https://github.com/openstax/staxly/pull/18))
 
-See [Issues](https://github.com/openstax/staxly/issues) for feature requests.
+When a user reacts to a Slack message with a `:github:` then a new Card is created (which includes a link back to the Slack chat).
 
-## Plugins
+The board that the card is added to depends on the Slack channel, and is configured in `/config.json`.
+
+![autocreate-cards](https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif)
+
+### Add/Move Project Cards when Issues/PullRequests change ([#17](https://github.com/openstax/staxly/pull/17))
+
+It is annoying to remember to add new Cards to a board and move the Cards when the Issue/Pull Request changes.
+So the card movement is now automated. Create an Issue/PullRequest and it is added to the board. Merge/Close it and it is moved to the Done column.
+
+The board that Card is added to is configured in the repository's `/.github/config.yml` which can inherit from another repository (to reduce copy/paste).
+
+![project-issues](https://user-images.githubusercontent.com/253202/36290898-ef958b26-1295-11e8-9baf-6209d1f0aef2.gif)
+
+### Channel link-back
+
+When someone mentions a channel in a message, that channel gets a link back to the original message.
+This is useful for notifying multiple groups, or casually asking for help.
+
+### Other features
+- [#8](https://github.com/openstax/staxly/pull/8) Reminder to add a Pull Request Reviewer
+  ![image](https://user-images.githubusercontent.com/253202/35791407-c04a6d56-0a15-11e8-8790-c2d0b4a73d0b.png)
+- [#16](https://github.com/openstax/staxly/pull/16) React when a user types `staxly ping` (verify the bot is up)
+
+### Plugins
 
 These are 3rd-party plugins that are included in this bot:
 
