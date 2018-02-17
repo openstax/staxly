@@ -1,6 +1,8 @@
 const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|book-tools> bar"
 const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
+const STAXLY_CONFIG = require('./config.json')
+
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
@@ -85,7 +87,6 @@ module.exports = (robot) => {
   // with the contents of the Slack message and a link to the Slack message
   //
   // See https://api.slack.com/methods/conversations.history#retrieving_a_single_message
-  const SLACK_CARD_CREATION = JSON.parse(process.env['CARD_CREATION_JSON'])
   robot.slackAdapter.on('reaction_added', async ({payload, github, slack, slackWeb}) => {
     const {reaction, item} = payload
     if ((reaction === 'evergreen_tree' || reaction === 'github') && item.type === 'message') {
@@ -100,7 +101,7 @@ module.exports = (robot) => {
       }
 
       const channel = robot.slackAdapter.getChannelById(item.channel)
-      const slackCardConfig = SLACK_CARD_CREATION.filter(({slackChannel}) => slackChannel === channel.name)[0]
+      const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
       if (channel && slackCardConfig) {
         // Create a new Note Card on the Project
         const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)

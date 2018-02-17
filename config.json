@@ -1,0 +1,5 @@
+{
+  "slackChannelsToProjects": [
+    {"slackChannelName": "cnx", "githubProjectOrg": "openstax", "githubProjectNumber": 1}
+  ]
+}
