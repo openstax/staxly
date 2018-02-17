@@ -90,6 +90,8 @@ module.exports = (robot) => {
   robot.slackAdapter.on('reaction_added', async ({payload, github, slack, slackWeb}) => {
     const {reaction, item} = payload
     if ((reaction === 'evergreen_tree' || reaction === 'github') && item.type === 'message') {
+      robot.log(`Noticed reaction`)
+
       // retrieve the message
       const theMessage = (await slackWeb.api.makeAPICall('channels.history', {channel: item.channel, latest: item.ts, inclusive: true, count: 1})).messages[0]
       const {reactions, text: messageText} = theMessage
@@ -103,6 +105,7 @@ module.exports = (robot) => {
       const channel = robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
       if (channel && slackCardConfig) {
+        robot.log(`Creating Card because of reaction`)
         // Create a new Note Card on the Project
         const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)
 
@@ -117,6 +120,9 @@ module.exports = (robot) => {
         await github.projects.createProjectCard({column_id: projectColumn.id, note: noteBody})
 
         robot.slackAdapter.addReaction('link', {channel: channel.id, ts: theMessage.ts})
+      } else {
+        const channel = robot.slackAdapter.getChannelById(item.channel)
+        robot.log(`Channel "${channel.name}" is not configured for reactions`)
       }
     }
   })
