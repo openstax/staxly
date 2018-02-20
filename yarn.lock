@@ -3875,6 +3875,13 @@ probot-config@^0.1.0:
   dependencies:
     js-yaml "^3.10.0"
 
+"probot-settings@github:probot/settings":
+  version "1.0.0"
+  resolved "https://codeload.github.com/probot/settings/tar.gz/a31da10f93d15b44905bbab181b9565171622a58"
+  dependencies:
+    js-yaml "^3.7.0"
+    probot "^5.0.0"
+
 probot@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/probot/-/probot-2.0.0.tgz#0c4f11c6f1689226cc8060226629c7a82dc7f2b8"
