@@ -19,3 +19,13 @@ newPRWelcomeComment: |
 # Comment to be posted to on pull requests merged by a first time user
 firstPRMergeComment: >
   Congrats on merging your first pull request! 🎉🎉🎉
+
+project:
+  type: "ORGANIZATION"
+  number: 1
+  new_issue_column:
+    index: 0
+    # name: "To do"
+  new_pull_request_column:
+    index: 1
+    # name: "In progress"

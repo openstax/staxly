@@ -20,6 +20,7 @@
     "probot-app-todos": "^1.0.5",
     "probot-config": "^0.1.0",
     "probot-settings": "github:probot/settings",
+    "project-bot": "github:philschatz/project-bot",
     "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
     "unfurl": "github:probot/unfurl",

@@ -8,7 +8,7 @@ module.exports = (robot) => {
 
   // Plugins that we use
   require('./src/slack-api')(robot)
-  require('./src/auto-cards')(robot)
+  require('project-bot')(robot)
   require('probot-settings')(robot)
   require('autolabeler')(robot)
   require('first-pr-merge')(robot)
