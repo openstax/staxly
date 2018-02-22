@@ -21,7 +21,7 @@ So the card movement is now automated. Create an Issue/PullRequest and it is add
 
 The board that Card is added to is configured in the repository's `/.github/config.yml` which can inherit from another repository (to reduce copy/paste).
 
-![project-issues](https://user-images.githubusercontent.com/253202/36290898-ef958b26-1295-11e8-9baf-6209d1f0aef2.gif)
+![project-issues](https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif)
 
 ### Channel link-back
 
