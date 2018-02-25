@@ -12,7 +12,7 @@ When a user reacts to a Slack message with a `:github:` then a new Card is creat
 
 The board that the card is added to depends on the Slack channel, and is configured in `/config.json`.
 
-![autocreate-cards](https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif)
+<a href="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"><img width="500" alt="autocreate-cards" src="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"/></a>
 
 ### Add/Move Project Cards when Issues/PullRequests change ([#17](https://github.com/openstax/staxly/pull/17))
 
@@ -21,7 +21,7 @@ So the card movement is now automated. Create an Issue/PullRequest and it is add
 
 The board that Card is added to is configured in the repository's `/.github/config.yml` which can inherit from another repository (to reduce copy/paste).
 
-![project-issues](https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif)
+<a href="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"/></a>
 
 ### Channel link-back
 
