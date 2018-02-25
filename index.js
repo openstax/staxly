@@ -6,6 +6,11 @@ const STAXLY_CONFIG = require('./config.json')
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
+  robot.on(['issues.opened'], async(context) => {
+    await context.github.issues.createComment(context.issue({body: 'Hello!'}))
+  })
+
+  
   // Plugins that we use
   require('./src/slack-api')(robot)
   require('project-bot')(robot)
