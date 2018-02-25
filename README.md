@@ -37,7 +37,7 @@ This is useful for notifying multiple groups, or casually asking for help.
 
 These are 3rd-party plugins that are included in this bot:
 
-- [changelog](https://github.com/mikz/probot-changelog): Automatically ensure that the `CHANGELOG` is updated for every Pull Request (configured in `.github/changelog.yml`)
+- [changelog](https://github.com/mikz/probot-changelog): Automatically ensure that the `CHANGELOG` is updated for every Pull Request (configured in the repos `/.github/changelog.yml`)
 - [settings](https://github.com/probot/settings): Pull Requests for GitHub repository settings
 - [autolabeler](https://github.com/probot/autolabeler): Automatically label Issues and Pull Requests based on logic in the `.github/config.yml` file
 - [wip-bot](https://github.com/gr2m/wip-bot): Mark a Pull Request as unmergeable when `WIP` is in the PR title
