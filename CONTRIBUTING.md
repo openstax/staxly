@@ -8,13 +8,6 @@ Hi there! We're thrilled that you'd like to contribute to this project. Your hel
 
 Please note that this project is released with a [Contributor Code of Conduct][code-of-conduct]. By participating in this project you agree to abide by its terms.
 
-## Development Options
-
-There are 3 different ways you can run a development version of the bot:
-
-1. Start a Pull Request ([staxly-dev](https://github.com/apps/staxly-dev) will be auto-deployed for you) and push up changes until it works
-1. Ask a maintainer dev keys to [staxly-dev](https://github.com/apps/staxly-dev)
-1. Follow [probot's instructions for creating a new GitHub App](https://github.com/probot/probot/blob/master/docs/development.md#configure-a-github-app)
 
 ## Development with Docker
 

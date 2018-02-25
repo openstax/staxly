@@ -65,10 +65,14 @@ If it is doing something wrong or you would like it to do something else, check 
 # Contributing
 
 To make development approachable to many types of contributors, there are several ways to get your awesome code up and running.
+The **Beginner** option is a great way to get started with minimal setup. Knowledge of Git is not even needed! Just click the Edit button on any file.
 
-- **Beginner**: Just submit a Pull Request. A dev version of the bot will be automatically (re)deployed as you push code up.
-  - This is a great way to get started with minimal setup. Knowledge of Git is not even needed!
-- **Medium**: Ask a maintainer for dev keys to the dev bot and use Docker to start it up locally
-- **Advanced**: Create your own bot and use Docker to start it up locally
+1. **Beginner**: Start a Pull Request ([staxly-dev](https://github.com/apps/staxly-dev) will be auto-deployed for you) and push up changes until it works
+  - As soon as you create the Pull Request, a link to the deployed bot will appear
+  - As you continue pushing changes, the bot will automatically be re-deployed and your Pull Request will be updated
+  - See [#25](https://github.com/openstax/staxly/pull/25) for an example
+1. **Intermediate**: Ask a maintainer for dev keys to [staxly-dev](https://github.com/apps/staxly-dev)
+1. **Advanced**: Follow [probot's instructions for creating a new GitHub App](https://github.com/probot/probot/blob/master/docs/development.md#configure-a-github-app)
 
-Details on each option can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+Additional details can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
