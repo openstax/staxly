@@ -6,6 +6,12 @@ const STAXLY_CONFIG = require('./config.json')
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
+  // Add a "Hello!" message when a new Issue is created
+  robot.on(['issues.opened'], async(context) => {
+    await context.github.issues.createComment(context.issue({body: 'Hello! New Issue!'}))
+  })
+  // We will test it by creating an Issue in https://github.com/philschatz/test
+
   // Plugins that we use
   require('./src/slack-api')(robot)
   require('project-bot')(robot)
