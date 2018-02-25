@@ -22,11 +22,9 @@ const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 module.exports = (robot) => {
   if (!SLACK_BOT_TOKEN) {
     robot.log.error('SLACK_BOT_TOKEN missing, skipping Slack integration')
-    process.exit(111)
   }
   if (!SLACK_GITHUB_INSTALL_ID) {
     robot.log.error('SLACK_GITHUB_INSTALL_ID missing. This is needed to know which authentication to use when creating GitHub Issues/Cards. It can be found in the probot trace output for /installations when LOG_LEVEL=trace')
-    process.exit(111)
   }
 
   let authenticatedGitHubClient
@@ -51,12 +49,6 @@ module.exports = (robot) => {
     })
   }
 
-  robot.log.trace('Slack connecting...')
-
-  // game start!
-  const events = new EventEmitter()
-  const SlackAPI = new RtmClient(SLACK_BOT_TOKEN)
-  const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
   let rtmBrain
 
   robot.slackAdapter = new class SlackAdapter {
@@ -148,6 +140,18 @@ module.exports = (robot) => {
       await SlackAPI.sendMessage(message, dmChannelId)
     }
   }()
+
+  if (!SLACK_BOT_TOKEN) {
+    robot.log('Skipping Slack connection because SLACK_BOT_TOKEN env var is not set')
+    return
+  }
+
+  robot.log.trace('Slack connecting...')
+
+  // game start!
+  const events = new EventEmitter()
+  const SlackAPI = new RtmClient(SLACK_BOT_TOKEN)
+  const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
   SlackAPI.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
