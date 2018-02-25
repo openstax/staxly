@@ -166,6 +166,12 @@ module.exports = (robot) => {
   // robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
   // robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
 
+  // Show the running version
+  robot.router.get('/_version', (req, res) => {
+    // See https://devcenter.heroku.com/changelog-items/630
+    res.json({source: process.env['SOURCE_VERSION']})
+  })
+
   // For more information on building apps:
   // https://probot.github.io/docs/
 
