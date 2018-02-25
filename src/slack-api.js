@@ -49,6 +49,7 @@ module.exports = (robot) => {
     })
   }
 
+  const events = new EventEmitter()
   let rtmBrain
 
   robot.slackAdapter = new class SlackAdapter {
@@ -149,7 +150,6 @@ module.exports = (robot) => {
   robot.log.trace('Slack connecting...')
 
   // game start!
-  const events = new EventEmitter()
   const SlackAPI = new RtmClient(SLACK_BOT_TOKEN)
   const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
 
