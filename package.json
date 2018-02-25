@@ -24,12 +24,12 @@
     "project-bot": "github:philschatz/project-bot",
     "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
+    "smee-client": "^1.0.1",
     "unfurl": "github:probot/unfurl",
     "wip-bot": "^2.1.0"
   },
   "devDependencies": {
     "jest": "^21.2.1",
-    "smee-client": "^1.0.1",
     "standard": "^10.0.3"
   },
   "engines": {
