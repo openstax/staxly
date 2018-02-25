@@ -1,0 +1,36 @@
+{
+  "name": "staxly",
+  "scripts": {
+  },
+  "env": {
+    "APP_ID": {
+      "required": true
+    },
+    "KEEPALIVE_URL": {
+      "required": true
+    },
+    "PRIVATE_KEY": {
+      "required": true
+    },
+    "SLACK_BOT_TOKEN": {
+      "required": true
+    },
+    "SLACK_GITHUB_INSTALL_ID": {
+      "required": true
+    },
+    "WEBHOOK_PROXY_URL": {
+      "required": true
+    },
+    "WEBHOOK_SECRET": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "scheduler"
+  ],
+  "buildpacks": [
+
+  ]
+}
