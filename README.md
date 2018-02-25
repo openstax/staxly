@@ -61,28 +61,14 @@ A bot would... (click one of the bars to vote and check out the [Issues](https:/
 
 If it is doing something wrong or you would like it to do something else, check out the [Issues](https://github.com/openstax/staxly/issues).
 
-# Dev Setup
 
-## Install Docker and Docker Compose
+# Contributing
 
-> Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/).
+To make development approachable to many types of contributors, there are several ways to get your awesome code up and running.
 
-## Copy the .env.example file and fill in the correct values.
+- **Beginner**: Just submit a Pull Request. A dev version of the bot will be automatically (re)deployed as you push code up.
+  - This is a great way to get started with minimal setup. Knowledge of Git is not even needed!
+- **Medium**: Ask a maintainer for dev keys to the dev bot and use Docker to start it up locally
+- **Advanced**: Create your own bot and use Docker to start it up locally
 
-> Ensure you have downloaded the private key file provided by GitHub
-
-    $ cp .env.example .env
-
-## Run Docker Compose:
-
-    $ docker-compose up
-
-See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this app.
-
-See [How it Works](./docs/how-it-works.md) to get an overview of how the bot works.
-
-# Development Help
-
-See the [GitHub Help](./docs/github-help.md) section in the docs for examples and links to other documentation.
-
-See the [Slack Help](./docs/slack-help.md) section in the docs for details.
+Details on each option can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
