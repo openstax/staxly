@@ -10,6 +10,7 @@ module.exports = (robot) => {
   require('./src/slack-api')(robot)
   require('project-bot')(robot)
   require('probot-settings')(robot)
+  require('probot-changelog')(robot)
   require('autolabeler')(robot)
   require('first-pr-merge')(robot)
   require('new-issue-welcome')(robot)

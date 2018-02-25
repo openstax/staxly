@@ -3869,6 +3869,12 @@ probot-app-todos@^1.0.5:
   version "1.0.0"
   resolved "https://codeload.github.com/probot/attachments/tar.gz/bfeb5d0e9def50c5cd69cbbaf1db1687b38cc5d2"
 
+"probot-changelog@github:mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d":
+  version "1.0.0"
+  resolved "https://codeload.github.com/mikz/probot-changelog/tar.gz/8441e070926211ad32b5f0430c9fe30a26f97c6d"
+  dependencies:
+    probot "^5.0.0"
+
 probot-config@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/probot-config/-/probot-config-0.1.0.tgz#b6ef11ccc468e7f28e06deb68b34e093b7c7e88e"
