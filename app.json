@@ -7,19 +7,19 @@
       "required": true
     },
     "KEEPALIVE_URL": {
-      "required": true
+      "required": false
     },
     "PRIVATE_KEY": {
       "required": true
     },
     "SLACK_BOT_TOKEN": {
-      "required": true
+      "required": false
     },
     "SLACK_GITHUB_INSTALL_ID": {
-      "required": true
+      "required": false
     },
     "WEBHOOK_PROXY_URL": {
-      "required": true
+      "required": false
     },
     "WEBHOOK_SECRET": {
       "required": true
