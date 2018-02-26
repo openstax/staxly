@@ -57,6 +57,8 @@ module.exports = (robot) => {
 
       if (channelId === message.channel) {
         // Skip posting a message when the bot is in the same channel
+      } else if (robot.getBrain().getChannelById(channelId).is_general) {
+        // Skip posting to the special #general channel since everyone is in it
       } else if (robot.slackAdapter.isMemberOfChannel(channelId)) {
         // This bot is already in the channel so post there
         robot.log(`Posting to ${channelName}`)
