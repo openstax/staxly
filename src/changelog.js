@@ -120,7 +120,7 @@ module.exports = (robot) => {
   }
 
   async function checkChangelog (context) {
-    const config = await getConfig('config.yml')
+    const config = await getConfig(context, 'config.yml')
 
     if (!config || !config.changelog) {
       // don't try to run analysis without a config
