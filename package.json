@@ -20,7 +20,7 @@
     "probot-app-todos": "^1.0.5",
     "probot-config": "^0.1.0",
     "probot-settings": "github:probot/settings",
-    "project-bot": "github:philschatz/project-bot",
+    "project-bot": "github:philschatz/project-bot#838a001841875c1e5ae8f2d5ee2de901c6ec64a4",
     "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
     "smee-client": "^1.0.1",
