@@ -24,7 +24,7 @@ module.exports = (robot) => {
 
       // Create a new Issue and copy over the title, body, labels, assignees
       robot.log(`Creating new Issue at ${destRepoName}`)
-      const newIssue = await context.github.issues.create({
+      const {data: newIssue} = await context.github.issues.create({
         owner,
         repo: destRepoName,
         title: payload.issue.title,
