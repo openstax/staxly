@@ -5,30 +5,28 @@ module.exports = (robot) => {
     'issue_comment.edited'
   ], moveIssue)
 
-  async function moveIssue(context) {
-    const {payload, github} = context
+  async function moveIssue (context) {
+    const {payload} = context
     const match = REGEXP.exec(payload.comment.body)
     if (match) {
-      const newRepoName = match[1]
+      const destRepoName = match[1]
       const {owner} = context.repo()
-      // TODO: Check if the repo exists. If not, create a comment on the Issue noting why the Issue could not be moved (likely repo does not exist, or bot does not have access to the repo)
-      robot.log(`Attempting to move Issue to ${newRepoName}`)
+      robot.log(`Attempting to move Issue to ${destRepoName}`)
 
       // Check if the destination repo exists
       try {
-        await context.github.repos.get({owner, repo: newRepoName})
+        await context.github.repos.get({owner, repo: destRepoName})
       } catch (err) {
-        Raven.logErrorTODO()
         // Repo does not exist. Create a comment letting the user know that we could not move the Issue
-        return await context.github.issues.createComment(context.issue({body: `I was unable to move this Issue to https://github.com/${owner}/${newRepoName}. It may not exist or I may not have permissions to that repository. Please check and try again or report it to a developer.`}))
+        await context.github.issues.createComment(context.issue({body: `I was unable to move this Issue to https://github.com/${owner}/${destRepoName}. It may not exist or I may not have permissions to that repository. Please check and try again or report it to a developer.`}))
+        return
       }
 
-
       // Create a new Issue and copy over the title, body, labels, assignees
-      robot.log(`Creating new Issue at ${repoName}`)
-      await context.github.issues.create({
+      robot.log(`Creating new Issue at ${destRepoName}`)
+      const newIssue = await context.github.issues.create({
         owner,
-        repo: newRepoName,
+        repo: destRepoName,
         title: payload.issue.title,
         body: `(originally created at ${payload.issue.html_url})\n\n${payload.issue.body}`,
         assignees: payload.issue.assignees,
