@@ -29,8 +29,8 @@ module.exports = (robot) => {
         repo: destRepoName,
         title: payload.issue.title,
         body: `(originally created at ${payload.issue.html_url})\n\n${payload.issue.body}`,
-        assignees: payload.issue.assignees,
-        labels: payload.issue.labels
+        assignees: payload.issue.assignees.map((assignee) => assignee.login),
+        labels: payload.issue.labels.map((label) => label.name)
       })
 
       // Add a comment to the old Issue that points to the new Issue
