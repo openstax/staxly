@@ -1,4 +1,8 @@
 'use strict'
+// Based on github.com/mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d
+// but modified in the following ways:
+// - uses .github/config.yml (instead of .github/changelog.yml)
+// - uses probot-config to allow inheriting the config from another repository
 
 const getConfig = require('probot-config')
 

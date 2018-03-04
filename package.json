@@ -18,7 +18,6 @@
     "nodemon": "^1.14.11",
     "probot": "^5.0.0",
     "probot-app-todos": "^1.0.5",
-    "probot-changelog": "github:mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d",
     "probot-config": "^0.1.0",
     "probot-settings": "github:probot/settings",
     "project-bot": "github:philschatz/project-bot",
