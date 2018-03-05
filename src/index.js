@@ -8,7 +8,7 @@ module.exports = (robot) => {
 
   // Plugins that we use
   require('./slack-api')(robot)
-  require('project-bot')(robot)
+  require('project-bot')(robot, {project: STAXLY_CONFIG.defaultProject})
   require('probot-settings')(robot)
   // require('probot-changelog')(robot)
   require('./changelog')(robot)
@@ -167,12 +167,6 @@ module.exports = (robot) => {
   // }
   // robot.on('pull_request.opened', notifySlackUserWhenPullRequestOpened)
   // robot.on('pull_request.reopened', notifySlackUserWhenPullRequestOpened)
-
-  // For debugging, report that the PR was (re)opened
-  robot.on([
-    'pull_request.opened',
-    'pull_request.reopened'
-  ], ({payload}) => robot.log(`PullRequest (re)opened for ${payload.pull_request.html_url}`))
 
   // Show the running version
   robot.router.get('/_version', (req, res) => {

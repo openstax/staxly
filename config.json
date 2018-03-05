@@ -1,5 +1,15 @@
 {
   "slackChannelsToProjects": [
     {"slackChannelName": "cnx", "githubProjectOrg": "openstax", "githubProjectNumber": 1}
-  ]
+  ],
+  "defaultProject": {
+    "type": "ORGANIZATION",
+    "number": 1,
+    "new_issue_column": {
+      "index": 0
+    },
+    "new_pull_request_column": {
+      "index": 1
+    }
+  }
 }

@@ -3960,9 +3960,9 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
-"project-bot@github:philschatz/project-bot":
+"project-bot@github:philschatz/project-bot#838a001841875c1e5ae8f2d5ee2de901c6ec64a4":
   version "1.0.1"
-  resolved "https://codeload.github.com/philschatz/project-bot/tar.gz/ab6d8ae2018cfe8ba85c05ca0ebea34a13a668ed"
+  resolved "https://codeload.github.com/philschatz/project-bot/tar.gz/838a001841875c1e5ae8f2d5ee2de901c6ec64a4"
   dependencies:
     probot-config "^0.1.0"
 

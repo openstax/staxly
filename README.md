@@ -12,7 +12,7 @@ When a user reacts to a Slack message with a `:github:` then a new Card is creat
 
 The board that the card is added to depends on the Slack channel, and is configured in `/config.json`.
 
-![autocreate-cards](https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif)
+<a href="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"><img width="500" alt="autocreate-cards" src="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"/></a>
 
 ### Add/Move Project Cards when Issues/PullRequests change ([#17](https://github.com/openstax/staxly/pull/17))
 
@@ -21,7 +21,7 @@ So the card movement is now automated. Create an Issue/PullRequest and it is add
 
 The board that Card is added to is configured in the repository's `/.github/config.yml` which can inherit from another repository (to reduce copy/paste).
 
-![project-issues](https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif)
+<a href="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"/></a>
 
 ### Channel link-back
 
@@ -62,28 +62,18 @@ A bot would... (click one of the bars to vote and check out the [Issues](https:/
 
 If it is doing something wrong or you would like it to do something else, check out the [Issues](https://github.com/openstax/staxly/issues).
 
-# Dev Setup
 
-## Install Docker and Docker Compose
+# Contributing
 
-> Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/).
+To make development approachable to many types of contributors, there are several ways to get your awesome code up and running.
+The **Beginner** option is a great way to get started with minimal setup. Knowledge of Git is not even needed!
 
-## Copy the .env.example file and fill in the correct values.
+1. **Beginner**: Start a Pull Request ([staxly-dev](https://github.com/apps/staxly-dev) will be auto-deployed for you) and push up changes until it works
+  - As soon as you create the Pull Request, a link to the deployed bot will appear
+  - As you continue pushing changes, the bot will automatically be re-deployed and your Pull Request will be updated
+  - See [#26](https://github.com/openstax/staxly/pull/26) for a [screncap of the whole process](https://github.com/openstax/staxly/pull/26)
+1. **Intermediate**: Ask a maintainer for dev keys to [staxly-dev](https://github.com/apps/staxly-dev)
+1. **Advanced**: Follow [probot's instructions for creating a new GitHub App](https://github.com/probot/probot/blob/master/docs/development.md#configure-a-github-app)
 
-> Ensure you have downloaded the private key file provided by GitHub
 
-    $ cp .env.example .env
-
-## Run Docker Compose:
-
-    $ docker-compose up
-
-See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this app.
-
-See [How it Works](./docs/how-it-works.md) to get an overview of how the bot works.
-
-# Development Help
-
-See the [GitHub Help](./docs/github-help.md) section in the docs for examples and links to other documentation.
-
-See the [Slack Help](./docs/slack-help.md) section in the docs for details.
+Additional details can be found in [CONTRIBUTING.md](./CONTRIBUTING.md).
