@@ -4,27 +4,44 @@
   },
   "env": {
     "APP_ID": {
+      "description": "the ID of your GitHub App. See probot Install docs",
       "required": true
     },
     "KEEPALIVE_URL": {
+      "description": "URL to ping to keep the Slack portion of the bot alive since it relies on web sockets",
       "required": false
     },
+    "LOG_LEVEL": {
+      "required": false,
+      "value": "info",
+      "description": "trace, debug, info, warn, error, or fatal; default: info"
+    },
     "PRIVATE_KEY": {
+      "description": "the private key you downloaded when creating the GitHub App. See probot Install docs",
       "required": true
     },
     "SENTRY_DSN": {
+      "description": "URL to report sentry errors to",
       "required": false
     },
+    "SENTRY_ENVIRONMENT": {
+      "description": "'development' or 'production'",
+      "required": true
+    },
     "SLACK_BOT_TOKEN": {
+      "description": "Slack app token",
       "required": false
     },
     "SLACK_GITHUB_INSTALL_ID": {
+      "description": "Which GitHub installation number that is used when GitHub communication is initiated by Slack (since the installation is not known at that point in time)",
       "required": false
     },
     "WEBHOOK_PROXY_URL": {
+      "description": "Proxy URL for webhooks (used by the dev PullRequests since each dyno cannot register with GitHubwhen it spins up",
       "required": false
     },
     "WEBHOOK_SECRET": {
+      "description": "the secret configured for your GitHub App. See probot Install docs",
       "required": true
     }
   },
