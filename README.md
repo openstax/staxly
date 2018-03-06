@@ -1,7 +1,5 @@
 # staxly
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/openstax/staxly.svg)](https://greenkeeper.io/)
-
 > a GitHub App built with [probot](https://github.com/probot/probot) that runs a bot with plugins used by OpenStax
 
 # Features
