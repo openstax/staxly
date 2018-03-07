@@ -1,4 +1,4 @@
-const REGEXP = /^move to (\w+)/i
+const REGEXP = /^move to ([^\ ]+)/i
 module.exports = (robot) => {
   robot.on([
     'issue_comment.created',
