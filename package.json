@@ -10,13 +10,13 @@
     "test": "jest && standard --fix"
   },
   "dependencies": {
-    "@slack/client": "^3.16.0",
+    "@slack/client": "^4.0.0",
     "autolabeler": "github:probot/autolabeler",
     "first-pr-merge": "github:behaviorbot/first-pr-merge",
     "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
     "new-pr-welcome": "github:behaviorbot/new-pr-welcome",
     "nodemon": "^1.14.11",
-    "probot": "^5.0.0",
+    "probot": "^6.0.0",
     "probot-app-todos": "^1.0.5",
     "probot-config": "^0.1.0",
     "probot-settings": "github:probot/settings",
@@ -28,8 +28,8 @@
     "wip-bot": "^2.1.0"
   },
   "devDependencies": {
-    "jest": "^21.2.1",
-    "standard": "^10.0.3"
+    "jest": "^22.4.2",
+    "standard": "^11.0.0"
   },
   "engines": {
     "node": ">= 7.7.0",
