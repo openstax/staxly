@@ -106,8 +106,10 @@ module.exports = (robot) => {
         return // already processed
       }
 
+      robot.log('looking up to see if this channel is configured')
       const channel = await robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
+      robot.log('looking up to see if this channel is configured....')
       if (channel && slackCardConfig) {
         robot.log(`Creating Card because of reaction`)
         // Create a new Note Card on the Project
@@ -125,6 +127,7 @@ module.exports = (robot) => {
 
         robot.slackAdapter.addReaction('link', {channel: channel.id, ts: theMessage.ts})
       } else {
+        robot.log('channel is not configured for reactions. Should post a reply to the message telling the user how to fix that')
         const channel = await robot.slackAdapter.getChannelById(item.channel)
         robot.log(`Channel "${channel.name}" is not configured for reactions`)
       }
