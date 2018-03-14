@@ -46,9 +46,6 @@ module.exports = (robot) => {
     let match
 
     // Ignore any messages that the bot has posted (infinite loops)
-    robot.log('Noticed this message:')
-    robot.log(JSON.stringify(message))
-
     if (robot.slackAdapter.isMe(message.user)) {
       return
     }
@@ -102,15 +99,14 @@ module.exports = (robot) => {
   robot.slackAdapter.on('reaction_added', async ({payload, github, slack, slackWeb}) => {
     const {reaction, item} = payload
     if ((reaction === 'evergreen_tree' || reaction === 'github') && item.type === 'message') {
-      robot.log(`Noticed reaction`)
+      robot.log(`Noticed reaction to create a new Card`)
 
       // retrieve the message
       const theMessages = await slackWeb.channels.history({channel: item.channel, latest: item.ts, inclusive: true, count: 1})
       robot.log('Looked up the message from history')
       const theMessage = theMessages.messages[0]
       const {reactions, text: messageText} = theMessage
-      robot.log('Looked up the message. Checking if we already reacted to it')
-      robot.log(JSON.stringify(theMessage))
+      robot.log.trace('Looked up the message. Checking if we already reacted to it')
 
       // Check if the message already has a check mark on it
       const linkReaction = reactions.filter((reaction) => reaction.name === 'link')[0]
@@ -118,10 +114,10 @@ module.exports = (robot) => {
         return // already processed
       }
 
-      robot.log('looking up to see if this channel is configured')
+      robot.log.trace('looking up to see if this channel is configured')
       const channel = await robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
-      robot.log('looking up to see if this channel is configured....')
+      robot.log.trace('looking up to see if this channel is configured....')
       if (channel && slackCardConfig) {
         robot.log(`Creating Card because of reaction`)
         // Create a new Note Card on the Project
@@ -139,7 +135,7 @@ module.exports = (robot) => {
 
         robot.slackAdapter.addReaction('link', {channel: channel.id, ts: theMessage.ts})
       } else {
-        robot.log('channel is not configured for reactions. Should post a reply to the message telling the user how to fix that')
+        robot.log.trace('channel is not configured for reactions')
         const channel = await robot.slackAdapter.getChannelById(item.channel)
         await robot.slackAdapter.sendDM(theMessage.user, `:wave: I noticed you reacted to a message with a :${reaction}: indicating that I should create a Card. Unfortunately #${channel.name} is not linked to a Project so I was unable to automatically create a Card. Please file an issue at https://github.com/openstax/staxly/issues/new and we will get that fixed right up!`)
       }

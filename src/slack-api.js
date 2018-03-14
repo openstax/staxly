@@ -147,11 +147,11 @@ module.exports = (robot) => {
 
   // you need to wait for the client to fully connect before you can send messages
   rtmClient.on('connected', () => {
-    robot.log.info('Slack connected')
+    robot.log.trace('Slack connected')
   })
 
   rtmClient.on('error', (payload) => {
-    robot.log('slack error', payload)
+    robot.log.error('slack error', payload)
   })
 
   // now connect
