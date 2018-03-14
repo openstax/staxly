@@ -32,7 +32,7 @@ module.exports = (robot) => {
   async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
     if (/staxly ping/.test(text)) {
       robot.log('ping detected')
-      await slackWeb.reactions.add('table_tennis_paddle_and_ball', {channel: channel, timestamp: ts})
+      await slackWeb.reactions.add({name: 'table_tennis_paddle_and_ball', channel: channel, timestamp: ts})
     }
   }
   robot.slackAdapter.on('message', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))

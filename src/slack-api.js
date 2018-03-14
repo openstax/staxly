@@ -14,7 +14,6 @@
 // because probot events assume a payload which contains the GitHub installation id
 
 const {RTMClient, WebClient} = require('@slack/client')
-const EventEmitter = require('promise-events')
 
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
@@ -116,7 +115,7 @@ module.exports = (robot) => {
     async addReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
       try {
-        return await webClient.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
+        return await webClient.reactions.add({name: reactionEmoji, channel: message.channel, timestamp: ts})
       } catch (err) {
         // already reacted
         robot.log.trace(`Slack already reacted to the message`)
@@ -125,7 +124,7 @@ module.exports = (robot) => {
     }
     async removeReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
-      return webClient.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
+      return webClient.reactions.remove({name: reactionEmoji, channel: message.channel, timestamp: ts})
     }
     async sendDM (userId, message) {
       const {channel: {id: dmChannelId}} = await webClient.im.open(userId)
