@@ -84,7 +84,7 @@ module.exports = (robot) => {
       } else {
         const sender = robot.slackAdapter.getUserById(message.user)
         robot.log(`Asking ${sender.name} (${message.user}) to invite me to ${channelName} because I have not been invited yet`)
-        await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @${robot.slackAdapter.getBrain().user.name} #${channelName}\` into the Slack text box below.\n\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxly/issues/new`)
+        await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @${robot.slackAdapter.getBrain().self.name} #${channelName}\` into the Slack text box below.\n\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxly/issues/new`)
         try {
           await robot.slackAdapter.addReaction('robot_face', message)
         } catch (err) {
