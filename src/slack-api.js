@@ -62,7 +62,8 @@ module.exports = (robot) => {
       return channel.is_member
     }
     async getChannelById (channelId) {
-      return webClient.conversations.info({channel: channelId})
+      const data = await webClient.conversations.info({channel: channelId})
+      return data.channel
     }
     async getUserById (userId) {
       return webClient.users.info({user: userId})
