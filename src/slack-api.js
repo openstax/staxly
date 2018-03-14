@@ -57,8 +57,6 @@ module.exports = (robot) => {
     }
     async isMemberOfChannel (channelId) {
       const channel = await this.getChannelById(channelId)
-      robot.log('Channel info:')
-      robot.log(JSON.stringify(channel))
       return channel.is_member
     }
     async getChannelById (channelId) {
@@ -144,7 +142,7 @@ module.exports = (robot) => {
   rtmClient.on('authenticated', (rtmStartData) => {
     robot.log.info('Slack successfully authenticated')
     rtmAuthenticationInfo = rtmStartData
-    robot.log.info(JSON.stringify(rtmStartData))
+    robot.log.info(rtmStartData)
   })
 
   // you need to wait for the client to fully connect before you can send messages
