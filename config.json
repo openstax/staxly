@@ -1,6 +1,8 @@
 {
   "slackChannelsToProjects": [
-    {"slackChannelName": "cnx", "githubProjectOrg": "openstax", "githubProjectNumber": 1}
+    {"slackChannelName": "cnx", "githubProjectOrg": "openstax", "githubProjectNumber": 1},
+    {"slackChannelName": "staxly-dev-sandbox", "githubProjectOrg": "openstax", "githubProjectNumber": 2},
+    {"slackChannelName": "staxly-dev-sandbox-2", "githubProjectOrg": "openstax", "githubProjectNumber": 2}
   ],
   "defaultProject": {
     "type": "ORGANIZATION",
