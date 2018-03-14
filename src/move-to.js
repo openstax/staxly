@@ -1,4 +1,5 @@
-const REGEXP = /^move to ([^ ]+)/i
+// Move an Issue to another repository when a GitHub comment of the form `move-to {REPO_NAME}` is created on an Issue
+const REGEXP = /^move[ -]to ([^ ]+)/i
 module.exports = (robot) => {
   robot.on([
     'issue_comment.created',
