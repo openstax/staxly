@@ -8,6 +8,7 @@ module.exports = (robot) => {
 
   // Plugins that we use
   require('./src/slack-api')(robot)
+  require('./src/move-to')(robot)
   require('project-bot')(robot, {project: STAXLY_CONFIG.defaultProject})
   require('probot-settings')(robot)
   require('autolabeler')(robot)

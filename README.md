@@ -23,6 +23,13 @@ The board that Card is added to is configured in the repository's `/.github/conf
 
 <a href="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"/></a>
 
+### Move an Issue to another Repository ([#34](https://github.com/openstax/staxly/pull/34))
+
+To move an Issue, create a Comment on an Issue that begins with `move-to {repository_name}` where `{repository_name}` is the name of the destination repository (without the curly braces).
+
+<a href="https://user-images.githubusercontent.com/253202/36949462-aee82baa-1fb6-11e8-9920-24ad629532ec.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36949462-aee82baa-1fb6-11e8-9920-24ad629532ec.gif"/></a>
+
+
 ### Channel link-back
 
 When someone mentions a channel in a message, that channel gets a link back to the original message.
