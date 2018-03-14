@@ -28,7 +28,7 @@ module.exports = (robot) => {
 
   let authenticatedGitHubClient
 
-  let rtmBrain
+  let rtmAuthenticationInfo
 
   robot.slackAdapter = new class SlackAdapter {
     on (name, callback) {
@@ -50,10 +50,10 @@ module.exports = (robot) => {
       return rtmBrain
     }
     isMe (userId) {
-      return rtmBrain.self.id === userId
+      return rtmAuthenticationInfo.self.id === userId
     }
     myName () {
-      return rtmBrain.self.name
+      return rtmAuthenticationInfo.self.name
     }
     async isMemberOfChannel (channelId) {
       return (await this.getChannelById(channelId)).is_member
@@ -138,7 +138,8 @@ module.exports = (robot) => {
   // The client will emit an 'authenticated' event on successful connection, with the `rtm.start` payload
   rtmClient.on('authenticated', (rtmStartData) => {
     robot.log.info('Slack successfully authenticated')
-    robot.log.info(rtmStartData)
+    rtmAuthenticationInfo = rtmStartData
+    robot.log.info(JSON.stringify(rtmStartData))
   })
 
   // you need to wait for the client to fully connect before you can send messages
