@@ -46,13 +46,21 @@ module.exports = (robot) => {
     let match
 
     // Ignore any messages that the bot has posted (infinite loops)
+    robot.log('Noticed this message:')
+    robot.log(JSON.stringify(message))
+    
     if (robot.slackAdapter.isMe(message.user)) {
       return
     }
 
+    const channelsToMessage = []
     while ((match = SLACK_CHANNEL_REGEXP.exec(message.text)) !== null) {
       const channelId = match[1]
       const channelName = match[2]
+      channelsToMessage.push({channelId, channelName})
+    }
+    for (const channelPair of channelsToMessage) {
+      const {channelId, channelName} = channelPair
 
       // See if we have permission to post in that channel
       robot.log(`Preparing to write to ${channelId} aka ${channelName}`)
