@@ -13,7 +13,7 @@
 // since probot no longer supports robot.on('slack.message')
 // because probot events assume a payload which contains the GitHub installation id
 
-const {RtmClient, WebClient, CLIENT_EVENTS, RTM_EVENTS} = require('@slack/client')
+const {RTMClient, WebClient, CLIENT_EVENTS, RTM_EVENTS} = require('@slack/client')
 const EventEmitter = require('promise-events')
 
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
@@ -150,7 +150,7 @@ module.exports = (robot) => {
   robot.log.trace('Slack connecting...')
 
   // game start!
-  const SlackAPI = new RtmClient(SLACK_BOT_TOKEN)
+  const SlackAPI = new RTMClient(SLACK_BOT_TOKEN)
   const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
 
   // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
