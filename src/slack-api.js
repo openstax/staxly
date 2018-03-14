@@ -55,25 +55,17 @@ module.exports = (robot) => {
     myName () {
       return rtmBrain.self.name
     }
-    isMemberOfChannel (channelId) {
-      return this.getChannelById(channelId).is_member
+    async isMemberOfChannel (channelId) {
+      return (await this.getChannelById(channelId)).is_member
     }
-    getChannelById (channelId) {
-      const channel = rtmBrain.channels.filter(({id}) => id === channelId)[0]
-      if (!channel) {
-        throw new Error(`BUG: Invalid channel id: "${channelId}"`)
-      }
-      return channel
+    async getChannelById (channelId) {
+      return webClient.conversations.info({channel: channelId})
     }
-    getUserById (userId) {
-      const user = rtmBrain.users.filter(({id}) => id === userId)[0]
-      if (!user) {
-        throw new Error(`BUG: Invalid user id: "${userId}"`)
-      }
-      return user
+    async getUserById (userId) {
+      return webClient.users.info({user: userId})
     }
-    getGithubUserBySlackUserIdOrNull (slackUserId) {
-      const slackUser = this.getUserById(slackUserId)
+    async getGithubUserBySlackUserIdOrNull (slackUserId) {
+      const slackUser = await this.getUserById(slackUserId)
       const {fields} = slackUser.profile
       if (fields) { // Not all users have fields
         const githubField = fields['Xf0MQDURNX']
@@ -98,12 +90,12 @@ module.exports = (robot) => {
     getMessagePermalink (channelId, messageTs) {
       return `https://${this.getBrain().team.domain}.slack.com/archives/${channelId}/p${messageTs.replace('.', '')}`
     }
-    convertTextToGitHub (text) {
+    async convertTextToGitHub (text) {
       const USER_REGEXP = /<@([^>]*)/
       let match
       while ((match = USER_REGEXP.exec(text)) != null) {
         const slackUserId = match[1]
-        const githubUserId = this.getGithubUserBySlackUserIdOrNull(slackUserId)
+        const githubUserId = await this.getGithubUserBySlackUserIdOrNull(slackUserId)
         if (githubUserId) {
           text = text.replace(`<@${slackUserId}>`, `@${githubUserId}`)
         } else {
@@ -146,7 +138,7 @@ module.exports = (robot) => {
   // The client will emit an 'authenticated' event on successful connection, with the `rtm.start` payload
   rtmClient.on('authenticated', (rtmStartData) => {
     robot.log.info('Slack successfully authenticated')
-    rtmBrain = rtmStartData
+    robot.log.info(rtmStartData)
   })
 
   // you need to wait for the client to fully connect before you can send messages

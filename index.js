@@ -59,7 +59,7 @@ module.exports = (robot) => {
 
       if (channelId === message.channel) {
         // Skip posting a message when the bot is in the same channel
-      } else if (robot.slackAdapter.isMemberOfChannel(channelId)) {
+      } else if (await robot.slackAdapter.isMemberOfChannel(channelId)) {
         // This bot is already in the channel so post there
         robot.log(`Posting to ${channelName}`)
         // Construct the permalink
@@ -106,7 +106,7 @@ module.exports = (robot) => {
         return // already processed
       }
 
-      const channel = robot.slackAdapter.getChannelById(item.channel)
+      const channel = await robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
       if (channel && slackCardConfig) {
         robot.log(`Creating Card because of reaction`)
@@ -114,7 +114,7 @@ module.exports = (robot) => {
         const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)
 
         // Convert the messageText so that usernames and channelnames are not in Slack-ese (`<@U12345>`)
-        const escapedText = robot.slackAdapter.convertTextToGitHub(messageText)
+        const escapedText = await robot.slackAdapter.convertTextToGitHub(messageText)
         const noteBody = `${escapedText}
 
 [Slack Link](${permalink})`
@@ -125,7 +125,7 @@ module.exports = (robot) => {
 
         robot.slackAdapter.addReaction('link', {channel: channel.id, ts: theMessage.ts})
       } else {
-        const channel = robot.slackAdapter.getChannelById(item.channel)
+        const channel = await robot.slackAdapter.getChannelById(item.channel)
         robot.log(`Channel "${channel.name}" is not configured for reactions`)
       }
     }
