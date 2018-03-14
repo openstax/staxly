@@ -97,7 +97,7 @@ module.exports = (robot) => {
       robot.log(`Noticed reaction`)
 
       // retrieve the message
-      const theMessage = (await slackWeb.api.makeAPICall('channels.history', {channel: item.channel, latest: item.ts, inclusive: true, count: 1})).messages[0]
+      const theMessage = (await slackWeb.channels.history({channel: item.channel, latest: item.ts, inclusive: true, count: 1})).messages[0]
       const {reactions, text: messageText} = theMessage
 
       // Check if the message already has a check mark on it
