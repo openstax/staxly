@@ -56,7 +56,10 @@ module.exports = (robot) => {
       return rtmAuthenticationInfo.self.name
     }
     async isMemberOfChannel (channelId) {
-      return (await this.getChannelById(channelId)).is_member
+      const channel = await this.getChannelById(channelId)
+      robot.log('Channel info:')
+      robot.log(JSON.stringify(channel))
+      return channel.is_member
     }
     async getChannelById (channelId) {
       return webClient.conversations.info({channel: channelId})
