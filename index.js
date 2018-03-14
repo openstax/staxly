@@ -102,7 +102,7 @@ module.exports = (robot) => {
       const theMessage = theMessages.messages[0]
       const {reactions, text: messageText} = theMessage
       robot.log('Looked up the message. Checking if we already reacted to it')
-      robot.log(theMessage)
+      robot.log(JSON.stringify(theMessage))
 
       // Check if the message already has a check mark on it
       const linkReaction = reactions.filter((reaction) => reaction.name === 'link')[0]
@@ -133,7 +133,7 @@ module.exports = (robot) => {
       } else {
         robot.log('channel is not configured for reactions. Should post a reply to the message telling the user how to fix that')
         const channel = await robot.slackAdapter.getChannelById(item.channel)
-        robot.log(`Channel "${channel.name}" is not configured for reactions`)
+        await robot.slackAdapter.sendDM(theMessage.user, `:wave: I noticed you reacted to a message with a :${reaction}: indicating that I should create a Card. Unfortunately #${channel.name} is not linked to a Project so I was unable to automatically create a Card. Please file an issue at https://github.com/openstax/staxly/issues/new and we will get that fixed right up!`)
       }
     }
   })

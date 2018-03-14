@@ -121,9 +121,9 @@ module.exports = (robot) => {
       const ts = this.getMessageTimestamp(message)
       return webClient.reactions.remove({name: reactionEmoji, channel: message.channel, timestamp: ts})
     }
-    async sendDM (userId, message) {
-      const {channel: {id: dmChannelId}} = await webClient.im.open(userId)
-      await rtmClient.sendMessage(message, dmChannelId)
+    async sendDM (userId, messageText) {
+      const {channel: {id: dmChannelId}} = await webClient.im.open({user: userId})
+      await webClient.chat.postMessage({text: messageText, channel: dmChannelId})
     }
   }()
 
