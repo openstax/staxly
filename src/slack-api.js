@@ -123,7 +123,7 @@ module.exports = (robot) => {
     }
     async sendDM (userId, messageText) {
       const {channel: {id: dmChannelId}} = await webClient.im.open({user: userId})
-      await webClient.chat.postMessage({text: messageText, channel: dmChannelId})
+      await webClient.chat.postMessage({text: messageText, channel: dmChannelId, as_user: true})
     }
   }()
 
