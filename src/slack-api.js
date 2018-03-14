@@ -13,7 +13,7 @@
 // since probot no longer supports robot.on('slack.message')
 // because probot events assume a payload which contains the GitHub installation id
 
-const {RTMClient, WebClient, CLIENT_EVENTS, RTM_EVENTS} = require('@slack/client')
+const {RTMClient, WebClient} = require('@slack/client')
 const EventEmitter = require('promise-events')
 
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
@@ -54,7 +54,19 @@ module.exports = (robot) => {
 
   robot.slackAdapter = new class SlackAdapter {
     on (name, callback) {
-      events.on(name, callback)
+      SlackAPI.on(name, async (payload) => {
+        if (!authenticatedGitHubClient && SLACK_GITHUB_INSTALL_ID) {
+          authenticatedGitHubClient = await robot.auth(SLACK_GITHUB_INSTALL_ID)
+        }
+        const value = {
+          payload,
+          github: authenticatedGitHubClient || null,
+          slack: SlackAPI,
+          slackWeb: SlackWebAPI
+        }
+        robot.log.trace(`slack_event ${name}`, name === 'authenticated' ? '(too_long_to_show_in_logs)' : payload)
+        callback(value)
+      })
     }
     getBrain () {
       return rtmBrain
@@ -153,25 +165,18 @@ module.exports = (robot) => {
   const SlackAPI = new RTMClient(SLACK_BOT_TOKEN)
   const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
 
-  // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload
-  SlackAPI.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
+  // The client will emit an 'authenticated' event on successful connection, with the `rtm.start` payload
+  SlackAPI.on('authenticated', (rtmStartData) => {
     robot.log.trace('Slack successfully authenticated')
     rtmBrain = rtmStartData
     emit('authenticated', rtmStartData)
   })
 
   // you need to wait for the client to fully connect before you can send messages
-  SlackAPI.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
+  SlackAPI.on('connected', () => {
     robot.log.info('Slack connected')
     emit('connected')
   })
-
-  // bind to all supported events <https://api.slack.com/events>
-  for (const event of Object.values(RTM_EVENTS)) {
-    SlackAPI.on(event, (payload) => {
-      emit(event, payload)
-    })
-  }
 
   // now connect
   SlackAPI.connect('https://slack.com/api/rtm.connect')
