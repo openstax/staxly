@@ -179,5 +179,5 @@ module.exports = (robot) => {
   })
 
   // now connect
-  SlackAPI.connect('https://slack.com/api/rtm.connect')
+  SlackAPI.start()
 }
