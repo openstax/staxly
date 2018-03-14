@@ -47,7 +47,7 @@ module.exports = (robot) => {
       })
     }
     getBrain () {
-      return rtmBrain
+      return rtmAuthenticationInfo
     }
     isMe (userId) {
       return rtmAuthenticationInfo.self.id === userId
@@ -66,7 +66,8 @@ module.exports = (robot) => {
       return data.channel
     }
     async getUserById (userId) {
-      return webClient.users.info({user: userId})
+      const data = await webClient.users.info({user: userId})
+      return data.user
     }
     async getGithubUserBySlackUserIdOrNull (slackUserId) {
       const slackUser = await this.getUserById(slackUserId)
