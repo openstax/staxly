@@ -1,13 +1,13 @@
 //
-// This adds a `robot.onSlack('message', ({payload, slack, slackWeb}) => )` function
+// This adds a `robot.slackAdapter.on('message', ({payload, slack, slackWeb}) => )` function
 // The event name is one of https://api.slack.com/rtm#events .
 //
 // If an event may have a subtype (ie 'message' has 'message_changed' and 'deleted')
 // then you can listen also listen to the following events:
 //
-// - 'message.deleted' : only listen to deleted events
-// - 'message.message_changed' : only listen to edited events
-// - 'message.' : only listen to new messages (no subtype)
+// - 'message::deleted' : only listen to deleted events
+// - 'message::message_changed' : only listen to edited events
+// - 'message' : only listen to new messages (no subtype)
 //
 // Modified from https://github.com/grrowl/probot-slack/blob/master/index.js
 // since probot no longer supports robot.on('slack.message')
@@ -29,40 +29,19 @@ module.exports = (robot) => {
 
   let authenticatedGitHubClient
 
-  async function emit (name, payload) {
-    if (!authenticatedGitHubClient) {
-      authenticatedGitHubClient = await robot.auth(SLACK_GITHUB_INSTALL_ID)
-    }
-    const value = {
-      payload,
-      github: authenticatedGitHubClient,
-      slack: SlackAPI,
-      slackWeb: SlackWebAPI
-    }
-    robot.log.trace(`slack_event ${name}`, name === 'authenticated' ? '(too_long_to_show_in_logs)' : payload)
-    return events.emit(name, value).then(() => {
-      if (payload && payload.subtype) { // "connected" does not have a payload
-        return events.emit(`${payload.subtype}`, value)
-      } else {
-        return events.emit(`${name}.`, value)
-      }
-    })
-  }
-
-  const events = new EventEmitter()
   let rtmBrain
 
   robot.slackAdapter = new class SlackAdapter {
     on (name, callback) {
-      SlackAPI.on(name, async (payload) => {
+      rtmClient.on(name, async (payload) => {
         if (!authenticatedGitHubClient && SLACK_GITHUB_INSTALL_ID) {
           authenticatedGitHubClient = await robot.auth(SLACK_GITHUB_INSTALL_ID)
         }
         const value = {
           payload,
           github: authenticatedGitHubClient || null,
-          slack: SlackAPI,
-          slackWeb: SlackWebAPI
+          slack: rtmClient,
+          slackWeb: webClient
         }
         robot.log.trace(`slack_event ${name}`, name === 'authenticated' ? '(too_long_to_show_in_logs)' : payload)
         callback(value)
@@ -137,7 +116,7 @@ module.exports = (robot) => {
     async addReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
       try {
-        return await SlackWebAPI.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
+        return await webClient.reactions.add(reactionEmoji, {channel: message.channel, timestamp: ts})
       } catch (err) {
         // already reacted
         robot.log.trace(`Slack already reacted to the message`)
@@ -146,11 +125,11 @@ module.exports = (robot) => {
     }
     async removeReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
-      return SlackWebAPI.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
+      return webClient.reactions.remove(reactionEmoji, {channel: message.channel, timestamp: ts})
     }
     async sendDM (userId, message) {
-      const {channel: {id: dmChannelId}} = await SlackWebAPI.im.open(userId)
-      await SlackAPI.sendMessage(message, dmChannelId)
+      const {channel: {id: dmChannelId}} = await webClient.im.open(userId)
+      await rtmClient.sendMessage(message, dmChannelId)
     }
   }()
 
@@ -162,22 +141,20 @@ module.exports = (robot) => {
   robot.log.trace('Slack connecting...')
 
   // game start!
-  const SlackAPI = new RTMClient(SLACK_BOT_TOKEN)
-  const SlackWebAPI = new WebClient(SLACK_BOT_TOKEN)
+  const rtmClient = new RTMClient(SLACK_BOT_TOKEN)
+  const webClient = new WebClient(SLACK_BOT_TOKEN)
 
   // The client will emit an 'authenticated' event on successful connection, with the `rtm.start` payload
-  SlackAPI.on('authenticated', (rtmStartData) => {
+  rtmClient.on('authenticated', (rtmStartData) => {
     robot.log.trace('Slack successfully authenticated')
     rtmBrain = rtmStartData
-    emit('authenticated', rtmStartData)
   })
 
   // you need to wait for the client to fully connect before you can send messages
-  SlackAPI.on('connected', () => {
+  rtmClient.on('connected', () => {
     robot.log.info('Slack connected')
-    emit('connected')
   })
 
   // now connect
-  SlackAPI.start()
+  rtmClient.start()
 }

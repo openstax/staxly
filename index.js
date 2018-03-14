@@ -31,16 +31,17 @@ module.exports = (robot) => {
   //
   async function waveWhenMentioned ({text, ts, channel}, slackWeb) {
     if (/staxly ping/.test(text)) {
+      robot.log('ping detected')
       await slackWeb.reactions.add('table_tennis_paddle_and_ball', {channel: channel, timestamp: ts})
     }
   }
-  robot.slackAdapter.on('message.', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
+  robot.slackAdapter.on('message', async ({payload: message, slackWeb}) => waveWhenMentioned(message, slackWeb))
   robot.slackAdapter.on('message_changed', async ({payload: message, slackWeb}) => waveWhenMentioned({text: message.message.text, ts: message.message.ts, channel: message.channel}, slackWeb))
 
   //
   // When a user (not a bot) mentions a channel then add a message in that channel letting them know they were referenced
   //
-  robot.slackAdapter.on('message.', async ({payload: message, slack, slackWeb}) => {
+  robot.slackAdapter.on('message', async ({payload: message, slack, slackWeb}) => {
     let match
 
     // Ignore any messages that the bot has posted (infinite loops)
