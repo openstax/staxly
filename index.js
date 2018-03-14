@@ -102,6 +102,7 @@ module.exports = (robot) => {
       const theMessage = theMessages.messages[0]
       const {reactions, text: messageText} = theMessage
       robot.log('Looked up the message. Checking if we already reacted to it')
+      robot.log(theMessage)
 
       // Check if the message already has a check mark on it
       const linkReaction = reactions.filter((reaction) => reaction.name === 'link')[0]
