@@ -146,13 +146,17 @@ module.exports = (robot) => {
 
   // The client will emit an 'authenticated' event on successful connection, with the `rtm.start` payload
   rtmClient.on('authenticated', (rtmStartData) => {
-    robot.log.trace('Slack successfully authenticated')
+    robot.log.info('Slack successfully authenticated')
     rtmBrain = rtmStartData
   })
 
   // you need to wait for the client to fully connect before you can send messages
   rtmClient.on('connected', () => {
     robot.log.info('Slack connected')
+  })
+
+  rtmClient.on('error', (payload) => {
+    robot.log('slack error', payload)
   })
 
   // now connect
