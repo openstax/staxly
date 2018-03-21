@@ -20,6 +20,22 @@ newPRWelcomeComment: |
 firstPRMergeComment: >
   Congrats on merging your first pull request! 🎉🎉🎉
 
+# Require updates to the CHANGELOG when certain files change in a PullRequest.
+# See https://github.com/mikz/probot-changelog for details.
+# This is slightly different than the original plugin.
+changelog:
+  # The filename of the CHANGELOG that needs to be updated in every PullRequest
+  # Until we start making releases, just make sure the README is updated.
+  filename: README.md
+
+  # (optional) when files matching these patterns are changed then disallow merging
+  # until the CHANGELOG is updated.
+  # If this pattern is not included then **all** Pull Requests require an edit to
+  # the CHANGELOG file
+  include:
+    - /^src\//
+
+# Automatically add cards to a GitHub Project
 project:
   type: "ORGANIZATION"
   number: 1
