@@ -1,5 +1,9 @@
-module.exports = (robot) => {
+const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|book-tools> bar"
+const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
+const STAXLY_CONFIG = require('../config.json')
+
+module.exports = (robot) => {
   // Ensure the slack-api is loaded
   require('./slack-api')(robot)
 
@@ -118,5 +122,4 @@ module.exports = (robot) => {
       }
     }
   })
-
 }
