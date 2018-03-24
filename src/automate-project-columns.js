@@ -14,16 +14,15 @@ const {readFileSync} = require('fs')
 const {join: pathJoin} = require('path')
 const yaml = require('js-yaml')
 
-
 const AUTOMATION_COMMANDS = [
   {
     webhookName: 'issues.labeled',
     ruleName: 'added_label',
-    ruleMatcher: async function(context, ruleValue) {
+    ruleMatcher: async function (context, ruleValue) {
       // labels may be defined by a label or an id (for more persistence)
       return context.payload.label.name === ruleValue || context.payload.label.id === ruleValue
     }
-  },
+  }
 ]
 
 module.exports = (robot) => {
@@ -74,17 +73,14 @@ module.exports = (robot) => {
             }
           }
         }
-
       } else {
         robot.log.error(`Could not find project. JSON=${JSON.stringify(projectConfig)}`)
       }
-
     } // Finished populating the CARD_LOOKUP cache
   }
 
   // Register all of the automation commands
   AUTOMATION_COMMANDS.forEach(({webhookName, ruleName, ruleMatcher}) => {
-
     robot.on(webhookName, async function (context) {
       await populateCache(context)
 
@@ -147,8 +143,5 @@ module.exports = (robot) => {
         }
       })
     })
-
-
   })
-
 }
