@@ -1,0 +1,120 @@
+---
+automate_project_columns:
+- title: Test Repo Project
+  repo_owner: "philschatz"
+  repo_name: "test"
+  number: 1
+  id: 1292562
+  columns:
+  - title: Done
+    # index: 2 # These are 0-based
+    id: 2202275
+    rules:
+      added_label: "wontfix"
+
+
+# - title: Tutor Sprint
+#   # number: 2
+#   # org: "openstax"
+#   # id: 246802468
+#   columns:
+#   - title: "1A: Backlog Define Design Decomp"
+#     index: 1
+#     # id: 12345678
+#     rules:
+#       new.issue: true
+#   - title: "3B: CODE & PEER REVIEW"
+#     index: 6
+#     # id: 12345678
+#     rules:
+#       new.pullrequest: true
+#       reopened.pullrequest: true
+#   - title: "4: UX REVIEW"
+#     index: 7
+#     # id: 12345678
+#     rules:
+#       accepted: true
+#       merged: true
+#   - title: "5A: Functional Verification"
+#     index: 8
+#     # id: 12345678
+#     rules:
+#       assigned: true
+#   - title: "5B: Verified on QA"
+#     index: 9
+#     # id: 12345678
+#     rules:
+#       added_label: "verified"
+#   - title: "Done: Will Not Release"
+#     index: 14
+#     # id: 12345678
+#     rules:
+#       closed.pullrequest: true
+#       added_label: "wontfix"
+#
+#
+# - title: Books Sprint
+#   # number: 2
+#   # org: "openstax"
+#   # id: 246802468
+#   columns:
+#   - title: "Inbox for Prioritization"
+#     index: 1
+#     # id: 12345678
+#     rules:
+#       new.issue: true
+#   - title: "Coding"
+#     index: 4
+#     # id: 12345678
+#     rules:
+#       new.pullrequest: true
+#   - title: "QA"
+#     index: 7
+#     # id: 12345678
+#     rules:
+#       accepted: true
+#       merged: true
+#   - title: "Done"
+#     index: 8
+#     # id: 12345678
+#     rules:
+#       closed.issue: true
+#
+#
+# - title: BIT Sprint
+#   # number: 2
+#   # org: "openstax"
+#   # id: 246802468
+#   columns:
+#   - title: "Backlog Define/Design/Decomp"
+#     index: 1
+#     # id: 12345678
+#     rules:
+#       new.issue: true
+#   - title: "Doing"
+#     index: 5
+#     # id: 12345678
+#     rules:
+#       new.pullrequest: true
+#       reopened.pullrequest: true
+#   - title: "Dev Verify"
+#     index: 6
+#     # id: 12345678
+#     rules:
+#       added_reviewer: true
+#   - title: "UX Review"
+#     index: 7
+#     # id: 12345678
+#     rules:
+#       added_reviewer: "Fredasaurus"
+#   - title: "5A: Functional Verification"
+#     index: 8
+#     # id: 12345678
+#     rules:
+#       accepted: true
+#       merged: true
+#   - title: "Done Not Released"
+#     index: 13
+#     # id: 12345678
+#     rules:
+#       closed.issue: true
