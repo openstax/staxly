@@ -1,16 +1,16 @@
 ---
 automate_project_columns:
-- title: Test Repo Project
-  repo_owner: "philschatz"
-  repo_name: "test"
-  number: 1
-  id: 1292562
-  columns:
-  - title: Done
-    # index: 2 # These are 0-based
-    id: 2202275
-    rules:
-      added_label: "wontfix"
+# - title: Test Repo Project
+#   repo_owner: "philschatz"
+#   repo_name: "test"
+#   number: 1
+#   id: 1292562
+#   columns:
+#   - title: Done
+#     # index: 2 # These are 0-based
+#     id: 2202275
+#     rules:
+#       added_label: "wontfix"
       # removed_label: "wontfix"
 
       # assigned_to.issue: "philschatz"

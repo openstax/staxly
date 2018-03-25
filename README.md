@@ -14,14 +14,22 @@ The board that the card is added to depends on the Slack channel, and is configu
 
 <a href="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"><img width="500" alt="autocreate-cards" src="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"/></a>
 
-### Add/Move Project Cards when Issues/PullRequests change ([#17](https://github.com/openstax/staxly/pull/17))
+### Add/Move Project Cards when Issues/PullRequests change ([#42](https://github.com/openstax/staxly/pull/42))
 
 It is annoying to remember to add new Cards to a board and move the Cards when the Issue/Pull Request changes.
 So the card movement is now automated. Create an Issue/PullRequest and it is added to the board. Merge/Close it and it is moved to the Done column.
 
-The board that Card is added to is configured in the repository's `/.github/config.yml` which can inherit from another repository (to reduce copy/paste).
+You can move cards based on many criteria (adding labels, adding reviews, merging, assigning, etc) and it is all configured by creating a card in the Project column like the following:
 
-<a href="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36498318-f09005c2-170b-11e8-90cb-771f4d13b884.gif"/></a>
+```markdown
+###### Automation Rules
+
+- `new.issue`
+- `added_label` wontfix
+```
+
+
+<a href="https://user-images.githubusercontent.com/253202/37872089-ad7d21ea-2fcd-11e8-81ba-7f3977c102cf.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/37872089-ad7d21ea-2fcd-11e8-81ba-7f3977c102cf.gif"/></a>
 
 ### Move an Issue to another Repository ([#34](https://github.com/openstax/staxly/pull/34))
 

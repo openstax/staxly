@@ -21,7 +21,9 @@
 const {readFileSync} = require('fs')
 const {join: pathJoin} = require('path')
 const yaml = require('js-yaml')
+const commonmark = require('commonmark')
 
+const commonmarkParser = new commonmark.Parser()
 function ALWAYS_TRUE () { return true }
 
 const AUTOMATION_COMMANDS = [
@@ -129,11 +131,111 @@ module.exports = (robot) => {
 
   // Load all the Cards in memory because there is no way to lookup which projects an Issue is in
   const CARD_LOOKUP = {} // Key is "{issue_url}" and value is [{projectId, cardId}]
-  let ORG_PROJECTS = {} // Only load this once for each org
-  let REPO_PROJECTS = {} // Only load this once for each repo
+  const ORG_PROJECTS = {} // Only load this once for each org
+  const REPO_PROJECTS = {} // Only load this once for each repo
+  const AUTOMATION_CARDS = {} // Derived from parsing the *magic* "Automation Rules" cards. Key is "{projectId}" and value is [{columnId, ruleName, ruleValue}]
+  let populatedCacheAlready = false
+
+  const USER_CACHED = {} // Key is the username, Value is the type of the User (User, Organization)
+  const PROJECTS_CACHED = {} // Key is "{username}/{repoName}", Value is `true`
+  const COLUMN_CACHE = {} // Key is columnId, Value is projectId. Unfortunately, https://developer.github.com/v3/activity/events/types/#projectcardevent does not contain the projectId but it does have the columnId so we can look it up
+
+  function addOrUpdateAutomationCache (context, projectId, columnId, projectCard) {
+    if (!projectId) {
+      console.log(COLUMN_CACHE)
+      throw new Error(`BUG: Could not find projectId for card. JSON=${JSON.stringify(projectCard)}`)
+    }
+    // Check if it is one of the special "Automation Rules" cards
+    let hasMagicTitle = false
+    let walkEvent
+    const root = commonmarkParser.parse(projectCard.note)
+    const walker = root.walker()
+    while ((walkEvent = walker.next())) {
+      const {node} = walkEvent
+      if (walkEvent.entering && node.type === 'text' && node.parent.type === 'heading' && node.literal.trim() === 'Automation Rules') {
+        hasMagicTitle = true
+      }
+      // Each item should be simple text that contains the rule, followed by a space, followed by any arguments (sometimes wrapped in spaces)
+      if (hasMagicTitle && walkEvent.entering && node.type === 'code') {
+        if (node.parent.type === 'paragraph' && node.parent.parent.type === 'item') {
+          AUTOMATION_CARDS[projectId] = AUTOMATION_CARDS[projectId] || []
+
+          // Find the card if it exists and remove it
+          const existingEntry = AUTOMATION_CARDS[projectId].filter(({cardId}) => cardId === projectCard.id)[0]
+          if (existingEntry) {
+            AUTOMATION_CARDS[projectId].splice(AUTOMATION_CARDS[projectId].indexOf(existingEntry), 1)
+          }
+
+          AUTOMATION_CARDS[projectId].push({
+            cardId: projectCard.id, // Store the cardId so we can update it if the card is edited
+            columnId: columnId,
+            ruleName: node.literal,
+            ruleValue: node.next && node.next.literal.trim() // not all rules have a value
+          })
+        }
+      }
+    }
+  }
+
+  function addOrUpdateCardCache (projectId, projectCard) {
+    CARD_LOOKUP[projectCard.content_url] = CARD_LOOKUP[projectCard.content_url] || {}
+    CARD_LOOKUP[projectCard.content_url][projectCard.id] = {projectId: projectId, cardId: projectCard.id}
+  }
 
   async function populateCache (context) {
+    // Loop through all the cards, populating the CARD_LOOKUP and the AUTOMATION_CARDS
+    const username = context.repo().owner
+    let cachedUserInfo = USER_CACHED[username]
+    if (!cachedUserInfo) {
+      const {data: userInfo} = await context.github.users.getForUser({username: username})
+      cachedUserInfo = userInfo.type
+    }
+
+    let projects = []
+    if (cachedUserInfo === 'User') {
+      // Ensure Projects for this repo have been added
+      if (!PROJECTS_CACHED[`${username}/${context.repo().repo}`]) {
+        projects = (await context.github.projects.getRepoProjects(context.repo({state: 'open'}))).data
+        PROJECTS_CACHED[`${username}/${context.repo().repo}`] = true
+      }
+    } else if (cachedUserInfo === 'Organization') {
+      // Ensure Projects for this org have been added
+      if (!PROJECTS_CACHED[username]) {
+        projects = (await context.github.projects.getOrgProjects({org: username, state: 'open'})).data
+        PROJECTS_CACHED[username] = true
+      }
+    }
+
+    // Loop over all the new projects, looking for the AUTOMATION_CARDS
+    for (const project of projects) {
+      const projectId = project.id
+      const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
+      for (const projectColumn of projectColumns) {
+        COLUMN_CACHE[projectColumn.id] = projectId
+        const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
+
+        for (const projectCard of projectCards) {
+          // Issues can belong to multiple cards
+          if (projectCard.content_url) {
+            addOrUpdateCardCache(projectId, projectCard)
+          } else {
+            addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard)
+          }
+        }
+      }
+    }
+
+    USER_CACHED[username] = cachedUserInfo
+
+    // Only populate based on the config file once
+    if (populatedCacheAlready) {
+      return
+    }
+
     // Loop through all the projects in the config and add them to the cache
+    if (!Array.isArray(automateProjectColumnsConfig)) {
+      return // the config file is not iterable (likely empty)
+    }
     for (const projectConfig of automateProjectColumnsConfig) {
       let projectId
       if (projectConfig.id) {
@@ -162,10 +264,11 @@ module.exports = (robot) => {
         }
         const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
         for (const projectColumn of projectColumns) {
+          COLUMN_CACHE[projectColumn.id] = projectId
           const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
 
           for (const projectCard of projectCards) {
-            // Issues can belong to multiple cards
+            // Issues can belong to multiple cards. We repeat this so that we include the projectConfig
             if (projectCard.content_url) {
               CARD_LOOKUP[projectCard.content_url] = CARD_LOOKUP[projectCard.content_url] || {}
               CARD_LOOKUP[projectCard.content_url][projectCard.id] = {projectId: projectId, cardId: projectCard.id, projectConfig: projectConfig}
@@ -176,7 +279,21 @@ module.exports = (robot) => {
         robot.log.error(`Could not find project. JSON=${JSON.stringify(projectConfig)}`)
       }
     } // Finished populating the CARD_LOOKUP cache
+    populatedCacheAlready = true
   }
+
+  // register a listener when a Card changes so we can re-parse it if it is an "Automation Rules" Card
+  robot.on(['project_card.edited', 'project_card.created', 'project_card.moved'], async (context) => {
+    await populateCache(context)
+
+    const projectCard = context.payload.project_card
+    const projectId = COLUMN_CACHE[projectCard.column_id]
+    if (projectCard.content_url) {
+      addOrUpdateCardCache(projectId, projectCard)
+    } else {
+      addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard)
+    }
+  })
 
   // Register all of the automation commands
   AUTOMATION_COMMANDS.forEach(({webhookName, ruleName, ruleMatcher}) => {
@@ -198,13 +315,26 @@ module.exports = (robot) => {
 
         let columnInfo = null
         let ruleValue = null
-        for (const column of projectConfig.columns) {
-          if (column.rules[ruleName]) {
-            if (columnInfo) {
-              robot.log.error(`Duplicate rule named "${ruleName}" within project config ${JSON.stringify(projectConfig)}`)
-            } else {
-              columnInfo = column
-              ruleValue = column.rules[ruleName]
+
+        // First, check if there is an "Automation Rules" that contains the rule
+        if (AUTOMATION_CARDS[projectId]) {
+          const maybeMatched = AUTOMATION_CARDS[projectId].filter(({ruleName: rn}) => rn === ruleName)[0]
+          if (maybeMatched) {
+            columnInfo = {id: maybeMatched.columnId}
+            ruleValue = maybeMatched.ruleValue
+          }
+        }
+
+        if (projectConfig) {
+          // Not all Cards have a projectConfig. If the .yml file did not contain a config for the project that this card was in then it would not have a projectConfig
+          for (const column of projectConfig.columns) {
+            if (column.rules[ruleName]) {
+              if (columnInfo) {
+                robot.log.error(`Duplicate rule named "${ruleName}" within project config (could also be overridden by and "Automation Rule" card) ${JSON.stringify(projectConfig)}`)
+              } else {
+                columnInfo = column
+                ruleValue = column.rules[ruleName]
+              }
             }
           }
         }
