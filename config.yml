@@ -11,6 +11,22 @@ automate_project_columns:
     id: 2202275
     rules:
       added_label: "wontfix"
+      # removed_label: "wontfix"
+
+      # assigned_to.issue: "philschatz"
+      # assigned.issue: true
+      # unassigned.issue: true
+      # closed.issue: true
+      # reopened.issue: true
+      #
+      # new.pullrequest: true
+      # assigned.pullrequest: true
+      # unassigned.pullrequest: true
+      # closed.pullrequest: true
+      # reopened.pullrequest: true
+      # added_reviewer: true
+      # accepted: true
+      # merged: true
 
 
 # - title: Tutor Sprint
