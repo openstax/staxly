@@ -151,6 +151,9 @@ module.exports = (robot) => {
     if (!projectId) {
       throw new Error(`BUG: Could not find projectId for card. JSON=${JSON.stringify(projectCard)}`)
     }
+    if (!projectCard.note) {
+      return
+    }
     // Check if it is one of the special "Automation Rules" cards
     let hasMagicTitle = false
     let walkEvent
@@ -224,8 +227,10 @@ module.exports = (robot) => {
           // Issues can belong to multiple cards
           if (projectCard.content_url) {
             addOrUpdateCardCache(projectId, projectCard)
-          } else {
+          } else if (projectCard.note) {
             addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard)
+          } else {
+            robot.log.error(projectCard, `Could not do anything with this card`)
           }
         }
       }
@@ -296,8 +301,10 @@ module.exports = (robot) => {
     const projectId = COLUMN_CACHE[projectCard.column_id]
     if (projectCard.content_url) {
       addOrUpdateCardCache(projectId, projectCard)
-    } else {
+    } else if (projectCard.note) {
       addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard)
+    } else {
+      robot.log.error(projectCard, `Could not do anything with this card`)
     }
   })
 
