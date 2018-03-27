@@ -135,7 +135,7 @@ const AUTOMATION_COMMANDS = [
 
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'probot-projects'})
-  logger.log(`Starting up`)
+  logger.info(`Starting up`)
   const {automate_project_columns: automateProjectColumnsConfig} = yaml.safeLoad(readFileSync(pathJoin(__dirname, '..', 'config.yml')))
 
   // Load all the Cards in memory because there is no way to lookup which projects an Issue is in
