@@ -5,6 +5,14 @@ const commonmark = require('commonmark')
 
 const commonmarkParser = new commonmark.Parser()
 function ALWAYS_TRUE () { return true }
+async function paginate (octokit, response) {
+  let {data} = response
+  while (octokit.hasNextPage(response)) {
+    response = await octokit.getNextPage(response)
+    data = data.concat(response.data)
+  }
+  return data
+}
 
 const AUTOMATION_COMMANDS = [
   { ruleName: 'edited_issue', webhookName: 'issues.edited', ruleMatcher: ALWAYS_TRUE },
@@ -156,6 +164,7 @@ module.exports = (robot) => {
     if (!projectCard.note) {
       return
     }
+    logger.debug(projectCard, `Checking whether the card is an AUTOMATION_CARD`)
     // Check if it is one of the special "Automation Rules" cards
     let hasMagicTitle = false
     let walkEvent
@@ -164,10 +173,12 @@ module.exports = (robot) => {
     while ((walkEvent = walker.next())) {
       const {node} = walkEvent
       if (walkEvent.entering && node.type === 'text' && node.parent.type === 'heading' && node.literal.trim() === 'Automation Rules') {
+        logger.debug(`Card Does have the Magic "Automation Rules" text`)
         hasMagicTitle = true
       }
       // Each item should be simple text that contains the rule, followed by a space, followed by any arguments (sometimes wrapped in spaces)
       if (hasMagicTitle && walkEvent.entering && node.type === 'code') {
+        logger.debug(`Found a code block in the Card (looks promising...)`)
         if (node.parent.type === 'paragraph' && node.parent.parent.type === 'item') {
           AUTOMATION_CARDS[projectId] = AUTOMATION_CARDS[projectId] || []
 
@@ -229,16 +240,16 @@ module.exports = (robot) => {
       const projectId = project.id
       const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
       for (const projectColumn of projectColumns) {
-        logger.trace(`Inspecting all cards in column ${projectColumn.url}`)
+        logger.trace(`Inspecting all cards in Column ${projectColumn.url}`)
         COLUMN_CACHE[projectColumn.id] = {projectId, ownerUrl: project.owner_url}
-        const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
+        const projectCards = await paginate(context.github, await context.github.projects.getProjectCards({column_id: projectColumn.id}))
 
         for (const projectCard of projectCards) {
           // Issues can belong to multiple cards
-          if (projectCard.content_url) {
-            addOrUpdateCardCache(projectId, projectCard)
-          } else if (projectCard.note) {
+          if (projectCard.note) {
             addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard, project.owner_url)
+          } else if (projectCard.content_url) {
+            addOrUpdateCardCache(projectId, projectCard)
           } else {
             logger.error(projectCard, `Could not do anything with this card`)
           }
@@ -286,7 +297,7 @@ module.exports = (robot) => {
         const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
         for (const projectColumn of projectColumns) {
           COLUMN_CACHE[projectColumn.id] = {projectId, ownerUrl: projectConfig.org || projectConfig.repo_owner}
-          const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
+          const projectCards = await paginate(context.github, await context.github.projects.getProjectCards({column_id: projectColumn.id}))
 
           for (const projectCard of projectCards) {
             // Issues can belong to multiple cards. We repeat this so that we include the projectConfig
@@ -311,10 +322,10 @@ module.exports = (robot) => {
     const projectCard = context.payload.project_card
     if (COLUMN_CACHE[projectCard.column_id]) {
       const {projectId, ownerUrl} = COLUMN_CACHE[projectCard.column_id]
-      if (projectCard.content_url) {
-        addOrUpdateCardCache(projectId, projectCard)
-      } else if (projectCard.note) {
+      if (projectCard.note) {
         addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard, ownerUrl)
+      } else if (projectCard.content_url) {
+        addOrUpdateCardCache(projectId, projectCard)
       } else {
         logger.error(projectCard, `Could not do anything with this card`)
       }
@@ -325,11 +336,12 @@ module.exports = (robot) => {
 
   // Register all of the automation commands
   AUTOMATION_COMMANDS.forEach(({createsACard, webhookName, ruleName, ruleMatcher}) => {
+    logger.trace(`Attaching listener for ${webhookName}`)
     robot.on(webhookName, async function (context) {
       let issueUrl
       let issueId
       let issueType
-      logger.debug(`Event received`)
+      logger.trace(`Event received for ${webhookName}`)
       if (context.payload.issue) {
         issueUrl = context.payload.issue.url
         issueId = context.payload.issue.id
