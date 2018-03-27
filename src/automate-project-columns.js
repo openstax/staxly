@@ -208,12 +208,14 @@ module.exports = (robot) => {
       // Ensure Projects for this repo have been added
       if (!PROJECTS_CACHED[`${username}/${context.repo().repo}`]) {
         projects = (await context.github.projects.getRepoProjects(context.repo({state: 'open'}))).data
+        logger.info(`Loading all Repo projects for ${username}/${context.repo().repo} (${projects.length})`)
         PROJECTS_CACHED[`${username}/${context.repo().repo}`] = true
       }
     } else if (cachedUserInfo === 'Organization') {
       // Ensure Projects for this org have been added
       if (!PROJECTS_CACHED[username]) {
         projects = (await context.github.projects.getOrgProjects({org: username, state: 'open'})).data
+        logger.info(`Loading all Organization projects for ${username} (${projects.length})`)
         PROJECTS_CACHED[username] = true
       }
     }
@@ -301,13 +303,17 @@ module.exports = (robot) => {
     // await populateCache(context) This command does not work because context.repo() does not really apply in this case (when it's an Org )
 
     const projectCard = context.payload.project_card
-    const {projectId, ownerUrl} = COLUMN_CACHE[projectCard.column_id]
-    if (projectCard.content_url) {
-      addOrUpdateCardCache(projectId, projectCard)
-    } else if (projectCard.note) {
-      addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard, ownerUrl)
+    if (COLUMN_CACHE[projectCard.column_id]) {
+      const {projectId, ownerUrl} = COLUMN_CACHE[projectCard.column_id]
+      if (projectCard.content_url) {
+        addOrUpdateCardCache(projectId, projectCard)
+      } else if (projectCard.note) {
+        addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard, ownerUrl)
+      } else {
+        logger.error(projectCard, `Could not do anything with this card`)
+      }
     } else {
-      logger.error(projectCard, `Could not do anything with this card`)
+      logger.error(projectCard, `Could not find column for card in COLUMN_CACHE`)
     }
   })
 
