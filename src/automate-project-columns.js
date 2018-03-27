@@ -7,16 +7,16 @@ const commonmarkParser = new commonmark.Parser()
 function ALWAYS_TRUE () { return true }
 
 const AUTOMATION_COMMANDS = [
-  { ruleName: 'edited.issue', webhookName: 'issues.edited', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'demilestoned.issue', webhookName: 'issues.demilestoned', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'milestoned.issue', webhookName: 'issues.milestoned', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'reopened.pullrequest', webhookName: 'pull_request.reopened', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'reopened.issue', webhookName: 'issues.reopened', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'closed.issue', webhookName: 'issues.closed', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'edited_issue', webhookName: 'issues.edited', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'demilestoned_issue', webhookName: 'issues.demilestoned', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'milestoned_issue', webhookName: 'issues.milestoned', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'reopened_pullrequest', webhookName: 'pull_request.reopened', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'reopened_issue', webhookName: 'issues.reopened', ruleMatcher: ALWAYS_TRUE },
+  { ruleName: 'closed_issue', webhookName: 'issues.closed', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'added_reviewer', webhookName: 'pull_request.review_requested', ruleMatcher: ALWAYS_TRUE }, // See https://developer.github.com/v3/activity/events/types/#pullrequestevent to get the reviewer
   {
     createsACard: true,
-    ruleName: 'new.issue',
+    ruleName: 'new_issue',
     webhookName: 'issues.opened',
     ruleMatcher: async function (robot, context, ruleValue) {
       if (ruleValue) {
@@ -30,7 +30,7 @@ const AUTOMATION_COMMANDS = [
   },
   {
     createsACard: true,
-    ruleName: 'new.pullrequest',
+    ruleName: 'new_pullrequest',
     webhookName: 'pull_request.opened',
     ruleMatcher: async function (robot, context, ruleValue) {
       if (ruleValue) {
@@ -44,7 +44,7 @@ const AUTOMATION_COMMANDS = [
     }
   },
   {
-    ruleName: 'merged',
+    ruleName: 'merged_pullrequest',
     webhookName: 'pull_request.closed',
     ruleMatcher: async function (robot, context, ruleValue) {
       // see https://developer.github.com/v3/activity/events/types/#pullrequestevent
@@ -52,7 +52,7 @@ const AUTOMATION_COMMANDS = [
     }
   },
   {
-    ruleName: 'closed.pullrequest',
+    ruleName: 'closed_pullrequest',
     webhookName: 'pull_request.closed',
     ruleMatcher: async function (robot, context, ruleValue) {
       // see https://developer.github.com/v3/activity/events/types/#pullrequestevent
@@ -60,7 +60,7 @@ const AUTOMATION_COMMANDS = [
     }
   },
   {
-    ruleName: 'assigned_to.issue',
+    ruleName: 'assigned_to_issue',
     webhookName: 'issues.assigned',
     ruleMatcher: async function (robot, context, ruleValue) {
       if (ruleValue !== true) {
@@ -71,28 +71,28 @@ const AUTOMATION_COMMANDS = [
     }
   },
   {
-    ruleName: 'assigned.issue',
+    ruleName: 'assigned_issue',
     webhookName: 'issues.assigned',
     ruleMatcher: async function (robot, context, ruleValue) {
       return context.payload.issue.assignees.length === 1
     }
   },
   {
-    ruleName: 'unassigned.issue',
+    ruleName: 'unassigned_issue',
     webhookName: 'issues.unassigned',
     ruleMatcher: async function (robot, context, ruleValue) {
       return context.payload.issue.assignees.length === 0
     }
   },
   {
-    ruleName: 'assigned.pullrequest',
+    ruleName: 'assigned_pullrequest',
     webhookName: 'pull_request.assigned',
     ruleMatcher: async function (robot, context, ruleValue) {
       return context.payload.pull_request.assignees.length === 1
     }
   },
   {
-    ruleName: 'unassigned.pullrequest',
+    ruleName: 'unassigned_pullrequest',
     webhookName: 'pull_request.unassigned',
     ruleMatcher: async function (robot, context, ruleValue) {
       return context.payload.pull_request.assignees.length === 0
@@ -114,7 +114,7 @@ const AUTOMATION_COMMANDS = [
     }
   },
   {
-    ruleName: 'accepted',
+    ruleName: 'accepted_pullrequest',
     webhookName: 'pull_request_review.submitted',
     ruleMatcher: async function (robot, context, ruleValue) {
       // See https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent
