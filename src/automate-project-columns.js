@@ -135,6 +135,7 @@ const AUTOMATION_COMMANDS = [
 
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'probot-projects'})
+  logger.log(`Starting up`)
   const {automate_project_columns: automateProjectColumnsConfig} = yaml.safeLoad(readFileSync(pathJoin(__dirname, '..', 'config.yml')))
 
   // Load all the Cards in memory because there is no way to lookup which projects an Issue is in
@@ -304,6 +305,7 @@ module.exports = (robot) => {
 
   // register a listener when a Card changes so we can re-parse it if it is an "Automation Rules" Card
   robot.on(['project_card.edited', 'project_card.created', 'project_card.moved'], async (context) => {
+    logger.debug(`Card Changed`)
     // await populateCache(context) This command does not work because context.repo() does not really apply in this case (when it's an Org )
 
     const projectCard = context.payload.project_card
@@ -327,6 +329,7 @@ module.exports = (robot) => {
       let issueUrl
       let issueId
       let issueType
+      logger.debug(`Event received`)
       if (context.payload.issue) {
         issueUrl = context.payload.issue.url
         issueId = context.payload.issue.id
