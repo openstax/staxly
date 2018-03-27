@@ -195,10 +195,12 @@ module.exports = (robot) => {
   }
 
   async function populateCache (context) {
+    logger.trace('starting populateCache (may return quickly)')
     // Loop through all the cards, populating the CARD_LOOKUP and the AUTOMATION_CARDS
     const username = context.repo().owner
     let cachedUserInfo = USER_CACHED[username]
     if (!cachedUserInfo) {
+      logger.trace('looking up user type')
       const {data: userInfo} = await context.github.users.getForUser({username: username})
       cachedUserInfo = userInfo.type
     }
@@ -222,9 +224,11 @@ module.exports = (robot) => {
 
     // Loop over all the new projects, looking for the AUTOMATION_CARDS
     for (const project of projects) {
+      logger.trace(`Inspecting all cards in project ${project.url}`)
       const projectId = project.id
       const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
       for (const projectColumn of projectColumns) {
+        logger.trace(`Inspecting all cards in column ${projectColumn.url}`)
         COLUMN_CACHE[projectColumn.id] = {projectId, ownerUrl: project.owner_url}
         const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
 
