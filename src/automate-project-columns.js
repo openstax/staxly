@@ -18,7 +18,7 @@ const AUTOMATION_COMMANDS = [
     createsACard: true,
     ruleName: 'new_issue',
     webhookName: 'issues.opened',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       if (ruleValue) {
         // Verify that it matches one of the repositories listed
         const repoNames = ruleValue.split(' ')
@@ -32,7 +32,7 @@ const AUTOMATION_COMMANDS = [
     createsACard: true,
     ruleName: 'new_pullrequest',
     webhookName: 'pull_request.opened',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       if (ruleValue) {
         // Verify that it matches one of the repositories listed
         const repoNames = ruleValue.split(' ')
@@ -46,7 +46,7 @@ const AUTOMATION_COMMANDS = [
   {
     ruleName: 'merged_pullrequest',
     webhookName: 'pull_request.closed',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       // see https://developer.github.com/v3/activity/events/types/#pullrequestevent
       return !!context.payload.pull_request.merged
     }
@@ -54,7 +54,7 @@ const AUTOMATION_COMMANDS = [
   {
     ruleName: 'closed_pullrequest',
     webhookName: 'pull_request.closed',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       // see https://developer.github.com/v3/activity/events/types/#pullrequestevent
       return !context.payload.pull_request.merged
     }
@@ -62,46 +62,46 @@ const AUTOMATION_COMMANDS = [
   {
     ruleName: 'assigned_to_issue',
     webhookName: 'issues.assigned',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       if (ruleValue !== true) {
         return context.payload.assignee.login === ruleValue
       } else {
-        robot.log.error(`assigned_to.issue requires a username but it is missing`)
+        logger.error(`assigned_to.issue requires a username but it is missing`)
       }
     }
   },
   {
     ruleName: 'assigned_issue',
     webhookName: 'issues.assigned',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       return context.payload.issue.assignees.length === 1
     }
   },
   {
     ruleName: 'unassigned_issue',
     webhookName: 'issues.unassigned',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       return context.payload.issue.assignees.length === 0
     }
   },
   {
     ruleName: 'assigned_pullrequest',
     webhookName: 'pull_request.assigned',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       return context.payload.pull_request.assignees.length === 1
     }
   },
   {
     ruleName: 'unassigned_pullrequest',
     webhookName: 'pull_request.unassigned',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       return context.payload.pull_request.assignees.length === 0
     }
   },
   {
     ruleName: 'added_label',
     webhookName: 'issues.labeled',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       // labels may be defined by a label or an id (for more persistence)
       return context.payload.label.name === ruleValue || context.payload.label.id === ruleValue
     }
@@ -109,14 +109,14 @@ const AUTOMATION_COMMANDS = [
   {
     ruleName: 'removed_label',
     webhookName: 'issues.unlabeled',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       return context.payload.label.name === ruleValue || context.payload.label.id === ruleValue
     }
   },
   {
     ruleName: 'accepted_pullrequest',
     webhookName: 'pull_request_review.submitted',
-    ruleMatcher: async function (robot, context, ruleValue) {
+    ruleMatcher: async function (logger, context, ruleValue) {
       // See https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent
       // Check if there are any Pending or Rejected reviews and ensure there is at least one Accepted one
       const {data: reviews} = await context.github.pullRequests.getReviews(context.issue())
@@ -134,6 +134,7 @@ const AUTOMATION_COMMANDS = [
 ]
 
 module.exports = (robot) => {
+  const logger = robot.log.child({name: 'probot-projects'})
   const {automate_project_columns: automateProjectColumnsConfig} = yaml.safeLoad(readFileSync(pathJoin(__dirname, '..', 'config.yml')))
 
   // Load all the Cards in memory because there is no way to lookup which projects an Issue is in
@@ -175,6 +176,7 @@ module.exports = (robot) => {
             AUTOMATION_CARDS[projectId].splice(AUTOMATION_CARDS[projectId].indexOf(existingEntry), 1)
           }
 
+          logger.info(`Detected Automation Rule: ${node.literal} on Card ${projectCard.url}`)
           AUTOMATION_CARDS[projectId].push({
             cardId: projectCard.id, // Store the cardId so we can update it if the card is edited
             columnId: columnId,
@@ -230,7 +232,7 @@ module.exports = (robot) => {
           } else if (projectCard.note) {
             addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard)
           } else {
-            robot.log.error(projectCard, `Could not do anything with this card`)
+            logger.error(projectCard, `Could not do anything with this card`)
           }
         }
       }
@@ -271,7 +273,7 @@ module.exports = (robot) => {
 
       if (projectId) {
         if (!projectConfig.id) {
-          robot.log.warn(`Set this to be "id: ${projectId}" for less fragility. JSON=${JSON.stringify(projectConfig)}`)
+          logger.warn(`Set this to be "id: ${projectId}" for less fragility. JSON=${JSON.stringify(projectConfig)}`)
         }
         const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
         for (const projectColumn of projectColumns) {
@@ -287,7 +289,7 @@ module.exports = (robot) => {
           }
         }
       } else {
-        robot.log.error(`Could not find project. JSON=${JSON.stringify(projectConfig)}`)
+        logger.error(`Could not find project. JSON=${JSON.stringify(projectConfig)}`)
       }
     } // Finished populating the CARD_LOOKUP cache
     populatedCacheAlready = true
@@ -295,7 +297,7 @@ module.exports = (robot) => {
 
   // register a listener when a Card changes so we can re-parse it if it is an "Automation Rules" Card
   robot.on(['project_card.edited', 'project_card.created', 'project_card.moved'], async (context) => {
-    await populateCache(context)
+    // await populateCache(context) This command does not work because context.repo() does not really apply in this case (when it's an Org )
 
     const projectCard = context.payload.project_card
     const projectId = COLUMN_CACHE[projectCard.column_id]
@@ -304,7 +306,7 @@ module.exports = (robot) => {
     } else if (projectCard.note) {
       addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard)
     } else {
-      robot.log.error(projectCard, `Could not do anything with this card`)
+      logger.error(projectCard, `Could not do anything with this card`)
     }
   })
 
@@ -330,8 +332,9 @@ module.exports = (robot) => {
         Object.entries(AUTOMATION_CARDS).forEach(async ([projectId, cardInfos]) => {
           cardInfos.forEach(async ({ruleName: rn, columnId, ruleValue}) => {
             if (ruleName === rn) {
-              if (await ruleMatcher(robot, context, ruleValue)) {
+              if (await ruleMatcher(logger, context, ruleValue)) {
                 // Create a new Card
+                logger.info(`Creating new Card for "${issueUrl}" because of "${ruleName}" and value: "${ruleValue}"`)
                 await context.github.projects.createProjectCard({column_id: columnId, content_id: issueId, content_type: issueType})
               }
             }
@@ -367,7 +370,7 @@ module.exports = (robot) => {
             for (const column of projectConfig.columns) {
               if (column.rules[ruleName]) {
                 if (columnInfo) {
-                  robot.log.error(`Duplicate rule named "${ruleName}" within project config (could also be overridden by and "Automation Rule" card) ${JSON.stringify(projectConfig)}`)
+                  logger.error(`Duplicate rule named "${ruleName}" within project config (could also be overridden by and "Automation Rule" card) ${JSON.stringify(projectConfig)}`)
                 } else {
                   columnInfo = column
                   ruleValue = column.rules[ruleName]
@@ -388,8 +391,9 @@ module.exports = (robot) => {
           }
         }).filter((info) => !!info) // remove all the nulls (ruleName not found in this projectConfig)
 
+        logger.debug(`Matched ${matchedColumnInfos.length} possible columns. Checking if it actually matches any.`)
         matchedColumnInfos.forEach(async ({columnInfo, cardId, projectId, ruleValue}) => {
-          if (await ruleMatcher(robot, context, ruleValue)) {
+          if (await ruleMatcher(logger, context, ruleValue)) {
             // Move the Card
             const {data: columns} = await context.github.projects.getProjectColumns({project_id: projectId})
 
@@ -399,13 +403,14 @@ module.exports = (robot) => {
               columnId = columnInfo.id
             } else if (columnInfo.index) {
               columnId = columns[columnInfo.index].id
-              robot.log.warn(`Consider identifying the column by "id: ${columnId}" rather than by index in JSON=${JSON.stringify(columnInfo)}`)
+              logger.warn(`Consider identifying the column by "id: ${columnId}" rather than by index in JSON=${JSON.stringify(columnInfo)}`)
             }
 
             if (!columnId) {
-              robot.log.error(`Could not find column for JSON=${JSON.stringify(columnInfo)}`)
+              logger.error(`Could not find column for JSON=${JSON.stringify(columnInfo)}`)
               return
             }
+            logger.info(`Moving Card ${cardId} for "${issueUrl}" to column ${columnId} because of "${ruleName}" and value: "${ruleValue}"`)
             await context.github.projects.moveProjectCard({id: cardId, column_id: columnId, position: 'top'})
           }
         })
