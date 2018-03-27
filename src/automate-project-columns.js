@@ -36,7 +36,7 @@ const AUTOMATION_COMMANDS = [
       if (ruleValue) {
         // Verify that it matches one of the repositories listed
         const repoNames = ruleValue.split(' ')
-        debugger
+
         return repoNames.indexOf(context.payload.repository.name) >= 0
       } else {
         return true
@@ -149,7 +149,6 @@ module.exports = (robot) => {
 
   function addOrUpdateAutomationCache (context, projectId, columnId, projectCard) {
     if (!projectId) {
-      console.log(COLUMN_CACHE)
       throw new Error(`BUG: Could not find projectId for card. JSON=${JSON.stringify(projectCard)}`)
     }
     // Check if it is one of the special "Automation Rules" cards
@@ -331,7 +330,6 @@ module.exports = (robot) => {
             }
           })
         })
-
       } else {
         // Check if we need to move the Issue (or Pull request)
         const cardsForIssue = Object.values(CARD_LOOKUP[issueUrl] || {})
@@ -405,8 +403,6 @@ module.exports = (robot) => {
           }
         })
       }
-
-
     })
   })
 }
