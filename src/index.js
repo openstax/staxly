@@ -6,7 +6,7 @@ module.exports = (robot) => {
   // Plugins that we use
   require('./slack-stuff')(robot)
   require('./move-to')(robot)
-  require('project-bot')(robot, {project: STAXLY_CONFIG.defaultProject})
+  // require('project-bot')(robot, {project: STAXLY_CONFIG.defaultProject})
   require('./automate-project-columns')(robot)
   require('probot-settings')(robot)
   // require('probot-changelog')(robot)

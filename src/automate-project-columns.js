@@ -1,23 +1,3 @@
-// - [x] `new.issue` : When an Issue is created
-// - [x] `new.pullrequest` : When a Pull Request is created
-// - [x] `assigned_to.issue`: When an Issue is assigned to a specific user
-// - [x] `assigned.issue`: When an Issue is assigned to a user (but was not before)
-// - [x] `unassigned.issue`: When an Issue is no longer assigned to a user
-// - [x] `assigned.pullrequest`: When a Pull Request is assigned to a user (but was not before)
-// - [x] `unassigned.pullrequest`: When a Pull Request is no longer assigned to a user
-// - [x] `reopened.issue`: When an Issue is reopened
-// - [x] `reopened.pullrequest`: When a Pull Request is reopened
-// - [x] `added_reviewer`: (optional username or array of usernames that need to be added)
-// - [x] `accepted`: When at least one Reviewer Accepted, and there are no Rejections on a Pull request
-// - [x] `merged`: When a Pull Request is merged
-// - [x] `closed.pullrequest`: When a Pull Request is closed
-// - [x] `added_label`: (has one argument, the string representing the name of the label)
-// - [x] `removed_label`: (has one argument, the string representing the name of the label)
-// - [x] `closed.issue`: When an Issue is closed
-// - [x] `edited.issue`
-// - [x] `milestoned.issue`
-// - [x] `demilestoned.issue`
-
 const {readFileSync} = require('fs')
 const {join: pathJoin} = require('path')
 const yaml = require('js-yaml')
@@ -30,12 +10,39 @@ const AUTOMATION_COMMANDS = [
   { ruleName: 'edited.issue', webhookName: 'issues.edited', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'demilestoned.issue', webhookName: 'issues.demilestoned', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'milestoned.issue', webhookName: 'issues.milestoned', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'new.issue', webhookName: 'issues.opened', ruleMatcher: ALWAYS_TRUE },
-  { ruleName: 'new.pullrequest', webhookName: 'pull_request.opened', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'reopened.pullrequest', webhookName: 'pull_request.reopened', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'reopened.issue', webhookName: 'issues.reopened', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'closed.issue', webhookName: 'issues.closed', ruleMatcher: ALWAYS_TRUE },
   { ruleName: 'added_reviewer', webhookName: 'pull_request.review_requested', ruleMatcher: ALWAYS_TRUE }, // See https://developer.github.com/v3/activity/events/types/#pullrequestevent to get the reviewer
+  {
+    createsACard: true,
+    ruleName: 'new.issue',
+    webhookName: 'issues.opened',
+    ruleMatcher: async function (robot, context, ruleValue) {
+      if (ruleValue) {
+        // Verify that it matches one of the repositories listed
+        const repoNames = ruleValue.split(' ')
+        return repoNames.indexOf(context.payload.repository.name) >= 0
+      } else {
+        return true
+      }
+    }
+  },
+  {
+    createsACard: true,
+    ruleName: 'new.pullrequest',
+    webhookName: 'pull_request.opened',
+    ruleMatcher: async function (robot, context, ruleValue) {
+      if (ruleValue) {
+        // Verify that it matches one of the repositories listed
+        const repoNames = ruleValue.split(' ')
+        debugger
+        return repoNames.indexOf(context.payload.repository.name) >= 0
+      } else {
+        return true
+      }
+    }
+  },
   {
     ruleName: 'merged',
     webhookName: 'pull_request.closed',
@@ -161,7 +168,7 @@ module.exports = (robot) => {
           AUTOMATION_CARDS[projectId] = AUTOMATION_CARDS[projectId] || []
 
           // Find the card if it exists and remove it
-          const existingEntry = AUTOMATION_CARDS[projectId].filter(({cardId}) => cardId === projectCard.id)[0]
+          const existingEntry = AUTOMATION_CARDS[projectId].filter(({cardId, ruleName}) => cardId === projectCard.id && ruleName === node.literal)[0]
           if (existingEntry) {
             AUTOMATION_CARDS[projectId].splice(AUTOMATION_CARDS[projectId].indexOf(existingEntry), 1)
           }
@@ -296,82 +303,110 @@ module.exports = (robot) => {
   })
 
   // Register all of the automation commands
-  AUTOMATION_COMMANDS.forEach(({webhookName, ruleName, ruleMatcher}) => {
+  AUTOMATION_COMMANDS.forEach(({createsACard, webhookName, ruleName, ruleMatcher}) => {
     robot.on(webhookName, async function (context) {
+      let issueUrl
+      let issueId
+      let issueType
+      if (context.payload.issue) {
+        issueUrl = context.payload.issue.url
+        issueId = context.payload.issue.id
+        issueType = 'Issue'
+      } else {
+        issueUrl = context.payload.pull_request.issue_url
+        issueId = context.payload.pull_request.id
+        issueType = 'PullRequest'
+      }
       await populateCache(context)
 
-      // Check if we need to move the Issue (or Pull request)
-      const issueUrl = context.payload.issue ? context.payload.issue.url : context.payload.pull_request.issue_url
-      const cardsForIssue = Object.values(CARD_LOOKUP[issueUrl] || {})
+      if (createsACard) {
+        // Loop through all of the AUTOMATION_CARDS and see if any match
+        Object.entries(AUTOMATION_CARDS).forEach(async ([projectId, cardInfos]) => {
+          cardInfos.forEach(async ({ruleName: rn, columnId, ruleValue}) => {
+            if (ruleName === rn) {
+              if (await ruleMatcher(robot, context, ruleValue)) {
+                // Create a new Card
+                await context.github.projects.createProjectCard({column_id: columnId, content_id: issueId, content_type: issueType})
+              }
+            }
+          })
+        })
 
-      // At this point we need the cards and columns that need to be moved.
-      const matchedColumnInfos = cardsForIssue.map(({projectId, cardId, projectConfig}) => {
-        // Check if there are any columns that match the ruleName.
-        // If so, return the following:
-        // - ruleArgs (most of the time it is just `true`)
-        // - columnInfo
-        // - cardId
-        // - projectId
+      } else {
+        // Check if we need to move the Issue (or Pull request)
+        const cardsForIssue = Object.values(CARD_LOOKUP[issueUrl] || {})
 
-        let columnInfo = null
-        let ruleValue = null
+        // At this point we need the cards and columns that need to be moved.
+        const matchedColumnInfos = cardsForIssue.map(({projectId, cardId, projectConfig}) => {
+          // Check if there are any columns that match the ruleName.
+          // If so, return the following:
+          // - ruleArgs (most of the time it is just `true`)
+          // - columnInfo
+          // - cardId
+          // - projectId
 
-        // First, check if there is an "Automation Rules" that contains the rule
-        if (AUTOMATION_CARDS[projectId]) {
-          const maybeMatched = AUTOMATION_CARDS[projectId].filter(({ruleName: rn}) => rn === ruleName)[0]
-          if (maybeMatched) {
-            columnInfo = {id: maybeMatched.columnId}
-            ruleValue = maybeMatched.ruleValue
+          let columnInfo = null
+          let ruleValue = null
+
+          // First, check if there is an "Automation Rules" that contains the rule
+          if (AUTOMATION_CARDS[projectId]) {
+            const maybeMatched = AUTOMATION_CARDS[projectId].filter(({ruleName: rn}) => rn === ruleName)[0]
+            if (maybeMatched) {
+              columnInfo = {id: maybeMatched.columnId}
+              ruleValue = maybeMatched.ruleValue
+            }
           }
-        }
 
-        if (projectConfig) {
-          // Not all Cards have a projectConfig. If the .yml file did not contain a config for the project that this card was in then it would not have a projectConfig
-          for (const column of projectConfig.columns) {
-            if (column.rules[ruleName]) {
-              if (columnInfo) {
-                robot.log.error(`Duplicate rule named "${ruleName}" within project config (could also be overridden by and "Automation Rule" card) ${JSON.stringify(projectConfig)}`)
-              } else {
-                columnInfo = column
-                ruleValue = column.rules[ruleName]
+          if (projectConfig) {
+            // Not all Cards have a projectConfig. If the .yml file did not contain a config for the project that this card was in then it would not have a projectConfig
+            for (const column of projectConfig.columns) {
+              if (column.rules[ruleName]) {
+                if (columnInfo) {
+                  robot.log.error(`Duplicate rule named "${ruleName}" within project config (could also be overridden by and "Automation Rule" card) ${JSON.stringify(projectConfig)}`)
+                } else {
+                  columnInfo = column
+                  ruleValue = column.rules[ruleName]
+                }
               }
             }
           }
-        }
 
-        if (columnInfo) {
-          return {
-            columnInfo,
-            cardId,
-            projectId,
-            ruleValue
+          if (columnInfo) {
+            return {
+              columnInfo,
+              cardId,
+              projectId,
+              ruleValue
+            }
+          } else {
+            return null
           }
-        } else {
-          return null
-        }
-      }).filter((info) => !!info) // remove all the nulls (ruleName not found in this projectConfig)
+        }).filter((info) => !!info) // remove all the nulls (ruleName not found in this projectConfig)
 
-      matchedColumnInfos.forEach(async ({columnInfo, cardId, projectId, ruleValue}) => {
-        if (await ruleMatcher(robot, context, ruleValue)) {
-          // Move the Card
-          const {data: columns} = await context.github.projects.getProjectColumns({project_id: projectId})
+        matchedColumnInfos.forEach(async ({columnInfo, cardId, projectId, ruleValue}) => {
+          if (await ruleMatcher(robot, context, ruleValue)) {
+            // Move the Card
+            const {data: columns} = await context.github.projects.getProjectColumns({project_id: projectId})
 
-          // Find the correct column
-          let columnId
-          if (columnInfo.id) {
-            columnId = columnInfo.id
-          } else if (columnInfo.index) {
-            columnId = columns[columnInfo.index].id
-            robot.log.warn(`Consider identifying the column by "id: ${columnId}" rather than by index in JSON=${JSON.stringify(columnInfo)}`)
+            // Find the correct column
+            let columnId
+            if (columnInfo.id) {
+              columnId = columnInfo.id
+            } else if (columnInfo.index) {
+              columnId = columns[columnInfo.index].id
+              robot.log.warn(`Consider identifying the column by "id: ${columnId}" rather than by index in JSON=${JSON.stringify(columnInfo)}`)
+            }
+
+            if (!columnId) {
+              robot.log.error(`Could not find column for JSON=${JSON.stringify(columnInfo)}`)
+              return
+            }
+            await context.github.projects.moveProjectCard({id: cardId, column_id: columnId, position: 'top'})
           }
+        })
+      }
 
-          if (!columnId) {
-            robot.log.error(`Could not find column for JSON=${JSON.stringify(columnInfo)}`)
-            return
-          }
-          await context.github.projects.moveProjectCard({id: cardId, column_id: columnId, position: 'top'})
-        }
-      })
+
     })
   })
 }
