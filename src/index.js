@@ -21,6 +21,12 @@ module.exports = (robot) => {
 
   console.log('Yay, the app was loaded!')
 
+  // Add a ping route
+  const app = robot.route('/staxly')
+  app.get('/_ping', (req, res) => {
+    res.end('Pong')
+  })
+
   // // If someone submits a Pull Request check if it has a reviewer
   // function getSlackUserByGithubIdOrNull (githubId) {
   //   return robot.slackAdapter.getBrain().users.filter(user => {
