@@ -1,12 +1,11 @@
-const STAXLY_CONFIG = require('../config.json')
-
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
   // Plugins that we use
   require('./slack-stuff')(robot)
   require('./move-to')(robot)
-  require('project-bot')(robot, {project: STAXLY_CONFIG.defaultProject})
+  // require('project-bot')(robot)
+  require('./automate-project-columns')(robot)
   require('probot-settings')(robot)
   // require('probot-changelog')(robot)
   require('./changelog')(robot)
