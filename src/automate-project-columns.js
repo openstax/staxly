@@ -146,9 +146,9 @@ module.exports = (robot) => {
 
   const USER_CACHED = {} // Key is the username, Value is the type of the User (User, Organization)
   const PROJECTS_CACHED = {} // Key is "{username}/{repoName}", Value is `true`
-  const COLUMN_CACHE = {} // Key is columnId, Value is projectId. Unfortunately, https://developer.github.com/v3/activity/events/types/#projectcardevent does not contain the projectId but it does have the columnId so we can look it up
+  const COLUMN_CACHE = {} // Key is columnId, Value is {projectId, ownerUrl}. Unfortunately, https://developer.github.com/v3/activity/events/types/#projectcardevent does not contain the projectId but it does have the columnId so we can look it up
 
-  function addOrUpdateAutomationCache (context, projectId, columnId, projectCard) {
+  function addOrUpdateAutomationCache (context, projectId, columnId, projectCard, ownerUrl) {
     if (!projectId) {
       throw new Error(`BUG: Could not find projectId for card. JSON=${JSON.stringify(projectCard)}`)
     }
@@ -180,6 +180,7 @@ module.exports = (robot) => {
           AUTOMATION_CARDS[projectId].push({
             cardId: projectCard.id, // Store the cardId so we can update it if the card is edited
             columnId: columnId,
+            ownerUrl: ownerUrl,
             ruleName: node.literal,
             ruleValue: node.next && node.next.literal.trim() // not all rules have a value
           })
@@ -222,7 +223,7 @@ module.exports = (robot) => {
       const projectId = project.id
       const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
       for (const projectColumn of projectColumns) {
-        COLUMN_CACHE[projectColumn.id] = projectId
+        COLUMN_CACHE[projectColumn.id] = {projectId, ownerUrl: project.owner_url}
         const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
 
         for (const projectCard of projectCards) {
@@ -230,7 +231,7 @@ module.exports = (robot) => {
           if (projectCard.content_url) {
             addOrUpdateCardCache(projectId, projectCard)
           } else if (projectCard.note) {
-            addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard)
+            addOrUpdateAutomationCache(context, projectId, projectColumn.id, projectCard, project.owner_url)
           } else {
             logger.error(projectCard, `Could not do anything with this card`)
           }
@@ -277,7 +278,7 @@ module.exports = (robot) => {
         }
         const {data: projectColumns} = await context.github.projects.getProjectColumns({project_id: projectId})
         for (const projectColumn of projectColumns) {
-          COLUMN_CACHE[projectColumn.id] = projectId
+          COLUMN_CACHE[projectColumn.id] = {projectId, ownerUrl: projectConfig.org || projectConfig.repo_owner}
           const {data: projectCards} = await context.github.projects.getProjectCards({column_id: projectColumn.id})
 
           for (const projectCard of projectCards) {
@@ -300,11 +301,11 @@ module.exports = (robot) => {
     // await populateCache(context) This command does not work because context.repo() does not really apply in this case (when it's an Org )
 
     const projectCard = context.payload.project_card
-    const projectId = COLUMN_CACHE[projectCard.column_id]
+    const {projectId, ownerUrl} = COLUMN_CACHE[projectCard.column_id]
     if (projectCard.content_url) {
       addOrUpdateCardCache(projectId, projectCard)
     } else if (projectCard.note) {
-      addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard)
+      addOrUpdateAutomationCache(context, projectId, projectCard.column_id, projectCard, ownerUrl)
     } else {
       logger.error(projectCard, `Could not do anything with this card`)
     }
@@ -330,7 +331,20 @@ module.exports = (robot) => {
       if (createsACard) {
         // Loop through all of the AUTOMATION_CARDS and see if any match
         Object.entries(AUTOMATION_CARDS).forEach(async ([projectId, cardInfos]) => {
-          cardInfos.forEach(async ({ruleName: rn, columnId, ruleValue}) => {
+          cardInfos.forEach(async ({ruleName: rn, columnId, ruleValue, ownerUrl}) => {
+            // Check if the AUTOMATION_CARD's owner matches this Issue's owner
+            // Org Projects have a api.github.com/orgs/{org_name} format
+            // while a Repository has an api.github.com/users/{org_name} format
+            // so we need to look at a different field to see if they match.
+            if (context.payload.organization) {
+              if (!ownerUrl === context.payload.organization.url) {
+                return
+              }
+            } else {
+              if (!ownerUrl === context.payload.repository.owner.url) {
+                return
+              }
+            }
             if (ruleName === rn) {
               if (await ruleMatcher(logger, context, ruleValue)) {
                 // Create a new Card
