@@ -14,7 +14,7 @@ The board that the card is added to depends on the Slack channel, and is configu
 
 <a href="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"><img width="500" alt="autocreate-cards" src="https://user-images.githubusercontent.com/253202/36339066-3afefb88-138b-11e8-8194-6c74de55872d.gif"/></a>
 
-### Add/Move Project Cards when Issues/PullRequests change ([#42](https://github.com/openstax/staxly/pull/42))
+### Add/Move Project Cards when Issues/PullRequests change ([#42](https://github.com/openstax/staxly/pull/42), [#49](https://github.com/openstax/staxly/pull/49))
 
 It is annoying to remember to add new Cards to a board and move the Cards when the Issue/Pull Request changes.
 So the card movement is now automated. Create an Issue/PullRequest and it is added to the board. Merge/Close it and it is moved to the Done column.
