@@ -4,8 +4,7 @@ module.exports = (robot) => {
   // Plugins that we use
   require('./slack-stuff')(robot)
   require('./move-to')(robot)
-  // require('project-bot')(robot)
-  require('./automate-project-columns')(robot)
+  require('project-bot')(robot)
   require('probot-settings')(robot)
   // require('probot-changelog')(robot)
   require('./changelog')(robot)
