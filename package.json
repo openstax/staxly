@@ -14,6 +14,7 @@
     "autolabeler": "github:probot/autolabeler",
     "commonmark": "^0.28.1",
     "first-pr-merge": "github:behaviorbot/first-pr-merge",
+    "json-2-csv": "^2.2.0",
     "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
     "new-pr-welcome": "github:behaviorbot/new-pr-welcome",
     "nodemon": "^1.14.11",

@@ -17,6 +17,7 @@ module.exports = (robot) => {
   // require('probot-app-todos')(robot)
   require('release-notifier')(robot)
   require('wip-bot')(robot)
+  require('./project-events')(robot)
 
   console.log('Yay, the app was loaded!')
 
