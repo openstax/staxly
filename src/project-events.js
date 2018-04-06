@@ -18,7 +18,12 @@ module.exports = async (robot) => {
       res.send(csv)
     }, {
       prependHeader: true,
-      delimiter: {wrap: '"'}
+      delimiter: {
+        field: ',',
+        array: ';',
+        wrap: '"',
+        eol: '\n'
+      }
     })
   })
 
