@@ -38,7 +38,14 @@ To move an Issue, create a Comment on an Issue that begins with `move-to {reposi
 <a href="https://user-images.githubusercontent.com/253202/36949462-aee82baa-1fb6-11e8-9920-24ad629532ec.gif"><img width="500" alt="project-issues" src="https://user-images.githubusercontent.com/253202/36949462-aee82baa-1fb6-11e8-9920-24ad629532ec.gif"/></a>
 
 
-### Channel link-back
+### Project Events Export ([#51](https://github.com/openstax/staxly/pull/51))
+
+There is a secret URL to get a CSV or a JSON file of the history of Cards being created and moved which is useful for generating reports.
+
+The URL format is `/project-events/{secret}/json` and `/project-events/{secret}/csv`.
+
+
+### Slack Channel link-back
 
 When someone mentions a channel in a message, that channel gets a link back to the original message.
 This is useful for notifying multiple groups, or casually asking for help.

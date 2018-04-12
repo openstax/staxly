@@ -20,6 +20,10 @@
       "description": "the private key you downloaded when creating the GitHub App. See probot Install docs",
       "required": true
     },
+    "SECRET_PROJECT_EVENTS_PATH": {
+      "description": "the 'secret' part of the path to get updates on Project Cards moving and being edited",
+      "required": true
+    },
     "SENTRY_DSN": {
       "description": "URL to report sentry errors to",
       "required": false
