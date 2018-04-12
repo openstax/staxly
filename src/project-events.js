@@ -15,7 +15,12 @@ module.exports = async (robot) => {
   })
   app.get('/csv', (req, res) => {
     json2csv(MOST_RECENT, (err, csv) => {
-      res.send(csv)
+      if (err) {
+        robot.log.error(err.message)
+        res.status(500).send('CSV Parsing Error')
+      } else {
+        res.send(csv)
+      }
     }, {
       prependHeader: true,
       delimiter: {
@@ -63,5 +68,4 @@ module.exports = async (robot) => {
       MOST_RECENT.shift(1)
     }
   })
-
 }
