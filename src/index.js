@@ -14,7 +14,7 @@ module.exports = (robot) => {
   require('new-pr-welcome')(robot)
   require('request-info')(robot)
   require('unfurl')(robot)
-  // require('probot-app-todos')(robot)
+  require('todo')(robot)
   require('release-notifier')(robot)
   require('wip-bot')(robot)
   require('./project-events')(robot)
