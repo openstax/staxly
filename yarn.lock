@@ -40,6 +40,19 @@
     node-fetch "^2.1.1"
     url-template "^2.0.8"
 
+"@octokit/rest@^15.6.0":
+  version "15.9.3"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.3.tgz#1177ccdfad29f7073756c98afc0890347e21788f"
+  dependencies:
+    before-after-hook "^1.1.0"
+    btoa-lite "^1.0.0"
+    debug "^3.1.0"
+    http-proxy-agent "^2.1.0"
+    https-proxy-agent "^2.2.0"
+    lodash "^4.17.4"
+    node-fetch "^2.1.1"
+    url-template "^2.0.8"
+
 "@octokit/webhooks@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@octokit/webhooks/-/webhooks-3.1.1.tgz#589830d3a51489b6d689094f5355b570c142c086"
@@ -708,6 +721,10 @@ bottleneck@^2.2.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/bottleneck/-/bottleneck-2.2.2.tgz#4a9ea7ee3e3d51d37a300b86800488cf21e247b7"
 
+bottleneck@^2.4.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/bottleneck/-/bottleneck-2.5.0.tgz#c558524005a7cef5327100b3152f9483fbf8975d"
+
 boxen@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-1.3.0.tgz#55c6c39a8ba58d9c61ad22cd877532deb665a20b"
@@ -1356,6 +1373,10 @@ dotenv@~5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
 
+dotenv@~6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.0.0.tgz#24e37c041741c5f4b25324958ebbc34bca965935"
+
 dtrace-provider@~0.8:
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/dtrace-provider/-/dtrace-provider-0.8.6.tgz#428a223afe03425d2cd6d6347fdf40c66903563d"
@@ -1721,6 +1742,10 @@ express-async-errors@^2.1.0:
   resolved "https://registry.yarnpkg.com/express-async-errors/-/express-async-errors-2.1.0.tgz#67b536db21c20668d5cf637a8aa4a4868e54b06a"
   dependencies:
     express "^4.16.2"
+
+express-async-errors@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/express-async-errors/-/express-async-errors-3.0.0.tgz#457d06952504718276697cebf9c332bccf2944dd"
 
 express@^4.15.4, express@^4.16.2:
   version "4.16.2"
@@ -4685,6 +4710,31 @@ probot@^6.1.0:
     resolve "^1.4.0"
     semver "^5.5.0"
 
+probot@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/probot/-/probot-7.0.0.tgz#54c54263d50dc0b5953c57fbccc5d8dd21c97f8c"
+  dependencies:
+    "@octokit/rest" "^15.6.0"
+    "@octokit/webhooks" "^3.1.1"
+    bottleneck "^2.4.0"
+    bunyan "^1.8.12"
+    bunyan-format "^0.2.1"
+    bunyan-sentry-stream "^1.1.0"
+    cache-manager "^2.4.0"
+    commander "^2.11.0"
+    dotenv "~6.0.0"
+    express "^4.16.2"
+    express-async-errors "^3.0.0"
+    hbs "^4.0.1"
+    js-yaml "^3.9.1"
+    jsonwebtoken "^8.1.0"
+    pkg-conf "^2.0.0"
+    promise-events "^0.1.3"
+    raven "^2.4.2"
+    resolve "^1.4.0"
+    semver "^5.5.0"
+    uuid "^3.2.1"
+
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
@@ -5910,6 +5960,10 @@ uuid@3.0.0:
 uuid@^3.0.0, uuid@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
+
+uuid@^3.2.1:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.0.tgz#b237147804881d7b86f40a7ff8f590f15c37de32"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"
