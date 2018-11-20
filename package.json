@@ -20,7 +20,7 @@
     "nodemon": "^1.14.11",
     "probot": "^6.1.0",
     "probot-app-todos": "^1.0.5",
-    "probot-config": "^0.2.0",
+    "probot-config": "^1.0.0",
     "probot-settings": "github:probot/settings",
     "project-bot": "^2.0.5",
     "release-notifier": "github:release-notifier/release-notifier",
