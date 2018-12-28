@@ -659,10 +659,6 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
-
 body-parser@1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.18.2.tgz#87678a19d84b47d859b83199bd59bce222b10454"
@@ -1191,6 +1187,13 @@ decompress-response@^3.3.0:
   dependencies:
     mimic-response "^1.0.0"
 
+deeks@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/deeks/-/deeks-1.0.0.tgz#5d9946974deccdb62da59da748b20e1204969247"
+  integrity sha512-4HGx4c/HCv1ZYOU0/E/805uBCJEPrDadlBtqVvhkP2SypZXVfyT3Xqu7Q3Om1SmeWnOuMaHsRLpfTIa2rIT/jQ==
+  dependencies:
+    underscore "1.9.1"
+
 deep-extend@~0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
@@ -1291,9 +1294,10 @@ diff@^3.2.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.4.0.tgz#b1d85507daf3964828de54b37d0d73ba67dda56c"
 
-doc-path@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/doc-path/-/doc-path-1.2.1.tgz#2068ec83c1d967bea51ba99263e479d6dd1d17a3"
+doc-path@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/doc-path/-/doc-path-1.3.1.tgz#fabcd8b93bcf1f02a9e820ce2b912298436fff59"
+  integrity sha512-DCi52AvveWNVudfYAD49koA2chOXw7hHpr0lhgRrvUmynyD8wvTUYNXd+NITgQgEBd1qtzorPHhFij+GvI2PqA==
 
 doctrine@1.5.0:
   version "1.5.0"
@@ -3542,13 +3546,14 @@ jsesc@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-1.3.0.tgz#46c3fec8c1892b12b0833db9bc7622176dbab34b"
 
-json-2-csv@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/json-2-csv/-/json-2-csv-2.2.0.tgz#5de1e738c9cb47cbca7770cd15ce5121d6f26dbb"
+json-2-csv@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/json-2-csv/-/json-2-csv-3.0.0.tgz#893d18195d03a0404bc65f00b25673dcc0807f5f"
+  integrity sha512-C6w3wwqjJbTG2iINGk9Tfk+D0NNB/nAh7tZLzBiMikTdtPWkzS7ksf4YcT74i6IybvRyGBLbinyVbOqs8f8QEg==
   dependencies:
-    bluebird "3.5.1"
-    doc-path "1.2.1"
-    underscore "1.8.3"
+    deeks "1.0.0"
+    doc-path "1.3.1"
+    underscore "1.9.1"
 
 json-buffer@3.0.0:
   version "3.0.0"
@@ -5773,9 +5778,10 @@ undefsafe@^2.0.1:
   dependencies:
     debug "^2.2.0"
 
-underscore@1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
+underscore@1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
+  integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
 
 unfurl.js@^1.1.6:
   version "1.1.6"
