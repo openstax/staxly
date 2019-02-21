@@ -79,7 +79,7 @@ module.exports = (robot) => {
   //
   // See https://api.slack.com/methods/conversations.history#retrieving_a_single_message
   robot.slackAdapter.on('reaction_added', async ({payload, github, slack, slackWeb}) => {
-    const {reaction, item} = payload
+    const {reaction, item, user} = payload
     if ((reaction === 'evergreen_tree' || reaction === 'github') && item.type === 'message') {
       logger.debug(`Noticed reaction to create a new Card`)
 
@@ -100,7 +100,7 @@ module.exports = (robot) => {
       const channel = await robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
       logger.trace('looking up to see if this channel is configured....')
-      if (channel && slackCardConfig) {
+      if (false/*channel && slackCardConfig*/) {
         logger.debug(`Creating Card because of reaction`)
         // Create a new Note Card on the Project
         const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)
@@ -120,9 +120,7 @@ module.exports = (robot) => {
       } else {
         logger.warn('channel is not configured for reactions')
         const channel = await robot.slackAdapter.getChannelById(item.channel)
-        console.log('reacji.user JSON', JSON.stringify(reaction.user))
-        console.log('reacji JSON', JSON.stringify(reaction))
-        await robot.slackAdapter.sendDM(reaction.user, `:wave: I noticed you reacted to a message with a :${reaction}: indicating that I should create a Card. Unfortunately #${channel.name} is not linked to a Project so I was unable to automatically create a Card. Please file an issue at https://github.com/openstax/staxly/issues/new and we will get that fixed right up!`)
+        await robot.slackAdapter.sendDM(user, `:wave: I noticed you reacted to a message with a :${reaction}: indicating that I should create a Card. Unfortunately #${channel.name} is not linked to a Project so I was unable to automatically create a Card. Please file an issue at https://github.com/openstax/staxly/issues/new and we will get that fixed right up!`)
       }
     }
   })
