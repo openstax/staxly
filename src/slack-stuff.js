@@ -100,7 +100,7 @@ module.exports = (robot) => {
       const channel = await robot.slackAdapter.getChannelById(item.channel)
       const slackCardConfig = STAXLY_CONFIG.slackChannelsToProjects.filter(({slackChannelName}) => slackChannelName === channel.name)[0]
       logger.trace('looking up to see if this channel is configured....')
-      if (false/*channel && slackCardConfig*/) {
+      if (channel && slackCardConfig) {
         logger.debug(`Creating Card because of reaction`)
         // Create a new Note Card on the Project
         const permalink = robot.slackAdapter.getMessagePermalink(channel.id, theMessage.ts)
