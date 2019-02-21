@@ -120,8 +120,8 @@ module.exports = (robot) => {
       } else {
         logger.warn('channel is not configured for reactions')
         const channel = await robot.slackAdapter.getChannelById(item.channel)
-        logger.info('reacji.user JSON', JSON.stringify(reaction.user))
-        logger.info('reacji JSON', JSON.stringify(reaction))
+        console.log('reacji.user JSON', JSON.stringify(reaction.user))
+        console.log('reacji JSON', JSON.stringify(reaction))
         await robot.slackAdapter.sendDM(reaction.user, `:wave: I noticed you reacted to a message with a :${reaction}: indicating that I should create a Card. Unfortunately #${channel.name} is not linked to a Project so I was unable to automatically create a Card. Please file an issue at https://github.com/openstax/staxly/issues/new and we will get that fixed right up!`)
       }
     }
