@@ -12,7 +12,7 @@
   "dependencies": {
     "@slack/client": "^4.0.0",
     "autolabeler": "github:probot/autolabeler",
-    "commonmark": "^0.28.1",
+    "commonmark": "^0.29.0",
     "first-pr-merge": "github:behaviorbot/first-pr-merge",
     "json-2-csv": "^2.2.0",
     "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
