@@ -6,6 +6,11 @@ module.exports = (robot) => {
   // Ensure the slack-api is loaded
   require('./slack-api')(robot)
 
+  if (!robot.slackAdapter) {
+    logger.warn('Slack did not initialize')
+    return
+  }
+
   //
   // React with a :table_tennis_paddle_and_ball: when a new message contains "staxly ping"
   //

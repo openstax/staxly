@@ -3,17 +3,14 @@ module.exports = (robot) => {
 
   // Plugins that we use
   require('./slack-stuff')(robot)
-  require('project-bot')(robot)
-  require('probot-settings')(robot)
-  require('./changelog')(robot)
-  require('autolabeler')(robot)
-  require('first-pr-merge')(robot)
-  require('new-issue-welcome')(robot)
-  require('new-pr-welcome')(robot)
-  require('request-info')(robot)
-  require('release-notifier')(robot)
 
-  console.log('Yay, the app was loaded!')
+  // Just for testing. Comment on an issue when the issue has a specific URL
+  robot.on('issues.opened', async context => {
+    if (context.payload.issue.url === 'https://api.github.com/repos/Codertocat/Hello-World/issues/2') {
+      const issueComment = context.issue({ body: 'Thanks for opening this issue!' })
+      return context.github.issues.createComment(issueComment)
+    }
+  })
 
   // Add a ping route
   const app = robot.route('/staxly')

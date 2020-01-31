@@ -22,6 +22,7 @@ module.exports = (robot) => {
   const logger = robot.log.child({name: 'slack'})
   if (!SLACK_BOT_TOKEN) {
     logger.error('SLACK_BOT_TOKEN missing, skipping Slack integration')
+    return
   }
   if (!SLACK_GITHUB_INSTALL_ID) {
     logger.error('SLACK_GITHUB_INSTALL_ID missing. This is needed to know which authentication to use when creating GitHub Issues/Cards. It can be found in the probot trace output for /installations when LOG_LEVEL=trace')
@@ -126,11 +127,6 @@ module.exports = (robot) => {
       await webClient.chat.postMessage({text: messageText, channel: dmChannelId, as_user: true})
     }
   }()
-
-  if (!SLACK_BOT_TOKEN) {
-    logger.warn('Skipping Slack connection because SLACK_BOT_TOKEN env var is not set')
-    return
-  }
 
   logger.trace('Slack connecting...')
 
