@@ -1,4 +1,11 @@
 // Merge base into PR branch whenever updated
+
+const repoWhitelist = [
+  'testrepo',
+  'rex-web',
+  'testing-stuff'
+];
+
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'merge-bases'})
   robot.on([
@@ -23,6 +30,10 @@ module.exports = (robot) => {
 
     const base = payload.ref.replace(/^refs\/heads\//, '');
     const {owner, repo} = context.repo();
+
+    if (!repoWhitelist.includes(repo)) {
+      return;
+    }
 
     logger.info(`received push event for ${base}`);
 

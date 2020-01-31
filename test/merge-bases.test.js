@@ -37,6 +37,24 @@ describe('My Probot app', () => {
 
     expect(nock.isDone()).toBe(true);
   })
+  
+  test('noops outside whitelist', async () => {
+    // Simulates delivery of an issues.opened webhook
+    await app.receive({
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        repository: {
+          name: 'randomrepo',
+          owner: {
+            name: 'testowner'
+          }
+        }
+      }
+    })
+
+    expect(nock.isDone()).toBe(true);
+  })
 
   afterEach(() => {
     nock.cleanAll()
