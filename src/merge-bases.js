@@ -6,6 +6,8 @@ module.exports = (robot) => {
   ], checkForPrs)
   
   const processPrs = context => ({data}) => {
+    const {owner, repo} = context.repo();
+
     for (const pr in data) {
       logger.info(`updating base for ${pr.number}`)
       context.github.pulls.updateBranch({
@@ -20,15 +22,14 @@ module.exports = (robot) => {
     const {payload} = context
 
     const base = payload.ref.replace(/^refs\/heads\//, '');
-    
-    const {owner, repo} = context.repo()
+    const {owner, repo} = context.repo();
 
     context.github.paginate(context.github.pulls.list({
       owner,
       repo,
       base,
       state: 'open',
-    }), processPrs(context))
+    }), processPrs(context));
   }
 
 }
