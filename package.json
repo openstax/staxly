@@ -29,6 +29,10 @@
     "standard": "^11.0.0",
     "weak": "^1.0.1"
   },
+  "engines": {
+    "node": ">= 10.13.0",
+    "npm": ">= 6.11.3"
+  },
   "standard": {
     "env": [
       "jest"
