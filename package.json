@@ -12,22 +12,17 @@
   "dependencies": {
     "@slack/client": "^4.0.0",
     "autolabeler": "github:probot/autolabeler",
-    "commonmark": "^0.28.1",
     "first-pr-merge": "github:behaviorbot/first-pr-merge",
-    "json-2-csv": "^2.2.0",
     "new-issue-welcome": "github:behaviorbot/new-issue-welcome",
     "new-pr-welcome": "github:behaviorbot/new-pr-welcome",
     "nodemon": "^1.14.11",
     "probot": "^6.1.0",
-    "probot-app-todos": "^1.0.5",
     "probot-config": "^0.2.0",
     "probot-settings": "github:probot/settings",
     "project-bot": "^2.0.5",
     "release-notifier": "github:release-notifier/release-notifier",
     "request-info": "github:behaviorbot/request-info",
-    "smee-client": "^1.0.1",
-    "unfurl": "github:probot/unfurl",
-    "wip-bot": "^2.1.0"
+    "smee-client": "^1.0.1"
   },
   "devDependencies": {
     "jest": "^22.4.2",
