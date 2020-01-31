@@ -26,8 +26,7 @@
   "devDependencies": {
     "jest": "^22.4.3",
     "nodemon": "^1.14.11",
-    "standard": "^11.0.0",
-    "weak": "^1.0.1"
+    "standard": "^11.0.0"
   },
   "engines": {
     "node": ">= 10.13.0",
