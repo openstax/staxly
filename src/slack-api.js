@@ -21,11 +21,11 @@ const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'slack'})
   if (!SLACK_BOT_TOKEN) {
-    logger.error('SLACK_BOT_TOKEN missing, skipping Slack integration')
+    logger.warn('SLACK_BOT_TOKEN missing, skipping Slack integration')
     return
   }
   if (!SLACK_GITHUB_INSTALL_ID) {
-    logger.error('SLACK_GITHUB_INSTALL_ID missing. This is needed to know which authentication to use when creating GitHub Issues/Cards. It can be found in the probot trace output for /installations when LOG_LEVEL=trace')
+    logger.warn('SLACK_GITHUB_INSTALL_ID missing. This is needed to know which authentication to use when creating GitHub Issues/Cards. It can be found in the probot trace output for /installations when LOG_LEVEL=trace')
   }
 
   let authenticatedGitHubClient

@@ -7,7 +7,7 @@ module.exports = (robot) => {
   require('./slack-api')(robot)
 
   if (!robot.slackAdapter) {
-    logger.warn('Slack did not initialize')
+    // Slack did not initialize
     return
   }
 

@@ -1,10 +1,9 @@
-const nock = require('nock');
+const nock = require('nock')
 const myProbotApp = require('..')
 const { createProbot } = require('probot')
 
-
 describe('My Probot app', () => {
-  let app;
+  let app
 
   beforeEach(() => {
     nock.disableNetConnect()
@@ -35,9 +34,9 @@ describe('My Probot app', () => {
       }
     })
 
-    expect(nock.isDone()).toBe(true);
+    expect(nock.isDone()).toBe(true)
   })
-  
+
   test('noops outside whitelist', async () => {
     // Simulates delivery of an issues.opened webhook
     await app.receive({
@@ -53,7 +52,7 @@ describe('My Probot app', () => {
       }
     })
 
-    expect(nock.isDone()).toBe(true);
+    expect(nock.isDone()).toBe(true)
   })
 
   afterEach(() => {

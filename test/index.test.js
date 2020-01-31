@@ -13,7 +13,7 @@ describe('My Probot app', () => {
   let app, github
 
   beforeEach(() => {
-    app = new Application()
+    app = new Application({githubToken: 'fake-token'})
     // Initialize the app based on the code from index.js
     app.load(myProbotApp)
     // This is an easy way to mock out the GitHub API
@@ -37,7 +37,7 @@ describe('My Probot app', () => {
     expect(github.issues.createComment).toHaveBeenCalled()
   })
 
-  test.skip('does not create a comment when a regular issue is opened', async () => {
+  test('does not create a comment when a regular issue is opened', async () => {
     // Simulates delivery of an issues.opened webhook
     issuesOpenedPayload.issue.url = 'something-else'
     await app.receive({
