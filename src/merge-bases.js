@@ -4,6 +4,17 @@ module.exports = (robot) => {
   robot.on([
     'push',
   ], checkForPrs)
+  
+  const processPrs = context => ({data}) => {
+    for (const pr in data) {
+      logger.info(`updating base for ${pr.number}`)
+      context.github.pulls.updateBranch({
+        owner,
+        repo,
+        pull_number: pr.number,
+      })
+    }
+  }
 
   function checkForPrs(context) {
     const {payload} = context
@@ -16,17 +27,8 @@ module.exports = (robot) => {
       owner,
       repo,
       base,
-      state: open,
-    }), processPrs)
+      state: 'open',
+    }), processPrs(context))
   }
 
-  function processPrs({data}) {
-    for (pr in data) {
-      context.github.pulls.updateBranch({
-        owner,
-        repo,
-        pull_number: pr.number,
-      })
-    }
-  }
 }
