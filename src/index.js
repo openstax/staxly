@@ -8,6 +8,7 @@ module.exports = (robot) => {
     require('./slack-stuff')(robot)
   }
   require('./merge-bases')(robot)
+  require('probot-settings')(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {
