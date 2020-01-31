@@ -3,13 +3,18 @@ const {IGNORE_FOR_TESTING} = process.env
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
-  // Plugins that we use
+  require('./merge-bases')(robot)
+
+  // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
     require('./slack-stuff')(robot)
+    require('probot-addon-release-notifier')(robot) // because it uses safe-env and yells loudly
   }
-  require('./merge-bases')(robot)
+
+  // 3rd-party addons that we use
   require('probot-addon-autolabeler')(robot)
   require('probot-addon-settings')(robot)
+  require('probot-addon-todo')(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {

@@ -1592,7 +1592,14 @@ dot-prop@^5.1.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv@~5.0.0:
+dotenv-safe@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv-safe/-/dotenv-safe-5.0.1.tgz#8c4a79b8978fd4271b3d8ef17be2b2f04588af71"
+  integrity sha512-NiS92uLQHKThcQIB4pNEQHLaosz+O1VaJ1yuBaZNj0BASGpQliSzfPKgaoFs/WvE+p8pS9STXOMW30b5uxBZog==
+  dependencies:
+    dotenv "^5.0.0"
+
+dotenv@^5.0.0, dotenv@~5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
   integrity sha512-4As8uPrjfwb7VXC+WnLCbXK7y+Ueb2B3zgNCePYfhxS1PYeaO1YTeplffTEcbfLhvFNGLAz90VvJs9yomG7bow==
@@ -3927,6 +3934,11 @@ make-dir@^3.0.0:
   dependencies:
     semver "^6.0.0"
 
+make-promises-safe@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/make-promises-safe/-/make-promises-safe-1.1.0.tgz#b4d28c61ef8ad5502f38dbb3a0ee89627f76ad61"
+  integrity sha1-tNKMYe+K1VAvONuzoO6JYn92rWE=
+
 makeerror@1.0.x:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/makeerror/-/makeerror-1.0.11.tgz#e01a5c9109f2af79660e4e8b9587790184f5a96c"
@@ -4774,13 +4786,23 @@ private@^0.1.8:
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
 
-"probot-addon-autolabeler@github:mithro/autolabeler#38392de5e611fe4538eeb48f0227e8c404439a07":
+"probot-addon-autolabeler@github:mithro/autolabeler":
   version "1.0.0"
   resolved "https://codeload.github.com/mithro/autolabeler/tar.gz/38392de5e611fe4538eeb48f0227e8c404439a07"
   dependencies:
     ignore "^3.3.3"
     js-yaml "^3.9.0"
     probot "^6.0.0"
+
+"probot-addon-release-notifier@github:release-notifier/release-notifier":
+  version "0.0.0-development"
+  resolved "https://codeload.github.com/release-notifier/release-notifier/tar.gz/50076e9e72276cea8a24f6e76bc4aa11a3d9265a"
+  dependencies:
+    dotenv-safe "^5.0.1"
+    lodash "^4.17.4"
+    make-promises-safe "^1.1.0"
+    probot "^6.0.0"
+    semver "^5.5.0"
 
 "probot-addon-settings@github:probot/settings#af40e21548181e8221a01bbcf125d1ee28f50a48":
   version "1.0.0"
@@ -4789,6 +4811,12 @@ private@^0.1.8:
     deepmerge "^4.1.0"
     js-yaml "^3.12.0"
     probot "^9.9.1"
+
+"probot-addon-todo@github:uber-workflow/probot-app-todos":
+  version "1.0.6-0"
+  resolved "https://codeload.github.com/uber-workflow/probot-app-todos/tar.gz/54320d0077fca2a823509975e8f54c16680f18a2"
+  dependencies:
+    probot "^9.2.10"
 
 probot@^6.0.0:
   version "6.2.1"
@@ -4815,7 +4843,7 @@ probot@^6.0.0:
     resolve "^1.4.0"
     semver "^5.5.0"
 
-probot@^9.9.1:
+probot@^9.2.10, probot@^9.9.1:
   version "9.9.1"
   resolved "https://registry.yarnpkg.com/probot/-/probot-9.9.1.tgz#18fb12bf3cba2663207063dcf1a09d54dbabe1bc"
   integrity sha512-Xhgm2zQB9zIciTBAoh33cz4I0sKGqRlC6njnkj7vtEITp8CyN8ttxZED+cUVNrv12TwSI8DF8fOHKxn2bOOW4w==

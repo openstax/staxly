@@ -21,8 +21,10 @@
   "dependencies": {
     "@slack/client": "^4.0.0",
     "probot": "^9.9.1",
-    "probot-addon-autolabeler": "github:mithro/autolabeler#38392de5e611fe4538eeb48f0227e8c404439a07",
+    "probot-addon-autolabeler": "github:mithro/autolabeler",
+    "probot-addon-release-notifier": "github:release-notifier/release-notifier",
     "probot-addon-settings": "github:probot/settings#af40e21548181e8221a01bbcf125d1ee28f50a48",
+    "probot-addon-todo": "github:uber-workflow/probot-app-todos",
     "smee-client": "^1.0.1"
   },
   "devDependencies": {
