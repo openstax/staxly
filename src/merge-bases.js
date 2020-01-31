@@ -25,7 +25,7 @@ module.exports = (robot) => {
     const {owner, repo} = context.repo();
 
     logger.info(`received push event for ${base}`)
-    context.github.paginate(context.github.pulls.getAll.endpoint.merge({
+    context.github.paginate(context.github.pullRequests.getAll.endpoint.merge({
       owner,
       repo,
       base,
