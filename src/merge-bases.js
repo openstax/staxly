@@ -10,7 +10,7 @@ module.exports = (robot) => {
 
     for (const pr in data) {
       logger.info(`updating base for ${pr.number}`)
-      context.github.pullRequests.updateBranch({
+      context.github.pulls.updateBranch({
         owner,
         repo,
         pull_number: pr.number,
@@ -25,7 +25,7 @@ module.exports = (robot) => {
     const {owner, repo} = context.repo();
 
     logger.info(`received push event for ${base}`)
-    context.github.paginate(context.github.pullRequests.getAll({
+    context.github.paginate(context.github.pulls.getAll.endpoint.merge({
       owner,
       repo,
       base,
