@@ -1,6 +1,6 @@
 const nock = require('nock');
 const myProbotApp = require('..')
-const { Probot, createProbot } = require('probot')
+const { createProbot } = require('probot')
 
 
 describe('My Probot app', () => {
