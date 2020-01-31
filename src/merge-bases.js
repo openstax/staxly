@@ -8,7 +8,7 @@ module.exports = (robot) => {
   const processPrs = context => ({data}) => {
     const {owner, repo} = context.repo();
 
-    for (const pr in data) {
+    for (const pr of data) {
       logger.info(`updating base for ${pr.number}`)
       context.github.pulls.updateBranch({
         owner,
