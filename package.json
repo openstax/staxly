@@ -14,8 +14,8 @@
     "dev": "nodemon",
     "lint": "standard --fix",
     "start": "probot run ./index.js",
-    "test": "jest && standard --fix",
-    "test:debug": "NODE_ENV=development node --inspect-brk $(npm bin)/jest -i --updateSnapshot",
+    "test": "IGNORE_FOR_TESTING=true jest && standard --fix",
+    "test:debug": "NODE_ENV=development IGNORE_FOR_TESTING=true node --inspect-brk $(npm bin)/jest -i --updateSnapshot",
     "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {

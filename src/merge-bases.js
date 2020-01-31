@@ -16,7 +16,7 @@ module.exports = (robot) => {
     const {owner, repo} = context.repo()
 
     return Promise.all(data.map(pr => {
-      logger.info(`updating base for ${pr.number}`)
+      logger.info(`updating base for ${owner}/${repo}#${pr.number}`)
       return context.github.pulls.updateBranch({
         owner,
         repo,

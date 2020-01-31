@@ -1,8 +1,12 @@
+const {IGNORE_FOR_TESTING} = process.env
+
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
   // Plugins that we use
-  require('./slack-stuff')(robot)
+  if (!IGNORE_FOR_TESTING) {
+    require('./slack-stuff')(robot)
+  }
   require('./merge-bases')(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
