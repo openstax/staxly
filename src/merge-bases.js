@@ -10,7 +10,7 @@ module.exports = (robot) => {
 
     for (const pr in data) {
       logger.info(`updating base for ${pr.number}`)
-      context.github.pulls.updateBranch({
+      context.github.pullRequests.updateBranch({
         owner,
         repo,
         pull_number: pr.number,
