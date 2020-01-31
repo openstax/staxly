@@ -8,14 +8,14 @@ module.exports = (robot) => {
   const processPrs = context => ({data}) => {
     const {owner, repo} = context.repo();
 
-    for (const pr of data) {
+    return Promise.all(data.map(pr => {
       logger.info(`updating base for ${pr.number}`)
-      context.github.pulls.updateBranch({
+      return context.github.pulls.updateBranch({
         owner,
         repo,
         pull_number: pr.number,
-      })
-    }
+      });
+    }));
   }
 
   function checkForPrs(context) {
@@ -24,13 +24,19 @@ module.exports = (robot) => {
     const base = payload.ref.replace(/^refs\/heads\//, '');
     const {owner, repo} = context.repo();
 
-    logger.info(`received push event for ${base}`)
-    context.github.paginate(context.github.pulls.list.endpoint.merge({
-      owner,
-      repo,
-      base,
-      state: 'open',
-    }), processPrs(context));
+    logger.info(`received push event for ${base}`);
+
+    return context.github.paginate(
+      context.github.pulls.list.endpoint.merge({
+        owner,
+        repo,
+        base,
+        state: 'open',
+      }),
+      processPrs(context)
+    )
+      .then(pagePromises => Promise.all(pagePromises))
+    ;
   }
 
 }
