@@ -1,10 +1,10 @@
-// Merge base into PR branch whenever updated 
+// Merge base into PR branch whenever updated
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'merge-bases'})
   robot.on([
     'push',
   ], checkForPrs)
-  
+
   const processPrs = context => ({data}) => {
     const {owner, repo} = context.repo();
 
@@ -24,6 +24,7 @@ module.exports = (robot) => {
     const base = payload.ref.replace(/^refs\/heads\//, '');
     const {owner, repo} = context.repo();
 
+    logger.info(`received push event for ${base}`)
     context.github.paginate(context.github.pulls.list({
       owner,
       repo,
