@@ -1461,6 +1461,11 @@ deepmerge@4.2.2, deepmerge@^4.1.0:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
 
+deepmerge@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+  integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
+
 default-require-extensions@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/default-require-extensions/-/default-require-extensions-1.0.0.tgz#f37ea15d3e13ffd9b437d33e1a75b5fb97874cb8"
@@ -3519,7 +3524,7 @@ js-tokens@^3.0.2:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
   integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
-js-yaml@^3.12.0, js-yaml@^3.13.1, js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
+js-yaml@^3.10.0, js-yaml@^3.12.0, js-yaml@^3.13.1, js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.1.tgz#aff151b30bfdfa8e49e05da22e7415e9dfa37847"
   integrity sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==
@@ -4817,6 +4822,14 @@ private@^0.1.8:
   resolved "https://codeload.github.com/uber-workflow/probot-app-todos/tar.gz/54320d0077fca2a823509975e8f54c16680f18a2"
   dependencies:
     probot "^9.2.10"
+
+probot-config@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/probot-config/-/probot-config-1.1.0.tgz#f8131c9f4f3e499e7bfc5c79284d012e4a8d2f25"
+  integrity sha512-FkTWzitDzkmGG3Pt7zLl2sTRpHuRbrUnKUbxs+7ruqoLv2dOEdc+sU1+uk0EP+fRR84sBkQfv8UjGASdeKT5lg==
+  dependencies:
+    deepmerge "^2.2.1"
+    js-yaml "^3.10.0"
 
 probot@^6.0.0:
   version "6.2.1"

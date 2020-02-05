@@ -3,6 +3,7 @@ const {IGNORE_FOR_TESTING} = process.env
 module.exports = (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
+  require('./changelog')(robot)
   require('./merge-bases')(robot)
 
   // Addons that are noisy during tests
