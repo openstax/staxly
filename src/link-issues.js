@@ -17,7 +17,6 @@ module.exports = (robot) => {
   ], checkPR)
 
   async function checkPR(context) {
-    const head_sha = context.payload.pull_request.head.sha; 
     const prInfo = {
       ...context.repo(),
       pull_number: context.payload.pull_request.number
@@ -25,15 +24,17 @@ module.exports = (robot) => {
     if (!repoWhitelist.includes(prInfo.repo)) {
       return
     }
+    logger.info(`checking pr ${prInfo.pull_number}`)
 
     const check = await context.github.checks.create(context.repo({
       name,
-      head_sha,
+      head_sha: context.payload.pull_request.head.sha,
       status: 'in_progress'
     }));
 
     const linkedIssueInfo = await getConnectedIssueForPR(context.github, prInfo);
 
+    logger.info(`pr ${prInfo.pull_number} ${linkedIssueInfo ? 'passed' : 'failed'}`)
     await context.github.checks.update(context.repo({
       check_run_id: check.data.id,
       status: 'completed',
