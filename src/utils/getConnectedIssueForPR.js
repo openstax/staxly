@@ -17,8 +17,11 @@ const targetRegexes = [
  *
  * @returns IssueData | null
  */
-module.exports = async (github, pullRequest) => {
+module.exports = async (logger, github, pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
+
+  logger.info(pullRequest.body);
+  logger.info(target);
 
   if (target) {
     return github.issues.get(target.groups).catch(() => null);

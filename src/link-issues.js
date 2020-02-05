@@ -31,7 +31,7 @@ module.exports = (robot) => {
       output: {title: name, summary: 'processing'}
     }))
 
-    const linkedIssueInfo = await getConnectedIssueForPR(context.github, pullRequest)
+    const linkedIssueInfo = await getConnectedIssueForPR(logger, context.github, pullRequest)
 
     logger.info(`pr ${pullRequest.number} ${linkedIssueInfo ? 'passed' : 'failed'}`)
 
