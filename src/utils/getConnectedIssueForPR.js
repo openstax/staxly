@@ -4,11 +4,11 @@ const targetRegexes = [
    * which is an error that cannot be suppressed
    **/
   /* eslint-disable-next-line */
-  '^(.* )?link: (?<owner>openstax)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)( .*)?$',
+  '^(.* )?for: (?<owner>openstax)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)( .*)?$',
   /* eslint-disable-next-line */
-  '^(.* )?link: https:\/\/github.com\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/issues\/(?<number>[0-9]+)( .*)?$',
+  '^(.* )?for: https:\/\/github.com\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/issues\/(?<number>[0-9]+)( .*)?$',
   /* eslint-disable-next-line */
-  '^(.* )?link: https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/(?<number>[0-9]+)( .*)?$'
+  '^(.* )?for: https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/(?<number>[0-9]+)( .*)?$'
 ]
 
 /*

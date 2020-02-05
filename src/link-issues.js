@@ -7,7 +7,7 @@ const repoWhitelist = [
   'testing-stuff'
 ]
 
-const name = 'issue linked'
+const name = 'has issue link'
 
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'link-issues-check'})
@@ -37,6 +37,7 @@ module.exports = (robot) => {
     const linkedIssueInfo = await getConnectedIssueForPR(context.github, prInfo)
 
     logger.info(`pr ${prInfo.pull_number} ${linkedIssueInfo ? 'passed' : 'failed'}`)
+
     await context.github.checks.update(context.repo({
       check_run_id: check.data.id,
       status: 'completed',
@@ -48,8 +49,8 @@ module.exports = (robot) => {
         }
         : {
           title: name,
-          summary: 'please add a link to the issue this PR is for',
-          text: 'for example `link: openstax/cool-repo#5`. `link: <github or zenhub url>` also work'
+          summary: 'please add a link to the issue this PR is for to the PR description',
+          text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
         }
     }))
   };
