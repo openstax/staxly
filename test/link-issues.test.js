@@ -52,7 +52,7 @@ describe('link issues', () => {
 
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {body: 'link: openstax/rex-web#4'})
+      .reply(200, {body: 'for: openstax/rex-web#4'})
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
