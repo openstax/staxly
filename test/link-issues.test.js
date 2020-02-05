@@ -2,7 +2,6 @@ const nock = require('nock')
 const linkIssues = require('../src/link-issues')
 const { createProbot } = require('probot')
 
-
 describe('link issues', () => {
   let app
 
@@ -20,7 +19,7 @@ describe('link issues', () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
       .reply(200, {body: 'no link'})
-    
+
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'failure')
       .reply(200, {id: 5})
@@ -45,7 +44,7 @@ describe('link issues', () => {
 
     expect(nock.isDone()).toBe(true)
   })
-  
+
   test('passes if there is a link', async () => {
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
@@ -54,7 +53,7 @@ describe('link issues', () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
       .reply(200, {body: 'link: openstax/rex-web#4'})
-    
+
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
       .reply(200, {id: 5})
