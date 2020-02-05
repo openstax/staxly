@@ -17,8 +17,39 @@ describe('link issues', () => {
       .reply(200, {id: 5})
 
     nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {body: 'no link'})
+      .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'failure')
+      .reply(200, {id: 5})
+
+    await app.receive({
+      name: 'pull_request.opened',
+      payload: {
+        pull_request: {
+          number: 2,
+          body: 'no link',
+          head: {
+            sha: 'shashashashasha'
+          }
+        },
+        repository: {
+          name: 'testrepo',
+          owner: {
+            name: 'testowner'
+          }
+        }
+      }
+    })
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('fails with an invalid link', async () => {
+    nock('https://api.github.com')
+      .post('/repos/testowner/testrepo/check-runs')
+      .reply(200, {id: 5})
+
+    nock('https://api.github.com')
+      .get('/repos/openstax/rex-web/issues/4')
+      .reply(404, {})
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'failure')
@@ -29,6 +60,7 @@ describe('link issues', () => {
       payload: {
         pull_request: {
           number: 2,
+          body: 'for: openstax/rex-web#4',
           head: {
             sha: 'shashashashasha'
           }
@@ -51,8 +83,8 @@ describe('link issues', () => {
       .reply(200, {id: 5})
 
     nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {body: 'for: openstax/rex-web#4'})
+      .get('/repos/openstax/rex-web/issues/4')
+      .reply(200, {})
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
@@ -63,6 +95,7 @@ describe('link issues', () => {
       payload: {
         pull_request: {
           number: 2,
+          body: 'for: openstax/rex-web#4',
           head: {
             sha: 'shashashashasha'
           }

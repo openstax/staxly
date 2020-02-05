@@ -4,25 +4,24 @@ const targetRegexes = [
    * which is an error that cannot be suppressed
    **/
   /* eslint-disable-next-line */
-  '^(.* )?for: (?<owner>openstax)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)( .*)?$',
+  '^(.* )?for: (?<owner>openstax)\/(?<repo>[a-z\-]+)#(?<issue_number>[0-9]+)( .*)?$',
   /* eslint-disable-next-line */
-  '^(.* )?for: https:\/\/github.com\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/issues\/(?<number>[0-9]+)( .*)?$',
+  '^(.* )?for: https:\/\/github.com\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/issues\/(?<issue_number>[0-9]+)( .*)?$',
   /* eslint-disable-next-line */
-  '^(.* )?for: https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/(?<number>[0-9]+)( .*)?$'
+  '^(.* )?for: https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/(?<issue_number>[0-9]+)( .*)?$'
 ]
 
 /*
- * @argument context.issue (or equivalent)
  * @argument context.github
+ * @argument PullRequestData 
  *
- * @returns {owner: string, repo: string, number: string} | null
+ * @returns IssueData | null
  */
-module.exports = async (github, pullInfo) => {
-  const pull = await github.pulls.get(pullInfo)
-  const target = targetRegexes.reduce((result, regex) => result || pull.data.body.match(regex), null)
+module.exports = async (github, pullRequest) => {
+  const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
 
   if (target) {
-    return target.groups
+    return await github.issues.get(target.groups).catch(() => null);
   }
 
   return null
