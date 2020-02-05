@@ -5,6 +5,7 @@ module.exports = (robot) => {
 
   require('./changelog')(robot)
   require('./merge-bases')(robot)
+  require('./link-issues')(robot)
 
   // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
