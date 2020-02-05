@@ -30,7 +30,8 @@ module.exports = (robot) => {
     const check = await context.github.checks.create(context.repo({
       name,
       head_sha: context.payload.pull_request.head.sha,
-      status: 'in_progress'
+      status: 'in_progress',
+      output: {title: name, summary: 'processing'}
     }))
 
     const linkedIssueInfo = await getConnectedIssueForPR(context.github, prInfo)
@@ -39,7 +40,17 @@ module.exports = (robot) => {
     await context.github.checks.update(context.repo({
       check_run_id: check.data.id,
       status: 'completed',
-      conclusion: linkedIssueInfo ? 'success' : 'failure'
+      conclusion: linkedIssueInfo ? 'success' : 'failure',
+      output: linkedIssueInfo
+        ? {
+          title: name,
+          summary: 'good job linking to that issue! :+1:'
+        }
+        : {
+          title: name,
+          summary: 'please add a link to the issue this PR is for',
+          text: 'for example `link: openstax/cool-repo#5`. `link: <github or zenhub url>` also work'
+        }
     }))
   };
 }
