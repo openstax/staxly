@@ -21,7 +21,7 @@ module.exports = async (github, pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
 
   if (target) {
-    return await github.issues.get(target.groups).catch(() => null);
+    return github.issues.get(target.groups).catch(() => null);
   }
 
   return null
