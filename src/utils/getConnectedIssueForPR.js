@@ -20,7 +20,7 @@ const targetRegexes = [
 module.exports = async (logger, github, pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
 
-  logger.info(pullRequest.body);
+  logger.info(JSON.stringify(pullRequest.body));
   logger.info(target);
 
   if (target) {

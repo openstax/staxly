@@ -83,7 +83,7 @@ describe('link issues', () => {
       .reply(200, {id: 5})
 
     nock('https://api.github.com')
-      .get('/repos/openstax/rex-web/issues/4')
+      .get('/repos/openstax/rex-web/issues/123')
       .reply(200, {})
 
     nock('https://api.github.com')
@@ -95,7 +95,7 @@ describe('link issues', () => {
       payload: {
         pull_request: {
           number: 2,
-          body: "asdf\nfor: openstax/rex-web#4\nasdf",
+          body: "asdf\nfor: openstax/rex-web#123",
           head: {
             sha: 'shashashashasha'
           }
