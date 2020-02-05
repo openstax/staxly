@@ -13,7 +13,8 @@ module.exports = (robot) => {
   const logger = robot.log.child({name: 'link-issues-check'})
   robot.on([
     'pull_request.opened',
-    'pull_request.edited'
+    'pull_request.edited',
+    'pull_request.synchronize',
   ], checkPR)
 
   async function checkPR (context) {
