@@ -95,7 +95,7 @@ describe('link issues', () => {
       payload: {
         pull_request: {
           number: 2,
-          body: "asdf\nfor: openstax/rex-web#123",
+          body: 'asdf\nfor: openstax/rex-web#123',
           head: {
             sha: 'shashashashasha'
           }

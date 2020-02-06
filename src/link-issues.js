@@ -14,11 +14,11 @@ module.exports = (robot) => {
   robot.on([
     'pull_request.opened',
     'pull_request.edited',
-    'pull_request.synchronize',
+    'pull_request.synchronize'
   ], checkPR)
 
   async function checkPR (context) {
-    const pullRequest = context.payload.pull_request;
+    const pullRequest = context.payload.pull_request
     if (!repoWhitelist.includes(context.payload.repository.name)) {
       return
     }
