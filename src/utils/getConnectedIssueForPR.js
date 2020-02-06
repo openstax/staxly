@@ -1,17 +1,11 @@
-
-const beginningOfStringOrWhitespace = '^(.*(\\s|\\r){1,})?'
-const endOfStringOrWhitespace = '((\\s|\\r){1,}.*)?$'
-
-/* eslint-disable-next-line */
-const githubRefGroups = '(?<owner>openstax)\/(?<repo>[a-z\-]+)#(?<issue_number>[0-9]+)'
-/* eslint-disable-next-line */
-const githubLinkGroups = 'https:\/\/github.com\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/issues\/(?<issue_number>[0-9]+)'
-/* eslint-disable-next-line */
-const zenhubLinkGroups = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>openstax)\/(?<repo>[a-z\-]+)\/(?<issue_number>[0-9]+)'
+const {
+  beginningOfStringOrWhitespace, endOfStringOrWhitespace,
+  githubRefGroups, githubIssueLinkGroups, zenhubLinkGroups,
+} = require('./regexes');
 
 const targetRegexes = [
   `${beginningOfStringOrWhitespace}for: ${githubRefGroups}${endOfStringOrWhitespace}`,
-  `${beginningOfStringOrWhitespace}for: ${githubLinkGroups}${endOfStringOrWhitespace}`,
+  `${beginningOfStringOrWhitespace}for: ${githubIssueLinkGroups}${endOfStringOrWhitespace}`,
   `${beginningOfStringOrWhitespace}for: ${zenhubLinkGroups}${endOfStringOrWhitespace}`
 ]
 

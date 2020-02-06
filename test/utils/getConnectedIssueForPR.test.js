@@ -18,7 +18,7 @@ describe('getConnectedIssueForPR', () => {
   })
 
   test('resolves with stuff around', () => {
-    const result = getConnectedIssueForPR({body: 'asdf for: openstax/rex-web#123 asdf'})
+    const result = getConnectedIssueForPR({body: 'asdf\nasdf\nasdf\nasdf for: openstax/rex-web#123 asdf'})
     expect(result).toEqual({repo: 'rex-web', owner: 'openstax', issue_number: '123'})
   })
 
