@@ -13,7 +13,6 @@ module.exports = (robot) => {
   }
 
   // 3rd-party addons that we use
-  require('probot-addon-autolabeler')(robot)
   require('probot-addon-settings')(robot)
   require('probot-addon-todo')(robot)
 
