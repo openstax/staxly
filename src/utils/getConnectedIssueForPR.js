@@ -16,16 +16,15 @@ const targetRegexes = [
 ]
 
 /*
- * @argument context.github
  * @argument PullRequestData
  *
- * @returns IssueData | null
+ * @returns IssueParams | null
  */
-module.exports = async (github, pullRequest) => {
+module.exports = (pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
 
   if (target) {
-    return github.issues.get(target.groups).catch(() => null)
+    return target.groups;
   }
 
   return null

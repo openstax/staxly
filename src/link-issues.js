@@ -31,15 +31,16 @@ module.exports = (robot) => {
       output: {title: name, summary: 'processing'}
     }))
 
-    const linkedIssueInfo = await getConnectedIssueForPR(context.github, pullRequest)
+    const linkedIssueParams = getConnectedIssueForPR(pullRequest)
+    const linkedIssue = await context.github.issues.get(linkedIssueParams).catch(() => null);
 
-    logger.info(`pr ${pullRequest.number} ${linkedIssueInfo ? 'passed' : 'failed'}`)
+    logger.info(`pr ${pullRequest.number} ${linkedIssue ? 'passed' : 'failed'}`)
 
     await context.github.checks.update(context.repo({
       check_run_id: check.data.id,
       status: 'completed',
-      conclusion: linkedIssueInfo ? 'success' : 'failure',
-      output: linkedIssueInfo
+      conclusion: linkedIssue ? 'success' : 'failure',
+      output: linkedIssue
         ? {
           title: 'all is as it should be',
           summary: 'good job linking to that issue! :+1:'
