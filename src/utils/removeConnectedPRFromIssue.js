@@ -12,7 +12,7 @@ module.exports = (github, issue, pullRequest) => {
   const repo = pullRequest.base.repo.name
   const owner = pullRequest.base.repo.owner.login
 
-  const blockMatch = issue.body.match(prBlockRegex)
+  const blockMatch = issue.body.match(new RegExp(prBlockRegex, 'i'))
 
   if (!blockMatch) {
     return
@@ -21,7 +21,7 @@ module.exports = (github, issue, pullRequest) => {
   const lines = blockMatch[0].match(new RegExp(listPrefix + anyLink, 'g'))
 
   const linesToRemove = lines.filter(line => {
-    const match = anyLinkGroups.reduce((result, regex) => result || line.match(regex), null)
+    const match = anyLinkGroups.reduce((result, regex) => result || line.match(new RegExp(regex, 'i')), null)
     const params = match && match.groups
     return params && Number(params.number) === pullNumber && params.repo === repo && params.owner === owner
   })

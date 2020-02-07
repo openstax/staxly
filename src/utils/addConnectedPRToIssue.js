@@ -22,7 +22,7 @@ module.exports = (github, issue, pullRequest) => {
   }
 
   const newLink = `\n- [ ] ${owner}/${repo}#${pullNumber}`
-  const blockMatch = issue.body.match(prBlockRegex)
+  const blockMatch = issue.body.match(new RegExp(prBlockRegex, 'i'))
   const newBody = blockMatch
     ? issue.body.replace(blockMatch[0], blockMatch[0] + newLink)
     : issue.body + '\n\npull requests:' + newLink

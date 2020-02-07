@@ -7,10 +7,10 @@ const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes')
  */
 module.exports = (issue) => {
   const blockMatch = issue.body.match(prBlockRegex)
-  const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'g'))
+  const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'gi'))
 
   return (links || []).map(link => {
-    const result = anyLinkGroups.reduce((result, regex) => result || link.match(regex), null)
+    const result = anyLinkGroups.reduce((result, regex) => result || link.match(new RegExp(regex, 'i')), null)
     return result ? result.groups : null
   })
     .filter(params => !!params)

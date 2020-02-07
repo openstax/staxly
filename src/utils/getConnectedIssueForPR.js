@@ -15,7 +15,7 @@ const targetRegexes = [
  * @returns IssueParams | null
  */
 module.exports = (pullRequest) => {
-  const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
+  const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(new RegExp(regex, 'i')), null)
 
   if (target && target.groups) {
     const {number, ...params} = target.groups
