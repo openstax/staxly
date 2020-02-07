@@ -1,19 +1,4 @@
-const {
-  githubRefGroups, githubPullRequestLinkGroups, zenhubLinkGroups,
-  githubRef, githubPullRequestLink, zenhubLink,
-  whitespace, beginningOfStringOrNewline
-} = require('./regexes');
-
-const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
-
-//const prBlockRegex = `${beginningOfStringOrNewline}#* ?(\*){0,2}pull requests:?(\*+)?:?(${whitespace}*\- [ ] ${anyLink})*`
-const prBlockRegex = `${beginningOfStringOrNewline}#* ?\\*{0,2}pull requests:?\\*{0,2}:?(${whitespace}*\\- \\[( |x)\\] ${anyLink})*`
-
-const groupLinkRegexes = [
-  githubRefGroups,
-  githubPullRequestLinkGroups,
-  zenhubLinkGroups,
-];
+const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes');
 
 /*
  * @argument IssueData
@@ -25,14 +10,10 @@ module.exports = (issue) => {
   const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'g'));
 
   return (links || []).map(link => {
-    const result = groupLinkRegexes.reduce((result, regex) => result || link.match(regex), null)
+    const result = anyLinkGroups.reduce((result, regex) => result || link.match(regex), null)
     return result ? result.groups : null
   })
-    .filter(params => !!params);
-
-  if (blockMatch) {
-    return blockMatch.groups;
-  }
-
-  return null
+    .filter(params => !!params)
+    .map(({number, ...params}) => ({...params, pull_number: number}))
+  ;
 }

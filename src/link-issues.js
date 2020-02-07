@@ -1,5 +1,7 @@
 // Merge base into PR branch whenever updated
 const getConnectedIssueForPR = require('./utils/getConnectedIssueForPR')
+const addConnectedPRToIssue = require('./utils/addConnectedPRToIssue')
+const removeConnectedPRFromIssue = require('./utils/removeConnectedPRFromIssue')
 
 const repoWhitelist = [
   'testrepo',
@@ -32,7 +34,9 @@ module.exports = (robot) => {
     }))
 
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
-    const linkedIssue = await context.github.issues.get(linkedIssueParams).catch(() => null);
+    const linkedIssue = linkedIssueParams && await context.github.issues.get(linkedIssueParams)
+      .then(response => response.data)
+      .catch(() => null);
 
     logger.info(`pr ${pullRequest.number} ${linkedIssue ? 'passed' : 'failed'}`)
 
@@ -51,5 +55,20 @@ module.exports = (robot) => {
           text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
         }
     }))
+
+    if (context.payload.action === 'edited') {
+      const previousIssueParams = getConnectedIssueForPR({...pullRequest, body: context.payload.changes.body.from});
+      const previousIssue = previousIssueParams && await context.github.issues.get(previousIssueParams)
+        .then(response => response.data)
+        .catch(() => null);
+
+      if (previousIssue && (!linkedIssue || previousIssue.number !== linkedIssue.number)) {
+        await removeConnectedPRFromIssue(context.github, previousIssue, pullRequest);
+      }
+    }
+
+    if (linkedIssue) {
+      await addConnectedPRToIssue(context.github, linkedIssue, pullRequest);
+    }
   };
 }

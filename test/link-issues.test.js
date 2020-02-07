@@ -33,7 +33,7 @@ describe('link issues', () => {
         repository: {
           name: 'testrepo',
           owner: {
-            name: 'testowner'
+            login: 'testowner'
           }
         }
       }
@@ -63,12 +63,12 @@ describe('link issues', () => {
           body: 'for: openstax/rex-web#4',
           head: {
             sha: 'shashashashasha'
-          }
+          },
         },
         repository: {
           name: 'testrepo',
           owner: {
-            name: 'testowner'
+            login: 'testowner'
           }
         }
       }
@@ -78,13 +78,19 @@ describe('link issues', () => {
   })
 
   test('passes if there is a link', async () => {
+    const repo = {
+      name: 'testrepo',
+      owner: {
+        login: 'testowner'
+      }
+    };
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
       .reply(200, {id: 5})
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/123')
-      .reply(200, {})
+      .reply(200, {body: 'pull requests:\n- [ ] testowner/testrepo#2'})
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
@@ -92,20 +98,114 @@ describe('link issues', () => {
 
     await app.receive({
       name: 'pull_request.opened',
+      action: 'created',
       payload: {
         pull_request: {
           number: 2,
           body: 'asdf\nfor: openstax/rex-web#123',
           head: {
             sha: 'shashashashasha'
+          },
+          base: { repo }
+        },
+        repository: repo
+      }
+    })
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('links to the issue if it isn\'t already', async () => {
+    const repo = {
+      name: 'testrepo',
+      owner: {
+        login: 'testowner'
+      }
+    };
+    nock('https://api.github.com')
+      .post('/repos/testowner/testrepo/check-runs')
+      .reply(200, {id: 5})
+
+    nock('https://api.github.com')
+      .get('/repos/openstax/rex-web/issues/123')
+      .reply(200, {body: '', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 123})
+
+    nock('https://api.github.com')
+      .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
+      .reply(200, {id: 5})
+ 
+    nock('https://api.github.com')
+      .patch('/repos/openstax/rex-web/issues/123', body => body.body === '\n\npull requests:\n- [ ] testowner/testrepo#2')
+      .reply(200, {})
+
+    await app.receive({
+      name: 'pull_request.opened',
+      action: 'created',
+      payload: {
+        pull_request: {
+          number: 2,
+          body: 'asdf\nfor: openstax/rex-web#123',
+          head: {
+            sha: 'shashashashasha'
+          },
+          base: { repo }
+        },
+        repository: repo
+      }
+    })
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('removes link from previous issue if link is changed', async () => {
+    const repo = {
+      name: 'testrepo',
+      owner: {
+        login: 'testowner'
+      }
+    };
+    nock('https://api.github.com')
+      .post('/repos/testowner/testrepo/check-runs')
+      .reply(200, {id: 5})
+
+    nock('https://api.github.com')
+      .get('/repos/openstax/rex-web/issues/123')
+      .reply(200, {body: '', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 123})
+
+    nock('https://api.github.com')
+      .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
+      .reply(200, {id: 5})
+
+    nock('https://api.github.com')
+      .get('/repos/openstax/rex-web/issues/234')
+      .reply(200, {body: 'pull requests:\n- [ ] testowner/testrepo#2', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 234})
+    
+    nock('https://api.github.com')
+      .patch('/repos/openstax/rex-web/issues/234', body => body.body === 'pull requests:')
+      .reply(200, {})
+ 
+    nock('https://api.github.com')
+      .patch('/repos/openstax/rex-web/issues/123', body => body.body === '\n\npull requests:\n- [ ] testowner/testrepo#2')
+      .reply(200, {})
+
+    await app.receive({
+      name: 'pull_request.opened',
+      payload: {
+        action: 'edited',
+        changes: {
+          body: {
+            from: 'for: openstax/rex-web#234'
           }
         },
-        repository: {
-          name: 'testrepo',
-          owner: {
-            name: 'testowner'
-          }
-        }
+        pull_request: {
+          number: 2,
+          body: 'for: openstax/rex-web#123',
+          head: {
+            sha: 'shashashashasha'
+          },
+          base: { repo }
+        },
+        repository: repo
       }
     })
 
@@ -126,7 +226,7 @@ describe('link issues', () => {
         repository: {
           name: 'randomrepo',
           owner: {
-            name: 'testowner'
+            login: 'testowner'
           }
         }
       }

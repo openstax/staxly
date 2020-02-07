@@ -4,13 +4,13 @@ const beginningOfStringOrWhitespace = '^(.*[\\s\\r]+)*'
 const endOfStringOrWhitespace = '([\\s\\r]+.*)*$'
 
 /* eslint-disable-next-line */
-const githubRefGroups = '(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)#(?<issue_number>[0-9]+)'
+const githubRefGroups = '(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)'
 /* eslint-disable-next-line */
-const githubIssueLinkGroups = 'https:\/\/github.com\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/issues\/(?<issue_number>[0-9]+)'
+const githubIssueLinkGroups = 'https:\/\/github.com\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/issues\/(?<number>[0-9]+)'
 /* eslint-disable-next-line */
-const githubPullRequestLinkGroups = 'https:\/\/github.com\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/pulls\/(?<issue_number>[0-9]+)'
+const githubPullRequestLinkGroups = 'https:\/\/github.com\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/pulls\/(?<number>[0-9]+)'
 /* eslint-disable-next-line */
-const zenhubLinkGroups = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/(?<issue_number>[0-9]+)'
+const zenhubLinkGroups = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/(?<number>[0-9]+)'
 
 const githubRef = '[a-z\-]+\/[a-z\-]+#[0-9]+'
 const githubPullRequestLink = 'https:\/\/github.com\/[a-z\-]+\/[a-z\-]+\/pulls\/[0-9]+'
