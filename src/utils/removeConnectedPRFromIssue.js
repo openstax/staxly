@@ -18,7 +18,7 @@ module.exports = (github, issue, pullRequest) => {
     return
   }
 
-  const lines = blockMatch[0].match(new RegExp(listPrefix + anyLink, 'g'))
+  const lines = blockMatch[0].match(new RegExp(listPrefix + anyLink, 'gi'))
 
   const linesToRemove = lines.filter(line => {
     const match = anyLinkGroups.reduce((result, regex) => result || line.match(new RegExp(regex, 'i')), null)

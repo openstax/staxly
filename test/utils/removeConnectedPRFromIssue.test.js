@@ -52,6 +52,27 @@ describe('removeConnectedPRFromIssue', () => {
     }))
   })
 
+  test('removes github ref, with caps', () => {
+    removeConnectedPRFromIssue(
+      github,
+      {...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#234'},
+      {
+        ...pullRequest,
+        base: {
+          repo: {
+            name: 'rex-web',
+            owner: {
+              login: 'OpenStax'
+            }
+          }
+        }
+      }
+    )
+    expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
+      body: 'pull requests:'
+    }))
+  })
+
   test('removes github link', () => {
     removeConnectedPRFromIssue(
       github,

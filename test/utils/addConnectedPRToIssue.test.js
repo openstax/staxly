@@ -52,6 +52,27 @@ describe('addConnectedPRToIssue', () => {
     }))
   })
 
+  test('appends to existing list, with caps', () => {
+    addConnectedPRToIssue(
+      github,
+      {...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#111'},
+      {
+        ...pullRequest,
+        base: {
+          repo: {
+            name: 'rex-web',
+            owner: {
+              login: 'OpenStax'
+            }
+          }
+        }
+      }
+    )
+    expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
+      body: 'pull requests:\n- [ ] OpenStax/rex-web#111\n- [ ] OpenStax/rex-web#234'
+    }))
+  })
+
   test('appends to empty list', () => {
     addConnectedPRToIssue(
       github,

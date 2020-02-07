@@ -5,6 +5,11 @@ describe('getConnectedIssueForPR', () => {
     const result = getConnectedIssueForPR({body: 'for: openstax/rex-web#123'})
     expect(result).toEqual({repo: 'rex-web', owner: 'openstax', issue_number: '123'})
   })
+  
+  test('resolves github ref, case insensitive', () => {
+    const result = getConnectedIssueForPR({body: 'for: OpenStax/rex-web#123'})
+    expect(result).toEqual({repo: 'rex-web', owner: 'OpenStax', issue_number: '123'})
+  })
 
   test('resolves github link', () => {
     const result = getConnectedIssueForPR({body: 'for: https://github.com/openstax/unified/issues/123'})

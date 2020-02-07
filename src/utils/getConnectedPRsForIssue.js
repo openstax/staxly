@@ -6,7 +6,7 @@ const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes')
  * @returns PullRequestParams | null
  */
 module.exports = (issue) => {
-  const blockMatch = issue.body.match(prBlockRegex)
+  const blockMatch = issue.body.match(new RegExp(prBlockRegex, 'i'))
   const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'gi'))
 
   return (links || []).map(link => {

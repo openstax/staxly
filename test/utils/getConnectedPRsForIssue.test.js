@@ -5,6 +5,10 @@ describe('getConnectedPRsForIssue', () => {
     const result = getConnectedPRsForIssue({body: 'pull requests: \n- [ ] openstax/rex-web#123'})
     expect(result).toEqual([{repo: 'rex-web', owner: 'openstax', pull_number: '123'}])
   })
+  test('resolves github ref case insensitive', () => {
+    const result = getConnectedPRsForIssue({body: 'pull requests: \n- [ ] OpenStax/rex-web#123'})
+    expect(result).toEqual([{repo: 'rex-web', owner: 'OpenStax', pull_number: '123'}])
+  })
   test('resolves github link', () => {
     const result = getConnectedPRsForIssue({body: 'pull requests: \n- [ ] https://github.com/openstax/rex-web/pulls/123'})
     expect(result).toEqual([{repo: 'rex-web', owner: 'openstax', pull_number: '123'}])
