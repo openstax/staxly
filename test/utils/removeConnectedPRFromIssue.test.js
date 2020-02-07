@@ -5,7 +5,7 @@ describe('removeConnectedPRFromIssue', () => {
   const issue = {
     body: '',
     number: 123,
-    repo: {
+    repository: {
       name: 'unified',
       owner: {
         login: 'openstax'

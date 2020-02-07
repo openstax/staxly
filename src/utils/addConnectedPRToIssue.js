@@ -28,8 +28,8 @@ module.exports = (github, issue, pullRequest) => {
     : issue.body + '\n\npull requests:' + newLink
 
   return github.issues.update({
-    owner: issue.repo.owner.login,
-    repo: issue.repo.name,
+    owner: issue.repository.owner.login,
+    repo: issue.repository.name,
     issue_number: issue.number,
     body: newBody
   })
