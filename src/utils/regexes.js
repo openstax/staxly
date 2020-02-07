@@ -12,8 +12,11 @@ const githubPullRequestLinkGroups = 'https:\/\/github.com\/(?<owner>[a-z\-]+)\/(
 /* eslint-disable-next-line */
 const zenhubLinkGroups = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)\/(?<number>[0-9]+)'
 
+/* eslint-disable-next-line */
 const githubRef = '[a-z\-]+\/[a-z\-]+#[0-9]+'
+/* eslint-disable-next-line */
 const githubPullRequestLink = 'https:\/\/github.com\/[a-z\-]+\/[a-z\-]+\/pulls\/[0-9]+'
+/* eslint-disable-next-line */
 const zenhubLink = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/[a-z\-]+\/[a-z\-]+\/[0-9]+'
 
 module.exports = {
@@ -27,5 +30,5 @@ module.exports = {
   zenhubLinkGroups,
   githubRef,
   githubPullRequestLink,
-  zenhubLink,
-};
+  zenhubLink
+}

@@ -63,7 +63,7 @@ describe('link issues', () => {
           body: 'for: openstax/rex-web#4',
           head: {
             sha: 'shashashashasha'
-          },
+          }
         },
         repository: {
           name: 'testrepo',
@@ -83,7 +83,7 @@ describe('link issues', () => {
       owner: {
         login: 'testowner'
       }
-    };
+    }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
       .reply(200, {id: 5})
@@ -121,7 +121,7 @@ describe('link issues', () => {
       owner: {
         login: 'testowner'
       }
-    };
+    }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
       .reply(200, {id: 5})
@@ -133,7 +133,7 @@ describe('link issues', () => {
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
       .reply(200, {id: 5})
- 
+
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/issues/123', body => body.body === '\n\npull requests:\n- [ ] testowner/testrepo#2')
       .reply(200, {})
@@ -163,7 +163,7 @@ describe('link issues', () => {
       owner: {
         login: 'testowner'
       }
-    };
+    }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
       .reply(200, {id: 5})
@@ -179,11 +179,11 @@ describe('link issues', () => {
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/234')
       .reply(200, {body: 'pull requests:\n- [ ] testowner/testrepo#2', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 234})
-    
+
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/issues/234', body => body.body === 'pull requests:')
       .reply(200, {})
- 
+
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/issues/123', body => body.body === '\n\npull requests:\n- [ ] testowner/testrepo#2')
       .reply(200, {})

@@ -1,7 +1,6 @@
 const getConnectedIssueForPR = require('../../src/utils/getConnectedIssueForPR')
 
 describe('getConnectedIssueForPR', () => {
-
   test('resolves github ref', () => {
     const result = getConnectedIssueForPR({body: 'for: openstax/rex-web#123'})
     expect(result).toEqual({repo: 'rex-web', owner: 'openstax', issue_number: '123'})
@@ -25,8 +24,8 @@ describe('getConnectedIssueForPR', () => {
   test('doesn\'t resolve with adjacent stuff', () => {
     const result1 = getConnectedIssueForPR({body: 'asdffor: openstax/rex-web#123'})
     const result2 = getConnectedIssueForPR({body: 'for: openstax/rex-web#123asdf'})
-    expect(result1).toBe(null);
-    expect(result2).toBe(null);
+    expect(result1).toBe(null)
+    expect(result2).toBe(null)
   })
 
   test('resolves with newlines', () => {

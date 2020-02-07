@@ -1,4 +1,4 @@
-const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes');
+const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes')
 
 /*
  * @argument IssueData
@@ -6,8 +6,8 @@ const {anyLink, anyLinkGroups, prBlockRegex} = require('./connectedPRRegexes');
  * @returns PullRequestParams | null
  */
 module.exports = (issue) => {
-  const blockMatch = issue.body.match(prBlockRegex);
-  const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'g'));
+  const blockMatch = issue.body.match(prBlockRegex)
+  const links = blockMatch && blockMatch[0].match(new RegExp(anyLink, 'g'))
 
   return (links || []).map(link => {
     const result = anyLinkGroups.reduce((result, regex) => result || link.match(regex), null)
@@ -15,5 +15,4 @@ module.exports = (issue) => {
   })
     .filter(params => !!params)
     .map(({number, ...params}) => ({...params, pull_number: number}))
-  ;
 }

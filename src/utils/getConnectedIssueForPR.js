@@ -1,7 +1,7 @@
 const {
   beginningOfStringOrWhitespace, endOfStringOrWhitespace,
-  githubRefGroups, githubIssueLinkGroups, zenhubLinkGroups,
-} = require('./regexes');
+  githubRefGroups, githubIssueLinkGroups, zenhubLinkGroups
+} = require('./regexes')
 
 const targetRegexes = [
   `${beginningOfStringOrWhitespace}for: ${githubRefGroups}${endOfStringOrWhitespace}`,
@@ -18,8 +18,8 @@ module.exports = (pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(regex), null)
 
   if (target && target.groups) {
-    const {number, ...params} =  target.groups;
-    return {...params, issue_number: number};
+    const {number, ...params} = target.groups
+    return {...params, issue_number: number}
   }
 
   return null

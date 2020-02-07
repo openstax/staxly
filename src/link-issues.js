@@ -36,7 +36,7 @@ module.exports = (robot) => {
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
     const linkedIssue = linkedIssueParams && await context.github.issues.get(linkedIssueParams)
       .then(response => response.data)
-      .catch(() => null);
+      .catch(() => null)
 
     logger.info(`pr ${pullRequest.number} ${linkedIssue ? 'passed' : 'failed'}`)
 
@@ -57,18 +57,18 @@ module.exports = (robot) => {
     }))
 
     if (context.payload.action === 'edited') {
-      const previousIssueParams = getConnectedIssueForPR({...pullRequest, body: context.payload.changes.body.from});
+      const previousIssueParams = getConnectedIssueForPR({...pullRequest, body: context.payload.changes.body.from})
       const previousIssue = previousIssueParams && await context.github.issues.get(previousIssueParams)
         .then(response => response.data)
-        .catch(() => null);
+        .catch(() => null)
 
       if (previousIssue && (!linkedIssue || previousIssue.number !== linkedIssue.number)) {
-        await removeConnectedPRFromIssue(context.github, previousIssue, pullRequest);
+        await removeConnectedPRFromIssue(context.github, previousIssue, pullRequest)
       }
     }
 
     if (linkedIssue) {
-      await addConnectedPRToIssue(context.github, linkedIssue, pullRequest);
+      await addConnectedPRToIssue(context.github, linkedIssue, pullRequest)
     }
   };
 }
