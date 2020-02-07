@@ -33,6 +33,8 @@ module.exports = (github, issue, pullRequest) => {
   const newPRBlock = linesToRemove.reduce((result, line) => result.replace(line, ''), blockMatch[0])
   const newBody = issue.body.replace(blockMatch[0], newPRBlock)
 
+  console.log(issue);
+
   return github.issues.update({
     owner: issue.repository.owner.login,
     repo: issue.repository.name,
