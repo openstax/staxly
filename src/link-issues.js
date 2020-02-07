@@ -56,7 +56,7 @@ module.exports = (robot) => {
         }
     }))
 
-    if (context.payload.action === 'edited') {
+    if (context.payload.action === 'edited' && context.payload.changes.body) {
       const previousIssueParams = getConnectedIssueForPR({...pullRequest, body: context.payload.changes.body.from})
       const previousIssue = previousIssueParams && await context.github.issues.get(previousIssueParams)
         .then(response => response.data)
