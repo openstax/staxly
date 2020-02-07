@@ -2,15 +2,14 @@ const addConnectedPRToIssue = require('../../src/utils/addConnectedPRToIssue')
 
 describe('addConnectedPRToIssue', () => {
   let github
+  const issueParams = {
+    owner: 'openstax',
+    repo: 'unified',
+    issue_number: 123,
+  }
   const issue = {
     body: '',
     number: 123,
-    repository: {
-      name: 'unified',
-      owner: {
-        login: 'openstax'
-      }
-    }
   }
   const pullRequest = {
     number: 234,
@@ -35,6 +34,7 @@ describe('addConnectedPRToIssue', () => {
   test('noops if link is already there', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#234'},
       pullRequest
     )
@@ -44,6 +44,7 @@ describe('addConnectedPRToIssue', () => {
   test('appends to existing list', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#111'},
       pullRequest
     )
@@ -55,6 +56,7 @@ describe('addConnectedPRToIssue', () => {
   test('appends to existing list, with caps', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#111'},
       {
         ...pullRequest,
@@ -76,6 +78,7 @@ describe('addConnectedPRToIssue', () => {
   test('appends to empty list', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'pull requests:'},
       pullRequest
     )
@@ -87,6 +90,7 @@ describe('addConnectedPRToIssue', () => {
   test('appends to empty list with trailing content', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'pull requests:\nasdf'},
       pullRequest
     )
@@ -98,6 +102,7 @@ describe('addConnectedPRToIssue', () => {
   test('adds the list if missing', () => {
     addConnectedPRToIssue(
       github,
+      issueParams,
       {...issue, body: 'asdf'},
       pullRequest
     )

@@ -7,7 +7,7 @@ const {anyLink, listPrefix, anyLinkGroups, prBlockRegex} = require('./connectedP
  *
  * @returns Promise<void>
  */
-module.exports = (github, issue, pullRequest) => {
+module.exports = (github, issueParams, issue, pullRequest) => {
   const pullNumber = pullRequest.number
   const repo = pullRequest.base.repo.name
   const owner = pullRequest.base.repo.owner.login
@@ -34,9 +34,7 @@ module.exports = (github, issue, pullRequest) => {
   const newBody = issue.body.replace(blockMatch[0], newPRBlock)
 
   return github.issues.update({
-    owner: issue.repository.owner.login,
-    repo: issue.repository.name,
-    issue_number: issue.number,
+    ...issueParams,
     body: newBody
   })
 }

@@ -63,12 +63,12 @@ module.exports = (robot) => {
         .catch(() => null)
 
       if (previousIssue && (!linkedIssue || previousIssue.number !== linkedIssue.number)) {
-        await removeConnectedPRFromIssue(context.github, previousIssue, pullRequest)
+        await removeConnectedPRFromIssue(context.github, previousIssueParams, previousIssue, pullRequest)
       }
     }
 
     if (linkedIssue) {
-      await addConnectedPRToIssue(context.github, linkedIssue, pullRequest)
+      await addConnectedPRToIssue(context.github, linkedIssueParams, linkedIssue, pullRequest)
     }
   };
 }
