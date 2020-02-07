@@ -5,11 +5,11 @@ describe('addConnectedPRToIssue', () => {
   const issueParams = {
     owner: 'openstax',
     repo: 'unified',
-    issue_number: 123,
+    issue_number: 123
   }
   const issue = {
     body: '',
-    number: 123,
+    number: 123
   }
   const pullRequest = {
     number: 234,
