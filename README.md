@@ -13,6 +13,8 @@ When someone mentions a channel in a message, that channel gets a link back to t
 This is useful for notifying multiple groups, or casually asking for help.
 
 ### Other features
+- [#74](https://github.com/openstax/staxly/pull/74) verify that PR descriptions contain a link to their issue
+- [#73](https://github.com/openstax/staxly/pull/73) automatically update PRs when their base branch has new commits (that will naturally trigger the checks to run again)
 - [#8](https://github.com/openstax/staxly/pull/8) Reminder to add a Pull Request Reviewer
   ![image](https://user-images.githubusercontent.com/253202/35791407-c04a6d56-0a15-11e8-8790-c2d0b4a73d0b.png)
 
