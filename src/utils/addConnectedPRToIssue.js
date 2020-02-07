@@ -27,6 +27,8 @@ module.exports = (github, issue, pullRequest) => {
     ? issue.body.replace(blockMatch[0], blockMatch[0] + newLink)
     : issue.body + '\n\npull requests:' + newLink
 
+  console.log(issue);
+
   return github.issues.update({
     owner: issue.repository.owner.login,
     repo: issue.repository.name,
