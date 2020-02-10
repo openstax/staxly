@@ -42,4 +42,14 @@ describe('getConnectedIssueForPR', () => {
     const result = getConnectedIssueForPR({body: 'asdf\r\nfor: openstax/rex-web#123\r\nasdf'})
     expect(result).toEqual({repo: 'rex-web', owner: 'openstax', issue_number: '123'})
   })
+
+  test('body ending in whitespace', () => {
+    const result = getConnectedIssueForPR({body: "for: https://app.zenhub.com/workspaces/openstax-unified-5b71aabe3815ff014b102258/issues/openstax/unified/831\r\n"})
+    expect(result).toEqual({repo: 'unified', owner: 'openstax', issue_number: '831'})
+  })
+
+  test('body beginning in whitespace', () => {
+    const result = getConnectedIssueForPR({body: "\r\nfor: https://app.zenhub.com/workspaces/openstax-unified-5b71aabe3815ff014b102258/issues/openstax/unified/831"})
+    expect(result).toEqual({repo: 'unified', owner: 'openstax', issue_number: '831'})
+  })
 })
