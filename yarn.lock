@@ -4809,12 +4809,6 @@ private@^0.1.8:
     js-yaml "^3.12.0"
     probot "^9.9.1"
 
-"probot-addon-todo@github:uber-workflow/probot-app-todos":
-  version "1.0.6-0"
-  resolved "https://codeload.github.com/uber-workflow/probot-app-todos/tar.gz/54320d0077fca2a823509975e8f54c16680f18a2"
-  dependencies:
-    probot "^9.2.10"
-
 probot-config@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/probot-config/-/probot-config-1.1.0.tgz#f8131c9f4f3e499e7bfc5c79284d012e4a8d2f25"
@@ -4848,7 +4842,7 @@ probot@^6.0.0:
     resolve "^1.4.0"
     semver "^5.5.0"
 
-probot@^9.2.10, probot@^9.9.1:
+probot@^9.9.1:
   version "9.9.1"
   resolved "https://registry.yarnpkg.com/probot/-/probot-9.9.1.tgz#18fb12bf3cba2663207063dcf1a09d54dbabe1bc"
   integrity sha512-Xhgm2zQB9zIciTBAoh33cz4I0sKGqRlC6njnkj7vtEITp8CyN8ttxZED+cUVNrv12TwSI8DF8fOHKxn2bOOW4w==
