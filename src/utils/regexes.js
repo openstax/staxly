@@ -1,9 +1,9 @@
 const whitespaceCharacters = '\\s\\r'
 const newlineCharacters = '\\n\\r'
 const whitespace = `[${whitespaceCharacters}]`
-const beginningOfStringOrNewline = `^([^${newlineCharacters}]*[${newlineCharacters}]+)*`
-const beginningOfStringOrWhitespace = `^([^${whitespaceCharacters}]*[${whitespaceCharacters}]+)*`
-const endOfStringOrWhitespace = `([${whitespaceCharacters}]+[^${whitespaceCharacters}]*)*$`
+const beginningOfStringOrNewline = `^([^${newlineCharacters}]+[${newlineCharacters}]+)*[${newlineCharacters}]*`
+const beginningOfStringOrWhitespace = `^([^${whitespaceCharacters}]+[${whitespaceCharacters}]+)*[${whitespaceCharacters}]*`
+const endOfStringOrWhitespace = `([${whitespaceCharacters}]+[^${whitespaceCharacters}]+)*[${whitespaceCharacters}]*$`
 
 /* eslint-disable-next-line */
 const githubRefGroups = '(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)'
