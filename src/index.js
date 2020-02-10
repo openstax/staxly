@@ -15,7 +15,6 @@ module.exports = (robot) => {
 
   // 3rd-party addons that we use
   require('probot-addon-settings')(robot)
-  require('probot-addon-todo')(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {
