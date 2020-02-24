@@ -1,5 +1,5 @@
-const {prBlockRegex} = require('./connectedPRRegexes')
 const getConnectedPRsForIssue = require('./getConnectedPRsForIssue')
+const getPRBlock = require('./getPRBlock');
 
 /*
  * @argument context.github
@@ -22,9 +22,10 @@ module.exports = (github, issueParams, issue, pullRequest) => {
   }
 
   const newLink = `\n- [ ] ${owner}/${repo}#${pullNumber}`
-  const blockMatch = issue.body.match(new RegExp(prBlockRegex, 'i'))
-  const newBody = blockMatch
-    ? issue.body.replace(blockMatch[0], blockMatch[0] + newLink)
+  const prBlock = getPRBlock(issue.body);
+
+  const newBody = prBlock 
+    ? issue.body.replace(prBlock, prBlock + newLink)
     : issue.body + '\n\npull requests:' + newLink
 
   return github.issues.update({
