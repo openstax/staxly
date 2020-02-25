@@ -24,6 +24,15 @@ describe('isReadyForAutoMerge', () => {
   const pullRequest = {
     number: 234,
     labels: [],
+    head: {
+      ref: 'rando-change',
+      repo: {
+        name: 'rex-web',
+        owner: {
+          login: 'openstax'
+        }
+      }
+    },
     base: {
       repo: {
         name: 'rex-web',
@@ -37,7 +46,10 @@ describe('isReadyForAutoMerge', () => {
   beforeEach(() => {
     github = {
       issues: {
-        get: jest.fn()
+        get: jest.fn(),
+      },
+      pulls: {
+        list: jest.fn(() => Promise.resolve([]))
       }
     }
   })
@@ -113,6 +125,24 @@ describe('isReadyForAutoMerge', () => {
       {...issue, body: incompletePipeline},
     )
 
+    expect(result).toEqual(false);
+  })
+
+  test('fails if pr has sub changes', async() => {
+    github.pulls.list.mockReturnValue(Promise.resolve([pullRequest]));
+
+    const result = await isReadyForAutoMerge(
+      github,
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...issue, body: completedPipeline},
+    )
+
+    expect(github.pulls.list).toHaveBeenCalledWith({
+      repo: 'rex-web',
+      owner: 'openstax',
+      base: 'rando-change',
+      state: 'open',
+    });
     expect(result).toEqual(false);
   })
 })
