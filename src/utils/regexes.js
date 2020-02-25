@@ -26,6 +26,7 @@ const zenhubLink = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/[
 module.exports = {
   whitespace,
   newline,
+  newlineCharacters,
   beginningOfStringOrNewline,
   beginningOfStringOrWhitespace,
   endOfStringOrWhitespace,
