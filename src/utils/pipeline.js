@@ -45,14 +45,18 @@ const getPipeline = (body) => {
   });
 }
 
-const getPipelineStage = (body, name) => {
+const getPipelineStage = (body, nameMatcher) => {
   const pipeline = getPipeline(body);
 
   if (!pipeline) {
     return null;
   }
+  const matcher = typeof nameMatcher === 'string'
+    ? stage => stage.name === nameMatcher
+    : stage => nameMatcher(stage.name);
+  ;
 
-  return pipeline.find(stage => stage.name === name) || null;
+  return pipeline.find(matcher) || null;
 }
 
 module.exports = {

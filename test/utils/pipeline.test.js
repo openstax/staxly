@@ -92,4 +92,24 @@ describe('getPipelineStage', () => {
     const result = getPipelineStage(examplePipeline, 'asdf');
     expect(result).toEqual(null);
   })
+
+  test('gets stage with matcher function', () => {
+    const result = getPipelineStage(examplePipeline, name => name.includes('REVIEW'));
+    expect(result).toEqual(expected[2]);
+  })
+
+  test('matcher function fails', () => {
+    const result = getPipelineStage(examplePipeline, name => name.includes('asdf'));
+    expect(result).toEqual(null);
+  })
+
+  test('gets stage with matcher regex', () => {
+    const result = getPipelineStage(examplePipeline, name => name.match(/review/i));
+    expect(result).toEqual(expected[2]);
+  })
+
+  test('matcher regex fails', () => {
+    const result = getPipelineStage(examplePipeline, name => name.match(/review/));
+    expect(result).toEqual(null);
+  })
 })
