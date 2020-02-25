@@ -1,7 +1,7 @@
 const whitespaceCharacters = '\\s\\r'
 const newlineCharacters = '\\n\\r'
 const whitespace = `[${whitespaceCharacters}]`
-const newline = `[${newlineCharacters}]`;
+const newline = `[${newlineCharacters}]`
 
 const beginningOfStringOrNewline = `^([^${newlineCharacters}]+${newline}+)*[${newlineCharacters}]*`
 const beginningOfStringOrWhitespace = `^([^${whitespaceCharacters}]+[${whitespaceCharacters}]+)*[${whitespaceCharacters}]*`

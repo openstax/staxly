@@ -1,5 +1,5 @@
 const {anyLink, listPrefix, anyLinkGroups} = require('./connectedPRRegexes')
-const getPRBlock = require('./getPRBlock');
+const getPRBlock = require('./getPRBlock')
 
 /*
  * @argument context.github
@@ -13,7 +13,7 @@ module.exports = (github, issueParams, issue, pullRequest) => {
   const repo = pullRequest.base.repo.name
   const owner = pullRequest.base.repo.owner.login
 
-  const prBlock = getPRBlock(issue.body);
+  const prBlock = getPRBlock(issue.body)
 
   if (!prBlock) {
     return

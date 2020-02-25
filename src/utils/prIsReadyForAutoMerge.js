@@ -1,4 +1,4 @@
-const {getPipelineStage} = require('./pipeline');
+const {getPipelineStage} = require('./pipeline')
 const getConnectedIssueForPR = require('./getConnectedIssueForPR')
 
 const hasSubChanges = (github, pullRequest) => github.pulls.list({
@@ -8,35 +8,33 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
   state: 'open'
 })
   .then(prs => prs.length > 0)
-;
-
 
 module.exports = async (github, pullRequest, optionalIssue) => {
   if (!pullRequest.labels.includes('ready to merge')) {
-    return false;
+    return false
   }
 
   const loadIssue = () => {
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
     return linkedIssueParams && github.issues.get(linkedIssueParams)
-  };
+  }
 
   const issue = optionalIssue || await loadIssue()
 
   if (!issue) {
-    return false;
+    return false
   }
 
-  const review = getPipelineStage(issue.body, name => name.match(/review/i));
-  const reviewComplete = review && review.complete;
+  const review = getPipelineStage(issue.body, name => name.match(/review/i))
+  const reviewComplete = review && review.complete
 
   if (!reviewComplete) {
-    return false;
+    return false
   }
 
   if (await hasSubChanges(github, pullRequest)) {
-    return false;
+    return false
   }
 
-  return true;
+  return true
 }

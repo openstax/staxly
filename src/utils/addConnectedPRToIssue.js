@@ -1,5 +1,5 @@
 const getConnectedPRsForIssue = require('./getConnectedPRsForIssue')
-const getPRBlock = require('./getPRBlock');
+const getPRBlock = require('./getPRBlock')
 
 /*
  * @argument context.github
@@ -22,9 +22,9 @@ module.exports = (github, issueParams, issue, pullRequest) => {
   }
 
   const newLink = `\n- [ ] ${owner}/${repo}#${pullNumber}`
-  const prBlock = getPRBlock(issue.body);
+  const prBlock = getPRBlock(issue.body)
 
-  const newBody = prBlock 
+  const newBody = prBlock
     ? issue.body.replace(prBlock, prBlock + newLink)
     : issue.body + '\n\npull requests:' + newLink
 

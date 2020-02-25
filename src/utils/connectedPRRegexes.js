@@ -1,7 +1,6 @@
 const {
   githubRefGroups, githubPullRequestLinkGroups, zenhubLinkGroups,
-  githubRef, githubPullRequestLink, zenhubLink,
-  whitespace, beginningOfStringOrNewline
+  githubRef, githubPullRequestLink, zenhubLink
 } = require('./regexes')
 
 const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
@@ -17,5 +16,5 @@ const anyLinkGroups = [
 module.exports = {
   listPrefix,
   anyLinkGroups,
-  anyLink,
+  anyLink
 }

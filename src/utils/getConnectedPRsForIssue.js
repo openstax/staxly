@@ -1,5 +1,5 @@
 const {anyLink, anyLinkGroups} = require('./connectedPRRegexes')
-const getPRBlock = require('./getPRBlock');
+const getPRBlock = require('./getPRBlock')
 
 /*
  * @argument IssueData
@@ -7,7 +7,7 @@ const getPRBlock = require('./getPRBlock');
  * @returns PullRequestParams | null
  */
 module.exports = (issue) => {
-  const prBlock = getPRBlock(issue.body);
+  const prBlock = getPRBlock(issue.body)
   const links = prBlock && prBlock.match(new RegExp(anyLink, 'gi'))
 
   return (links || []).map(link => {
