@@ -20,13 +20,13 @@ module.exports = (robot) => {
 
   safeBind(['check_run.completed'], context =>
     Promise.all(context.payload.pull_requests.map(pr => {
-      const pullParams = {pull_number: pr.number, ...context.repo()};
+      const pullParams = {pull_number: pr.number, ...context.repo()}
       return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
   safeBind(['pull_request.edited'], context => {
-    const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()};
+    const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()}
     return checkPR(context, pullParams, context.payload.pull_request)
   })
 
@@ -50,7 +50,7 @@ module.exports = (robot) => {
         } else {
           // TODO - not sure what type response.data is in this case, might need to json encode it
           logger.error(`status ${response.status} attempting to merge PR: ${pullRequest.number} ${response.data}`)
-          return Promise.reject(text)
+          return Promise.reject(response)
         }
       })
     }

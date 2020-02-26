@@ -1,11 +1,10 @@
-jest.mock('../src/utils/prIsReadyForAutoMerge');
+jest.mock('../src/utils/prIsReadyForAutoMerge')
 jest.mock('../src/utils/getConnectedPRsForIssue')
 
 const nock = require('nock')
 const autoMerge = require('../src/auto-merge')
 const { createProbot } = require('probot')
 const prIsReadyForAutoMerge = require('../src/utils/prIsReadyForAutoMerge')
-
 
 describe('auto merge', () => {
   let app
@@ -30,13 +29,13 @@ describe('auto merge', () => {
       .put('/repos/testowner/testrepo/pulls/2/merge')
       .reply(200, {message: 'merged pr'})
 
-    prIsReadyForAutoMerge.mockReturnValue(true);
+    prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({
       name: 'check_run.completed',
       payload: {
         pull_requests: [{
-          number: 2,
+          number: 2
         }],
         repository: {
           name: 'testrepo',
@@ -55,13 +54,13 @@ describe('auto merge', () => {
       .get('/repos/testowner/testrepo/pulls/2')
       .reply(200, {number: 2, draft: false, state: 'merged'})
 
-    prIsReadyForAutoMerge.mockReturnValue(true);
+    prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({
       name: 'check_run.completed',
       payload: {
         pull_requests: [{
-          number: 2,
+          number: 2
         }],
         repository: {
           name: 'testrepo',
@@ -80,13 +79,13 @@ describe('auto merge', () => {
       .get('/repos/testowner/testrepo/pulls/2')
       .reply(200, {number: 2, draft: false, state: 'open'})
 
-    prIsReadyForAutoMerge.mockReturnValue(false);
+    prIsReadyForAutoMerge.mockReturnValue(false)
 
     await app.receive({
       name: 'check_run.completed',
       payload: {
         pull_requests: [{
-          number: 2,
+          number: 2
         }],
         repository: {
           name: 'testrepo',
@@ -105,7 +104,7 @@ describe('auto merge', () => {
       name: 'check_run.completed',
       payload: {
         pull_requests: [{
-          number: 2,
+          number: 2
         }],
         repository: {
           name: 'randomrepo',
