@@ -20,19 +20,19 @@ module.exports = (robot) => {
 
   safeBind(['check_run.completed'], context =>
     Promise.all(context.payload.pull_requests.map(pr => {
-      const pullParams = {pull_number: pr.number, owner: context.repository.owner.login, repo: context.repository.name}
-      return context.github.pulls.get(pullParams).then(pullRequest => checkPR(context, pullParams, pullRequest))
+      const pullParams = {pull_number: pr.number, ...context.repo()};
+      return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
   safeBind(['pull_request.edited'], context => {
-    const pullParams = {pull_number: context.payload.pull_request.number, owner: context.repository.owner.login, repo: context.repository.name}
+    const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()};
     return checkPR(context, pullParams, context.payload.pull_request)
   })
 
   safeBind(['issue.edited'], context =>
     Promise.all(getConnectedPRsForIssue(context.payload.issue).map(prParams =>
-      context.github.pulls.get(prParams).then(pr => checkPR(context, prParams, pr, context.payload.issue))
+      context.github.pulls.get(prParams).then(response => checkPR(context, prParams, response.data, context.payload.issue))
     ))
   )
 
@@ -46,15 +46,12 @@ module.exports = (robot) => {
     if (prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
       return context.github.pulls.merge({...pullParams, merge_method: 'squash'}).then(response => {
         if ([200, 405].includes(response.status)) {
-          return response.json().then(json => {
-            logger.info(`PR: ${pullRequest.number} ${json.message}`)
-          })
-        }
-
-        return response.text().then(text => {
-          logger.error(`status ${response.status} attempting to merge PR: ${pullRequest.number} ${text}`)
+          logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
+        } else {
+          // TODO - not sure what type response.data is in this case, might need to json encode it
+          logger.error(`status ${response.status} attempting to merge PR: ${pullRequest.number} ${response.data}`)
           return Promise.reject(text)
-        })
+        }
       })
     }
   }
