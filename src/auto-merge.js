@@ -25,7 +25,7 @@ module.exports = (robot) => {
     }))
   )
 
-  safeBind(['pull_request.edited'], context => {
+  safeBind(['pull_request.edited', 'pull_request.labeled'], context => {
     const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()}
     return checkPR(context, pullParams, context.payload.pull_request)
   })
@@ -40,6 +40,7 @@ module.exports = (robot) => {
     logger.info(`checking pr ${pullRequest.number}`)
 
     if (pullRequest.draft || pullRequest.state !== 'open') {
+      logger.info(`skipping pr ${pullRequest.number} because it is a draft or closed`)
       return
     }
 
@@ -53,6 +54,8 @@ module.exports = (robot) => {
           return Promise.reject(response)
         }
       })
+    } else {
+      logger.info(`skipping pr ${pullRequest.number} because it is not ready to merge`)
     }
   }
 }

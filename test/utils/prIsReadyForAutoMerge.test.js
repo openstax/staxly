@@ -57,7 +57,7 @@ describe('isReadyForAutoMerge', () => {
   test('uses passed in issue', async () => {
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: completedPipeline}
     )
 
@@ -70,7 +70,7 @@ describe('isReadyForAutoMerge', () => {
 
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']}
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
     )
 
     expect(github.issues.get).toHaveBeenCalledTimes(1)
@@ -101,7 +101,7 @@ describe('isReadyForAutoMerge', () => {
   test('fails without pipeline', async () => {
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       issue
     )
 
@@ -111,7 +111,7 @@ describe('isReadyForAutoMerge', () => {
   test('fails if pipeline has no review', async () => {
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: pipelineWithoutReview}
     )
 
@@ -121,7 +121,7 @@ describe('isReadyForAutoMerge', () => {
   test('fails if pipeline review stage is incomplete', async () => {
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: incompletePipeline}
     )
 
@@ -133,7 +133,7 @@ describe('isReadyForAutoMerge', () => {
 
     const result = await isReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: ['ready to merge']},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: completedPipeline}
     )
 

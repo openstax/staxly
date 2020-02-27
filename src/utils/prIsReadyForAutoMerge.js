@@ -10,7 +10,7 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
   .then(prs => prs.length > 0)
 
 module.exports = async (github, pullRequest, optionalIssue) => {
-  if (!pullRequest.labels.includes('ready to merge')) {
+  if (!pullRequest.labels.map(({name}) => name).includes('ready to merge')) {
     return false
   }
 
