@@ -43,7 +43,7 @@ module.exports = (robot) => {
       return
     }
 
-    if (prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
+    if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
       return context.github.pulls.merge({...pullParams, merge_method: 'squash'}).then(response => {
         if ([200, 405].includes(response.status)) {
           logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
