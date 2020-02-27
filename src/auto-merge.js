@@ -30,7 +30,7 @@ module.exports = (robot) => {
     return checkPR(context, pullParams, context.payload.pull_request)
   })
 
-  safeBind(['issue.edited'], context =>
+  safeBind(['issues.edited'], context =>
     Promise.all(getConnectedPRsForIssue(context.payload.issue).map(prParams =>
       context.github.pulls.get(prParams).then(response => checkPR(context, prParams, response.data, context.payload.issue))
     ))
