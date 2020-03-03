@@ -49,7 +49,7 @@ module.exports = (robot) => {
         .catch(error => error.status === 405
           // trying to fake the way octokit handles successful requests here
           // because there is no way to get it to handle 405s in a reasonable way
-          ? Promise.resolve({status: error.status, data: error.message})
+          ? Promise.resolve({status: error.status, data: {message: error.message}})
           : Promise.reject(error)
         )
         .then(response => {
