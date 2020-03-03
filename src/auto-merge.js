@@ -45,15 +45,20 @@ module.exports = (robot) => {
     }
 
     if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
-      return context.github.pulls.merge({...pullParams, merge_method: 'squash'}).then(response => {
-        if ([200, 405].includes(response.status)) {
-          logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
-        } else {
-          // TODO - not sure what type response.data is in this case, might need to json encode it
-          logger.error(`status ${response.status} attempting to merge PR: ${pullRequest.number} ${response.data}`)
-          return Promise.reject(response)
-        }
-      })
+      return context.github.pulls.merge({...pullParams, merge_method: 'squash'})
+        .catch(error => {
+          logger.info(`DEBUG: ${error.status}`);
+          return Promise.reject(error);
+        })
+        .then(response => {
+          if ([200, 405].includes(response.status)) {
+            logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
+          } else {
+            // TODO - not sure what type response.data is in this case, might need to json encode it
+            logger.error(`status ${response.status} attempting to merge PR: ${pullRequest.number} ${response.data}`)
+            return Promise.reject(response)
+          }
+        })
     } else {
       logger.info(`skipping pr ${pullRequest.number} because it is not ready to merge`)
     }
