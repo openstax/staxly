@@ -46,9 +46,9 @@ module.exports = (robot) => {
 
     if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
       return context.github.pulls.merge({...pullParams, merge_method: 'squash'})
-        .catch(response => error.status === 405
+        .catch(response => response.status === 405
           ? Promise.resolve(response)
-          : Promise.reject(resposne)
+          : Promise.reject(response)
         )
         .then(response => {
           if ([200, 405].includes(response.status)) {
