@@ -43,8 +43,7 @@ module.exports = (robot) => {
     await context.github.checks.update(context.repo({
       check_run_id: check.data.id,
       status: 'completed',
-      //conclusion: linkedIssue ? 'success' : 'failure',
-      conclusion: 'failure',
+      conclusion: linkedIssue ? 'success' : 'failure',
       output: linkedIssue
         ? {
           title: 'all is as it should be',
