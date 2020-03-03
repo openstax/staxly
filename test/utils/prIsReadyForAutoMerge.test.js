@@ -66,7 +66,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fetches issue if not passed', async () => {
-    github.issues.get.mockReturnValue(Promise.resolve({...issue, body: completedPipeline}))
+    github.issues.get.mockReturnValue(Promise.resolve({data: {...issue, body: completedPipeline}}))
 
     const result = await isReadyForAutoMerge(
       github,
