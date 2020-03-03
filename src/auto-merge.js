@@ -52,6 +52,7 @@ module.exports = (robot) => {
         )
         .then(response => {
           if ([200, 405].includes(response.status)) {
+            logger.info(JSON.stringify(response));
             logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
           } else {
             return Promise.reject(response)
