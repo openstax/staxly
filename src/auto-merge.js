@@ -46,11 +46,11 @@ module.exports = (robot) => {
 
     if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
       return context.github.pulls.merge({...pullParams, merge_method: 'squash'})
-        .catch(response => response.status === 405
+        .catch(error => error.status === 405
           // trying to fake the way octokit handles successful requests here
           // because there is no way to get it to handle 405s in a reasonable way
-          ? response.json().then(data => ({status: response.status, data}))
-          : Promise.reject(response)
+          ? Promise.resolve({status: error.status, data: error.message})
+          : Promise.reject(error)
         )
         .then(response => {
           if ([200, 405].includes(response.status)) {
