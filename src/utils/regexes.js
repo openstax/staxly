@@ -1,7 +1,9 @@
 const whitespaceCharacters = '\\s\\r'
 const newlineCharacters = '\\n\\r'
 const whitespace = `[${whitespaceCharacters}]`
-const beginningOfStringOrNewline = `^([^${newlineCharacters}]+[${newlineCharacters}]+)*[${newlineCharacters}]*`
+const newline = `[${newlineCharacters}]`
+
+const beginningOfStringOrNewline = `^([^${newlineCharacters}]+${newline}+)*[${newlineCharacters}]*`
 const beginningOfStringOrWhitespace = `^([^${whitespaceCharacters}]+[${whitespaceCharacters}]+)*[${whitespaceCharacters}]*`
 const endOfStringOrWhitespace = `([${whitespaceCharacters}]+[^${whitespaceCharacters}]+)*[${whitespaceCharacters}]*$`
 
@@ -23,6 +25,8 @@ const zenhubLink = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/[
 
 module.exports = {
   whitespace,
+  newline,
+  newlineCharacters,
   beginningOfStringOrNewline,
   beginningOfStringOrWhitespace,
   endOfStringOrWhitespace,

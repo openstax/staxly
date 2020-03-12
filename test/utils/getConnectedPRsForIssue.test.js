@@ -48,6 +48,10 @@ describe('getConnectedPRsForIssue', () => {
     const result = getConnectedPRsForIssue({body: 'asdf\r\nasdf\r\nasdf\r\n### pull requests \r\n- [ ] openstax/rex-web#123'})
     expect(result).toEqual([{repo: 'rex-web', owner: 'openstax', pull_number: '123'}])
   })
+  test('ignores previous links', () => {
+    const result = getConnectedPRsForIssue({body: 'asdf\r\nasdf\r\nopenstax/rex-web#234\r\nasdf\r\n### pull requests \r\n- [ ] openstax/rex-web#123'})
+    expect(result).toEqual([{repo: 'rex-web', owner: 'openstax', pull_number: '123'}])
+  })
   test('but not without the whitespace', () => {
     const result = getConnectedPRsForIssue({body: 'asdf\r\nasdf\r\nasdf### pull requests \r\n- [ ] openstax/rex-web#123'})
     expect(result).toEqual([])
