@@ -29,6 +29,10 @@ describe('auto merge', () => {
       .put('/repos/testowner/testrepo/pulls/2/merge')
       .reply(200, {message: 'merged pr'})
 
+    nock('https://api.github.com')
+      .delete('/repos/testowner/testrepo/issues/2/labels/ready%20to%20merge')
+      .reply(200)
+
     prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({

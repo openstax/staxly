@@ -53,10 +53,19 @@ module.exports = (robot) => {
           : Promise.reject(error)
         )
         .then(response => {
-          if ([200, 405].includes(response.status)) {
-            logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
-          } else {
+          if (![200, 405].includes(response.status)) {
             return Promise.reject(response)
+          }
+
+          logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
+
+          if (response.status === 200) {
+            return context.github.issues.removeLabel({
+              owner: pullParams.owner,
+              repo: pullParams.repo,
+              issue_number: pullParams.pull_number,
+              name: 'ready to merge',
+            })
           }
         })
     } else {
