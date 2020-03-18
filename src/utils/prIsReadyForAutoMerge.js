@@ -14,17 +14,17 @@ module.exports = async (github, pullRequest, optionalIssue) => {
     return false
   }
 
-  const loadIssue = async() => {
+  const loadIssue = async () => {
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
 
     if (!linkedIssueParams) {
-      return null;
+      return null
     }
 
-    const response = await github.issues.get(linkedIssueParams);
+    const response = await github.issues.get(linkedIssueParams)
 
     if (response && response.data) {
-      return response.data;
+      return response.data
     }
   }
 

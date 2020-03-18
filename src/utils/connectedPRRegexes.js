@@ -5,8 +5,6 @@ const {
 
 const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
 
-const listPrefix = '\\n\\- \\[( |x)\\] '
-
 const anyLinkGroups = [
   githubRefGroups,
   githubPullRequestLinkGroups,
@@ -14,7 +12,6 @@ const anyLinkGroups = [
 ]
 
 module.exports = {
-  listPrefix,
   anyLinkGroups,
   anyLink
 }

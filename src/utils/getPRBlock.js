@@ -1,5 +1,5 @@
-const { whitespace, beginningOfStringOrNewline } = require('./regexes')
-const { listPrefix, anyLink } = require('./connectedPRRegexes')
+const { whitespace, beginningOfStringOrNewline, listPrefix } = require('./regexes')
+const { anyLink } = require('./connectedPRRegexes')
 
 const prBlockRegex = `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}pull requests:?\\*{0,2}:?(${whitespace}*${listPrefix}${anyLink})*)`
 

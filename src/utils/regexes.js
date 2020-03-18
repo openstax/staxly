@@ -7,6 +7,8 @@ const beginningOfStringOrNewline = `^([^${newlineCharacters}]+${newline}+)*[${ne
 const beginningOfStringOrWhitespace = `^([^${whitespaceCharacters}]+[${whitespaceCharacters}]+)*[${whitespaceCharacters}]*`
 const endOfStringOrWhitespace = `([${whitespaceCharacters}]+[^${whitespaceCharacters}]+)*[${whitespaceCharacters}]*$`
 
+const listPrefix = '\\n\\- \\[( |x)\\] '
+
 /* eslint-disable-next-line */
 const githubRefGroups = '(?<owner>[a-z\-]+)\/(?<repo>[a-z\-]+)#(?<number>[0-9]+)'
 /* eslint-disable-next-line */
@@ -24,17 +26,18 @@ const githubPullRequestLink = 'https:\/\/github.com\/[a-z\-]+\/[a-z\-]+\/pulls\/
 const zenhubLink = 'https:\/\/app.zenhub.com\/workspaces\/[0-9a-z\-]+\/issues\/[a-z\-]+\/[a-z\-]+\/[0-9]+'
 
 module.exports = {
-  whitespace,
-  newline,
-  newlineCharacters,
   beginningOfStringOrNewline,
   beginningOfStringOrWhitespace,
   endOfStringOrWhitespace,
-  githubRefGroups,
   githubIssueLinkGroups,
-  githubPullRequestLinkGroups,
-  zenhubLinkGroups,
-  githubRef,
   githubPullRequestLink,
-  zenhubLink
+  githubPullRequestLinkGroups,
+  githubRef,
+  githubRefGroups,
+  listPrefix,
+  newline,
+  newlineCharacters,
+  whitespace,
+  zenhubLink,
+  zenhubLinkGroups
 }
