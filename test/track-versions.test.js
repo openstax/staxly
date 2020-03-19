@@ -32,7 +32,7 @@ describe('track-versions', () => {
       name: 'push',
       payload: {
         ref: 'refs/heads/master',
-        head: 'asdfasdfasdfasdfasdf',
+        after: 'asdfasdfasdfasdfasdf',
         repository: {
           name: 'testrepo',
           full_name: 'testowner/testrepo',
@@ -64,7 +64,7 @@ describe('track-versions', () => {
       name: 'push',
       payload: {
         ref: 'refs/heads/master',
-        head: 'asdfasdfasdfasdfasdf',
+        after: 'asdfasdfasdfasdfasdf',
         repository: {
           name: 'testotherrepo',
           full_name: 'testowner/testotherrepo',
@@ -85,7 +85,7 @@ describe('track-versions', () => {
       name: 'push',
       payload: {
         ref: 'refs/heads/master',
-        head: 'asdfasdfasdfasdfasdf',
+        after: 'asdfasdfasdfasdfasdf',
         repository: {
           full_name: 'testowner/randomrepo',
           name: 'randomrepo',
