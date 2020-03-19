@@ -2,7 +2,7 @@ const { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } = r
 
 const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^${newlineCharacters}]+)`
 const blockItems = `(${blockItem})+`
-const versionBlockRegex = `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}versions:?\\*{0,2}:?${blockItems}`
+const versionBlockRegex = `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}versions:?\\*{0,2}:?${blockItems})`
 
 const getVersionsBlock = (body) => {
   const blockMatch = body.match(new RegExp(versionBlockRegex, 'i'))
@@ -21,7 +21,7 @@ const getVersions = (body) => {
     .reduce((result, item) => ({...result, [item.name]: item.version}), {})
 }
 
-const getItemVersion = (body, itemName) => {
+const getVersion = (body, itemName) => {
   const versions = getVersions(body)
 
   if (!versions) {
@@ -31,27 +31,27 @@ const getItemVersion = (body, itemName) => {
   return versions[itemName]
 }
 
-const setBlockVersions = (body, versions) => {
+const setVersions = (body, versions) => {
   const versionsText = getVersionsBlock(body)
-  const itemsText = versionsText && versionsText.match(new RegExp(blockItems, 'i'))
+  const itemsText = versionsText && versionsText.match(new RegExp(blockItems, 'i'))[0]
 
   const newItemsText = Object.entries(versions).reduce((result, [name, version]) =>
     result + `\n- ${name}: ${version}`
-    , '')
+  , '')
 
   return itemsText
     ? body.replace(itemsText, newItemsText)
     : body + '\n\nversions:' + newItemsText
 }
 
-const setItemVersion = (body, itemName, version) => {
+const setVersion = (body, itemName, version) => {
   const versions = getVersions(body) || {}
-  return setBlockVersions(body, {...versions, [itemName]: version})
+  return setVersions(body, {...versions, [itemName]: version})
 }
 
 module.exports = {
   getVersions,
-  getItemVersion,
-  setBlockVersions,
-  setItemVersion
+  getVersion,
+  setVersions,
+  setVersion
 }
