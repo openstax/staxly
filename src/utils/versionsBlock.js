@@ -1,6 +1,6 @@
 const { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } = require('./regexes')
 
-const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^${newlineCharacters}]+)`
+const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^ ${newlineCharacters}]+)(?<locked> locked)?`
 const blockItems = `(${blockItem})+`
 const versionBlockRegex = `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}versions:?\\*{0,2}:?${blockItems})`
 
@@ -9,7 +9,7 @@ const getVersionsBlock = (body) => {
   return blockMatch && blockMatch.groups.block
 }
 
-const getVersions = (body) => {
+const getVersions = (body, filter = () => true) => {
   const versionsText = getVersionsBlock(body)
 
   if (!versionsText) {
@@ -17,7 +17,11 @@ const getVersions = (body) => {
   }
 
   return versionsText.match(new RegExp(blockItem, 'gi'))
-    .map(itemText => itemText.match(new RegExp(blockItem, 'i')).groups)
+    .map(itemText => {
+      const {groups} = itemText.match(new RegExp(blockItem, 'i'));
+      return {...groups, locked: !!groups.locked}
+    })
+    .filter(filter)
     .reduce((result, item) => ({...result, [item.name]: item.version}), {})
 }
 
@@ -32,10 +36,12 @@ const getVersion = (body, itemName) => {
 }
 
 const setVersions = (body, versions) => {
+  const lockedVersions = getVersions(body, item => item.locked) || {}
+  const newVersions = {...versions, ...lockedVersions};
   const versionsText = getVersionsBlock(body)
   const itemsText = versionsText && versionsText.match(new RegExp(blockItems, 'i'))[0]
 
-  const newItemsText = Object.entries(versions).reduce((result, [name, version]) =>
+  const newItemsText = Object.entries(newVersions).reduce((result, [name, version]) =>
     result + `\n- ${name}: ${version}`
   , '')
 
@@ -46,7 +52,11 @@ const setVersions = (body, versions) => {
 
 const setVersion = (body, itemName, version) => {
   const versions = getVersions(body) || {}
-  return setVersions(body, {...versions, [itemName]: version})
+
+  return setVersions(body, {
+    ...versions,
+    [itemName]: version,
+  })
 }
 
 module.exports = {

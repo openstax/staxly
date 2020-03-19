@@ -2,8 +2,8 @@ const {getVersions, getVersion, setVersions, setVersion} = require('../../src/ut
 
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
-- openstax/rex-web (release id): master/dfde202
-- openstax/highlights-api (sha): 8575ef7
+- openstax/rex-web (release id): master/dfde202 locked
+- openstax/highlights-api (sha): 8575ef7 locked
 - openstax/highlights-api (ami): ami-000167d12cf19dce1
 `
 
@@ -66,6 +66,29 @@ describe('getVersion', () => {
 describe('setVersions', () => {
   test('sets versions', () => {
     const newVersions = {...expected, 'openstax/rex-web (sha)': 'foobar'}
+    const result = setVersions(`asdf
+asdf
+${exampleBlock}asdf
+asdf
+`, newVersions)
+    expect(result).toEqual(`asdf
+asdf
+# versions
+- openstax/rex-web (sha): foobar
+- openstax/rex-web (release id): master/dfde202
+- openstax/highlights-api (sha): 8575ef7
+- openstax/highlights-api (ami): ami-000167d12cf19dce1
+asdf
+asdf
+`)
+  })
+
+  test('noops locked versions', () => {
+    const newVersions = {
+      ...expected,
+      'openstax/rex-web (sha)': 'foobar',
+      'openstax/rex-web (release id)': 'foobar2'
+    }
     const result = setVersions(`asdf
 asdf
 ${exampleBlock}asdf
