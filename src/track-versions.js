@@ -20,15 +20,18 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
   const [owner, repo] = masterRepo.split('/')
 
   const processIssues = ({data}) => {
-    return Promise.all(data.map(issue => {
-      logger.info(`updating version "${versionKey}" in ${masterRepo}#${issue.number} to "${version}"`)
-      return context.github.issues.update({
-        owner,
-        repo,
-        issue_number: issue.number,
-        body: setVersion(issue.body, versionKey, version)
+    return Promise.all(data
+      .filter(issue => !issue.labels.map(({name}) => name).includes('locked'))
+      .map(issue => {
+        logger.info(`updating version "${versionKey}" in ${masterRepo}#${issue.number} to "${version}"`)
+        return context.github.issues.update({
+          owner,
+          repo,
+          issue_number: issue.number,
+          body: setVersion(issue.body, versionKey, version)
+        })
       })
-    }))
+    )
   }
 
   return context.github.paginate(

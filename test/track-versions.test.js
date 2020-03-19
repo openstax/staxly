@@ -20,7 +20,7 @@ describe('track-versions', () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
       .query({'labels': 'release', 'state': 'open'})
-      .reply(200, [{number: 5, body: 'body'}])
+      .reply(200, [{number: 5, body: 'body', labels: []}])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
@@ -52,7 +52,7 @@ describe('track-versions', () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
       .query({'labels': 'release', 'state': 'open'})
-      .reply(200, [{number: 5, body: 'body'}])
+      .reply(200, [{number: 5, body: 'body', labels: []}])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
@@ -76,6 +76,30 @@ describe('track-versions', () => {
     })
 
     expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo (sha)', 'asdfasd')
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('skips issues with "locked" label', async () => {
+    nock('https://api.github.com')
+      .get('/repos/testowner/testrepo/issues')
+      .query({'labels': 'release', 'state': 'open'})
+      .reply(200, [{number: 5, body: 'body', labels: [{name: 'locked'}]}])
+
+    await app.receive({
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        after: 'asdfasdfasdfasdfasdf',
+        repository: {
+          name: 'testotherrepo',
+          full_name: 'testowner/testotherrepo',
+          owner: {
+            name: 'testowner'
+          }
+        }
+      }
+    })
 
     expect(nock.isDone()).toBe(true)
   })
