@@ -9,7 +9,7 @@ const releaseCardRepos = {
     'openstax/rex-web',
     'openstax/highlights-api',
     'openstax/open-search',
-    'openstax/unified-deployment',
+    'openstax/unified-deployment'
   ],
   'TomWoodward/testing-stuff': [
     'TomWoodward/testing-stuff'
@@ -17,7 +17,7 @@ const releaseCardRepos = {
 }
 
 const updateReleaseCards = (logger, context, masterRepo, versionKey, version) => {
-  const [owner, repo] = masterRepo.split('/');
+  const [owner, repo] = masterRepo.split('/')
 
   const processIssues = ({data}) => {
     return Promise.all(data.map(issue => {
@@ -29,7 +29,7 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
         body: setVersion(issue.body, versionKey, version)
       })
     }))
-  };
+  }
 
   return context.github.paginate(
     context.github.issues.listForRepo.endpoint.merge({
@@ -41,7 +41,7 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
     processIssues
   )
     .then(pagePromises => Promise.all(pagePromises))
-};
+}
 
 module.exports = (robot) => {
   const logger = robot.log.child({name: 'track-versions'})
@@ -51,16 +51,16 @@ module.exports = (robot) => {
     const branch = payload.ref.replace(/^refs\/heads\//, '')
     const repo = payload.repository.full_name
     const versionKey = `${repo} (sha)`
-    const version = payload.head.substring(0, 7);
+    const version = payload.head.substring(0, 7)
 
     if (branch !== 'master') {
-      return;
+      return
     }
 
     return Promise.all(
       Object.entries(releaseCardRepos)
         .filter(([, childRepos]) => childRepos.includes(repo))
         .map(([masterRepo]) => updateReleaseCards(logger, context, masterRepo, versionKey, version))
-    );
-  });
+    )
+  })
 }

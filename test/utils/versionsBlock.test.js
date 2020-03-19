@@ -11,7 +11,7 @@ const expected = {
   'openstax/rex-web (sha)': 'dfde202',
   'openstax/rex-web (release id)': 'master/dfde202',
   'openstax/highlights-api (sha)': '8575ef7',
-  'openstax/highlights-api (ami)': 'ami-000167d12cf19dce1',
+  'openstax/highlights-api (ami)': 'ami-000167d12cf19dce1'
 }
 
 describe('getVersions', () => {

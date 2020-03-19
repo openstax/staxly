@@ -18,7 +18,7 @@ const getVersions = (body, filter = () => true) => {
 
   return versionsText.match(new RegExp(blockItem, 'gi'))
     .map(itemText => {
-      const {groups} = itemText.match(new RegExp(blockItem, 'i'));
+      const {groups} = itemText.match(new RegExp(blockItem, 'i'))
       return {...groups, locked: !!groups.locked}
     })
     .filter(filter)
@@ -37,13 +37,13 @@ const getVersion = (body, itemName) => {
 
 const setVersions = (body, versions) => {
   const lockedVersions = getVersions(body, item => item.locked) || {}
-  const newVersions = {...versions, ...lockedVersions};
+  const newVersions = {...versions, ...lockedVersions}
   const versionsText = getVersionsBlock(body)
   const itemsText = versionsText && versionsText.match(new RegExp(blockItems, 'i'))[0]
 
   const newItemsText = Object.entries(newVersions).reduce((result, [name, version]) =>
     result + `\n- ${name}: ${version}`
-  , '')
+    , '')
 
   return itemsText
     ? body.replace(itemsText, newItemsText)
@@ -55,7 +55,7 @@ const setVersion = (body, itemName, version) => {
 
   return setVersions(body, {
     ...versions,
-    [itemName]: version,
+    [itemName]: version
   })
 }
 

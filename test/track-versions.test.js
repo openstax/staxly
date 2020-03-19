@@ -19,14 +19,14 @@ describe('track-versions', () => {
   test('updates issues', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
-      .query({"labels":"release","state":"open"})
+      .query({'labels': 'release', 'state': 'open'})
       .reply(200, [{number: 5, body: 'body'}])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
       .reply(200, {number: 5})
 
-    setVersion.mockReturnValue('newbody');
+    setVersion.mockReturnValue('newbody')
 
     await app.receive({
       name: 'push',
@@ -42,8 +42,8 @@ describe('track-versions', () => {
         }
       }
     })
-    
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo (sha)', 'asdfasd');
+
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo (sha)', 'asdfasd')
 
     expect(nock.isDone()).toBe(true)
   })
@@ -51,14 +51,14 @@ describe('track-versions', () => {
   test('updates issues from other repo', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
-      .query({"labels":"release","state":"open"})
+      .query({'labels': 'release', 'state': 'open'})
       .reply(200, [{number: 5, body: 'body'}])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
       .reply(200, {number: 5})
 
-    setVersion.mockReturnValue('newbody');
+    setVersion.mockReturnValue('newbody')
 
     await app.receive({
       name: 'push',
@@ -74,8 +74,8 @@ describe('track-versions', () => {
         }
       }
     })
-    
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo (sha)', 'asdfasd');
+
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo (sha)', 'asdfasd')
 
     expect(nock.isDone()).toBe(true)
   })
