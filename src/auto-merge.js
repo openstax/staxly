@@ -4,6 +4,7 @@ const getConnectedPRsForIssue = require('./utils/getConnectedPRsForIssue')
 const repoWhitelist = [
   'testrepo',
   'rex-web',
+  'unified',
   'testing-stuff'
 ]
 
