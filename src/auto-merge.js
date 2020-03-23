@@ -1,4 +1,4 @@
-const prIsReadyForAutoMerge = require('./utils/prIsReadyForAutoMerge')
+const {prIsReadyForAutoMerge, readyToMergeLabel} = require('./utils/prIsReadyForAutoMerge')
 const getConnectedPRsForIssue = require('./utils/getConnectedPRsForIssue')
 
 const repoWhitelist = [
@@ -64,7 +64,7 @@ module.exports = (robot) => {
               owner: pullParams.owner,
               repo: pullParams.repo,
               issue_number: pullParams.pull_number,
-              name: 'ready to merge',
+              name: readyToMergeLabel,
             })
           }
         })
