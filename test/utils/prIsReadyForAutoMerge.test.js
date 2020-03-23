@@ -1,4 +1,4 @@
-const isReadyForAutoMerge = require('../../src/utils/prIsReadyForAutoMerge')
+const {prIsReadyForAutoMerge} = require('../../src/utils/prIsReadyForAutoMerge')
 
 const completedPipeline = `# pipeline
 2B-REVIEW
@@ -15,7 +15,7 @@ const pipelineWithoutReview = `# pipeline
   - [ ] Developer approves change
 `
 
-describe('isReadyForAutoMerge', () => {
+describe('prIsReadyForAutoMerge', () => {
   let github
   const issue = {
     body: '',
@@ -55,7 +55,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('uses passed in issue', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: completedPipeline}
@@ -68,7 +68,7 @@ describe('isReadyForAutoMerge', () => {
   test('fetches issue if not passed', async () => {
     github.issues.get.mockReturnValue(Promise.resolve({data: {...issue, body: completedPipeline}}))
 
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
     )
@@ -79,7 +79,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fails if pr is unlinked', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: ''}
     )
@@ -89,7 +89,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fails without label', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123'},
       {...issue, body: completedPipeline}
@@ -99,7 +99,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fails without pipeline', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       issue
@@ -109,7 +109,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fails if pipeline has no review', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: pipelineWithoutReview}
@@ -119,7 +119,7 @@ describe('isReadyForAutoMerge', () => {
   })
 
   test('fails if pipeline review stage is incomplete', async () => {
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: incompletePipeline}
@@ -131,7 +131,7 @@ describe('isReadyForAutoMerge', () => {
   test('fails if pr has sub changes', async () => {
     github.pulls.list.mockReturnValue(Promise.resolve([pullRequest]))
 
-    const result = await isReadyForAutoMerge(
+    const result = await prIsReadyForAutoMerge(
       github,
       {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
       {...issue, body: completedPipeline}
