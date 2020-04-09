@@ -1,10 +1,13 @@
-jest.mock('../src/utils/prIsReadyForAutoMerge')
+jest.mock('../src/utils/prIsReadyForAutoMerge', () => ({
+  prIsReadyForAutoMerge: jest.fn(),
+  readyToMergeLabel: 'ready to merge'
+}))
 jest.mock('../src/utils/getConnectedPRsForIssue')
 
 const nock = require('nock')
 const autoMerge = require('../src/auto-merge')
 const { createProbot } = require('probot')
-const prIsReadyForAutoMerge = require('../src/utils/prIsReadyForAutoMerge')
+const { prIsReadyForAutoMerge } = require('../src/utils/prIsReadyForAutoMerge')
 
 describe('auto merge', () => {
   let app
@@ -28,6 +31,10 @@ describe('auto merge', () => {
     nock('https://api.github.com')
       .put('/repos/testowner/testrepo/pulls/2/merge')
       .reply(200, {message: 'merged pr'})
+
+    nock('https://api.github.com')
+      .delete('/repos/testowner/testrepo/issues/2/labels/ready%20to%20merge')
+      .reply(200)
 
     prIsReadyForAutoMerge.mockReturnValue(true)
 
