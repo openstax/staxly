@@ -1,5 +1,5 @@
 const nock = require('nock')
-const myProbotApp = require('..')
+const mergeBases = require('../src/merge-bases')
 const { createProbot } = require('probot')
 
 describe('My Probot app', () => {
@@ -8,7 +8,7 @@ describe('My Probot app', () => {
   beforeEach(() => {
     nock.disableNetConnect()
     app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
-    app.load(myProbotApp)
+    app.load(mergeBases)
   })
 
   test('updates branch', async () => {

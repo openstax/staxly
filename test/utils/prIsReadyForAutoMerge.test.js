@@ -70,7 +70,7 @@ describe('prIsReadyForAutoMerge', () => {
 
     const result = await prIsReadyForAutoMerge(
       github,
-      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]},
+      {...pullRequest, body: 'for: openstax/rex-web#123', labels: [{name: 'ready to merge'}]}
     )
 
     expect(github.issues.get).toHaveBeenCalledTimes(1)

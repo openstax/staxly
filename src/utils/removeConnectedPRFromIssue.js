@@ -1,4 +1,5 @@
-const {anyLink, listPrefix, anyLinkGroups} = require('./connectedPRRegexes')
+const {listPrefix} = require('./regexes')
+const {anyLink, anyLinkGroups} = require('./connectedPRRegexes')
 const getPRBlock = require('./getPRBlock')
 
 /*
