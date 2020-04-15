@@ -52,5 +52,5 @@ const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
 
 module.exports = {
   prIsReadyForAutoMerge,
-  readyToMergeLabel,
-};
+  readyToMergeLabel
+}

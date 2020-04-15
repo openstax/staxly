@@ -24,10 +24,10 @@ module.exports = (robot) => {
       })
         .catch(error => {
           if (error.status === 422) {
-            // 422 is returned when there is a merge conflict, don't explode on these errors 
-            logger.info(`github response (422): ${error.message}`);
+            // 422 is returned when there is a merge conflict, don't explode on these errors
+            logger.info(`github response (422): ${error.message}`)
           } else {
-            return Promise.reject(error);
+            return Promise.reject(error)
           }
         })
     }))

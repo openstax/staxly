@@ -65,7 +65,7 @@ module.exports = (robot) => {
               owner: pullParams.owner,
               repo: pullParams.repo,
               issue_number: pullParams.pull_number,
-              name: readyToMergeLabel,
+              name: readyToMergeLabel
             })
           }
         })
