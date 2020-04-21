@@ -53,7 +53,7 @@ module.exports = (robot) => {
     const {payload} = context
     const branch = payload.ref.replace(/^refs\/heads\//, '')
     const repo = payload.repository.full_name
-    const versionKey = `${repo} (sha)`
+    const versionKey = repo
     const version = payload.after.substring(0, 7)
 
     if (branch !== 'master') {

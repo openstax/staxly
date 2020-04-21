@@ -43,7 +43,7 @@ describe('track-versions', () => {
       }
     })
 
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo (sha)', 'asdfasd')
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo', 'asdfasd')
 
     expect(nock.isDone()).toBe(true)
   })
@@ -75,7 +75,7 @@ describe('track-versions', () => {
       }
     })
 
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo (sha)', 'asdfasd')
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo', 'asdfasd')
 
     expect(nock.isDone()).toBe(true)
   })
