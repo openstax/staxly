@@ -13,7 +13,7 @@ describe('My Probot app', () => {
 
   test('updates branch', async () => {
     nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/pulls?base=master&state=open')
+      .get('/repos/testowner/testrepo/pulls?base=master&state=open&draft=false')
       .reply(200, [{number: 5}])
 
     nock('https://api.github.com')
