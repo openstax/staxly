@@ -39,7 +39,7 @@ describe('auto merge', () => {
     prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({
-      name: 'check_run.completed',
+      name: 'check_suite.completed',
       payload: {
         pull_requests: [{
           number: 2
@@ -64,7 +64,7 @@ describe('auto merge', () => {
     prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({
-      name: 'check_run.completed',
+      name: 'check_suite.completed',
       payload: {
         pull_requests: [{
           number: 2
@@ -89,7 +89,7 @@ describe('auto merge', () => {
     prIsReadyForAutoMerge.mockReturnValue(false)
 
     await app.receive({
-      name: 'check_run.completed',
+      name: 'check_suite.completed',
       payload: {
         pull_requests: [{
           number: 2
@@ -108,7 +108,7 @@ describe('auto merge', () => {
 
   test('noops outside whitelist', async () => {
     await app.receive({
-      name: 'check_run.completed',
+      name: 'check_suite.completed',
       payload: {
         pull_requests: [{
           number: 2

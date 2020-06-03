@@ -19,14 +19,14 @@ module.exports = (robot) => {
     return handler(context)
   })
 
-  safeBind(['check_run.completed'], context =>
+  safeBind(['check_suite.completed'], context =>
     Promise.all(context.payload.pull_requests.map(pr => {
       const pullParams = {pull_number: pr.number, ...context.repo()}
       return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
-  safeBind(['pull_request.edited', 'pull_request.labeled'], context => {
+  safeBind(['pull_request.edited', 'pull_request.labeled', 'pull_request_review.submitted'], context => {
     const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()}
     return checkPR(context, pullParams, context.payload.pull_request)
   })
