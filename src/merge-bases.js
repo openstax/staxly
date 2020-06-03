@@ -50,6 +50,7 @@ module.exports = (robot) => {
         owner,
         repo,
         base,
+        draft: false,
         state: 'open'
       }),
       processPrs(context)
