@@ -16,6 +16,10 @@ module.exports = (robot) => {
     const {owner, repo} = context.repo()
 
     return Promise.all(data.map(pr => {
+      if (pr.draft) {
+        logger.info(`skipping base update for ${owner}/${repo}#${pr.number} because it is a draft`)
+        return Promise.resolve()
+      }
       logger.info(`updating base for ${owner}/${repo}#${pr.number}`)
       return context.github.pulls.updateBranch({
         owner,

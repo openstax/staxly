@@ -37,6 +37,28 @@ describe('My Probot app', () => {
     expect(nock.isDone()).toBe(true)
   })
 
+  test('skips draft', async () => {
+    nock('https://api.github.com')
+      .get('/repos/testowner/testrepo/pulls?base=master&state=open')
+      .reply(200, [{number: 5, draft: true}])
+
+    // Simulates delivery of an issues.opened webhook
+    await app.receive({
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        repository: {
+          name: 'testrepo',
+          owner: {
+            name: 'testowner'
+          }
+        }
+      }
+    })
+
+    expect(nock.isDone()).toBe(true)
+  })
+
   test('noops outside whitelist', async () => {
     // Simulates delivery of an issues.opened webhook
     await app.receive({
