@@ -49,7 +49,7 @@ describe('prIsReadyForAutoMerge', () => {
         get: jest.fn()
       },
       pulls: {
-        list: jest.fn(() => Promise.resolve([]))
+        list: jest.fn(() => Promise.resolve({data: []}))
       }
     }
   })
@@ -129,7 +129,7 @@ describe('prIsReadyForAutoMerge', () => {
   })
 
   test('fails if pr has sub changes', async () => {
-    github.pulls.list.mockReturnValue(Promise.resolve([pullRequest]))
+    github.pulls.list.mockReturnValue(Promise.resolve({data: [pullRequest]}))
 
     const result = await prIsReadyForAutoMerge(
       github,

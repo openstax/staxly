@@ -7,7 +7,7 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
   base: pullRequest.head.ref,
   state: 'open'
 })
-  .then(prs => prs.length > 0)
+  .then(response => response.data.length > 0)
 
 const readyToMergeLabel = 'ready to merge'
 

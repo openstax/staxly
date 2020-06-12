@@ -19,6 +19,26 @@ module.exports = (robot) => {
     return handler(context)
   })
 
+  safeBind(['status'], context => {
+    const branches = context.payload.branches
+
+    if (branches.length !== 1) {
+      return
+    }
+
+    const [branch] = branches
+    return context.github.pulls.list({...context.repo(), head: `openstax:${branch.name}`}).then(response => {
+      const prs = response.data
+      if (prs.length !== 1) {
+        return
+      }
+
+      const [pr] = prs
+      const pullParams = {pull_number: pr.number, ...context.repo()}
+      return checkPR(context, pullParams, pr)
+    })
+  })
+
   safeBind(['check_suite.completed'], context =>
     Promise.all(context.payload.pull_requests.map(pr => {
       const pullParams = {pull_number: pr.number, ...context.repo()}
