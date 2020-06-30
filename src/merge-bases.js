@@ -1,9 +1,10 @@
 // Merge base into PR branch whenever updated
 
 const repoWhitelist = [
-  'testrepo',
+  'event-capture-api',
   'rex-web',
-  'testing-stuff'
+  'testing-stuff',
+  'testrepo',
 ]
 
 module.exports = (robot) => {
