@@ -1,4 +1,4 @@
-import { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } from './regexes'
+import { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } from './regexes.js'
 
 const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^ ${newlineCharacters}]+)(?<locked> locked)?`
 const blockItems = `(${blockItem})+`
