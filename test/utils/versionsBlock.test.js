@@ -1,4 +1,4 @@
-import {getVersions, getVersion, setVersions, setVersion} from '../../src/utils/versionsBlock'
+import {getVersions, getVersion, setVersions, setVersion} from '../../src/utils/versionsBlock.js'
 
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
