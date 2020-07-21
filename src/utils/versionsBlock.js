@@ -1,4 +1,4 @@
-const { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } = require('./regexes')
+import { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } from './regexes'
 
 const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^ ${newlineCharacters}]+)(?<locked> locked)?`
 const blockItems = `(${blockItem})+`
@@ -9,7 +9,7 @@ const getVersionsBlock = (body) => {
   return blockMatch && blockMatch.groups.block
 }
 
-const getVersions = (body, filter = () => true) => {
+export const getVersions = (body, filter = () => true) => {
   const versionsText = getVersionsBlock(body)
 
   if (!versionsText) {
@@ -25,7 +25,7 @@ const getVersions = (body, filter = () => true) => {
     .reduce((result, item) => ({...result, [item.name]: item.version}), {})
 }
 
-const getVersion = (body, itemName) => {
+export const getVersion = (body, itemName) => {
   const versions = getVersions(body)
 
   if (!versions) {
@@ -35,7 +35,7 @@ const getVersion = (body, itemName) => {
   return versions[itemName]
 }
 
-const setVersions = (body, versions) => {
+export const setVersions = (body, versions) => {
   const lockedVersions = getVersions(body, item => item.locked) || {}
   const newVersions = {...versions, ...lockedVersions}
   const versionsText = getVersionsBlock(body)
@@ -50,18 +50,11 @@ const setVersions = (body, versions) => {
     : body + '\n\nversions:' + newItemsText
 }
 
-const setVersion = (body, itemName, version) => {
+export const setVersion = (body, itemName, version) => {
   const versions = getVersions(body) || {}
 
   return setVersions(body, {
     ...versions,
     [itemName]: version
   })
-}
-
-module.exports = {
-  getVersions,
-  getVersion,
-  setVersions,
-  setVersion
 }

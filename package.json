@@ -1,5 +1,6 @@
 {
   "name": "staxly",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "author": "Philip Schatz <phil@cnx.org>",
@@ -27,7 +28,9 @@
     "smee-client": "^1.0.1"
   },
   "devDependencies": {
-    "jest": "^22.4.3",
+    "@babel/preset-env": "^7.10.4",
+    "babel-jest": "^26.1.0",
+    "jest": "^26.1.0",
     "nock": "^12.0.0",
     "nodemon": "^1.14.11",
     "standard": "^11.0.0"
@@ -42,7 +45,10 @@
     ]
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   },
   "nodemonConfig": {
     "exec": "npm start",
