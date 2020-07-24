@@ -2,8 +2,8 @@ import {getVersions, getVersion, setVersions, setVersion} from '../../src/utils/
 
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
-- openstax/rex-web (release id): master/dfde202 locked
-- openstax/highlights-api (sha): 8575ef7 locked
+- openstax/rex-web (release id): master/dfde202 (locked)
+- openstax/highlights-api (sha): 8575ef7 (locked)
 - openstax/highlights-api (ami): ami-000167d12cf19dce1
 `
 
@@ -75,8 +75,8 @@ asdf
 asdf
 # versions
 - openstax/rex-web (sha): foobar
-- openstax/rex-web (release id): master/dfde202
-- openstax/highlights-api (sha): 8575ef7
+- openstax/rex-web (release id): master/dfde202 (locked)
+- openstax/highlights-api (sha): 8575ef7 (locked)
 - openstax/highlights-api (ami): ami-000167d12cf19dce1
 asdf
 asdf
@@ -98,8 +98,8 @@ asdf
 asdf
 # versions
 - openstax/rex-web (sha): foobar
-- openstax/rex-web (release id): master/dfde202
-- openstax/highlights-api (sha): 8575ef7
+- openstax/rex-web (release id): master/dfde202 (locked)
+- openstax/highlights-api (sha): 8575ef7 (locked)
 - openstax/highlights-api (ami): ami-000167d12cf19dce1
 asdf
 asdf
@@ -156,8 +156,8 @@ asdf
 asdf
 # versions
 - openstax/rex-web (sha): foobar
-- openstax/rex-web (release id): master/dfde202
-- openstax/highlights-api (sha): 8575ef7
+- openstax/rex-web (release id): master/dfde202 (locked)
+- openstax/highlights-api (sha): 8575ef7 (locked)
 - openstax/highlights-api (ami): ami-000167d12cf19dce1
 asdf
 asdf

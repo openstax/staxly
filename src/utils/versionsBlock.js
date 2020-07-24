@@ -1,6 +1,6 @@
 import { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } from './regexes.js'
 
-const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^ ${newlineCharacters}]+)(?<locked> locked)?`
+const blockItem = `${newline}+${whitespace}*\\- (?<name>[^:]+): (?<version>[^ ${newlineCharacters}]+)(?<locked> \\(locked\\))?`
 const blockItems = `(${blockItem})+`
 const versionBlockRegex = `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}versions:?\\*{0,2}:?${blockItems})`
 
@@ -42,7 +42,7 @@ export const setVersions = (body, versions) => {
   const itemsText = versionsText && versionsText.match(new RegExp(blockItems, 'i'))[0]
 
   const newItemsText = Object.entries(newVersions).reduce((result, [name, version]) =>
-    result + `\n- ${name}: ${version}`
+    result + `\n- ${name}: ${version}${name in lockedVersions ? ' (locked)' : ''}`
     , '')
 
   return itemsText

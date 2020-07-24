@@ -4,7 +4,7 @@ const repoWhitelist = [
   'event-capture-api',
   'rex-web',
   'testing-stuff',
-  'testrepo',
+  'testrepo'
 ]
 
 module.exports = (robot) => {

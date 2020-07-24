@@ -54,7 +54,7 @@ module.exports = (robot) => {
     const branch = payload.ref.replace(/^refs\/heads\//, '')
     const repo = payload.repository.full_name
     const versionKey = repo
-    const version = payload.after.substring(0, 7)
+    const version = payload.after
 
     if (branch !== 'master') {
       return
