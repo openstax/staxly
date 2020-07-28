@@ -1,4 +1,4 @@
-const removeConnectedPRFromIssue = require('../../src/utils/removeConnectedPRFromIssue')
+import removeConnectedPRFromIssue from '../../src/utils/removeConnectedPRFromIssue'
 
 describe('removeConnectedPRFromIssue', () => {
   let github

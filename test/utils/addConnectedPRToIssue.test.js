@@ -1,4 +1,4 @@
-const addConnectedPRToIssue = require('../../src/utils/addConnectedPRToIssue')
+import addConnectedPRToIssue from '../../src/utils/addConnectedPRToIssue'
 
 describe('addConnectedPRToIssue', () => {
   let github

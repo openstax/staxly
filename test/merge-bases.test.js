@@ -1,5 +1,6 @@
+import mergeBases from '../src/merge-bases.js'
+
 const nock = require('nock')
-const mergeBases = require('../src/merge-bases')
 const { createProbot } = require('probot')
 
 describe('My Probot app', () => {

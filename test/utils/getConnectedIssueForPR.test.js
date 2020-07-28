@@ -1,4 +1,4 @@
-const getConnectedIssueForPR = require('../../src/utils/getConnectedIssueForPR')
+import getConnectedIssueForPR from '../../src/utils/getConnectedIssueForPR'
 
 describe('getConnectedIssueForPR', () => {
   test('resolves github ref', () => {
