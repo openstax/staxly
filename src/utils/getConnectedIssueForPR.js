@@ -1,7 +1,7 @@
-const {
+import {
   beginningOfStringOrWhitespace, endOfStringOrWhitespace,
   githubRefGroups, githubIssueLinkGroups, zenhubLinkGroups
-} = require('./regexes')
+} from './regexes'
 
 const targetRegexes = [
   `${beginningOfStringOrWhitespace}for: ${githubRefGroups}${endOfStringOrWhitespace}`,
@@ -14,7 +14,7 @@ const targetRegexes = [
  *
  * @returns IssueParams | null
  */
-module.exports = (pullRequest) => {
+export default (pullRequest) => {
   const target = targetRegexes.reduce((result, regex) => result || pullRequest.body.match(new RegExp(regex, 'i')), null)
 
   if (target && target.groups) {

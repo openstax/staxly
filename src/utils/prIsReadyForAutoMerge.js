@@ -1,5 +1,5 @@
-const {getPipelineStage} = require('./pipeline')
-const getConnectedIssueForPR = require('./getConnectedIssueForPR')
+import {getPipelineStage} from './pipeline'
+import getConnectedIssueForPR from './getConnectedIssueForPR'
 
 const hasSubChanges = (github, pullRequest) => github.pulls.list({
   owner: pullRequest.head.repo.owner.login,
@@ -9,9 +9,9 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
 })
   .then(response => response.data.length > 0)
 
-const readyToMergeLabel = 'ready to merge'
+export const readyToMergeLabel = 'ready to merge'
 
-const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
+export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
   if (!pullRequest.labels.map(({name}) => name).includes(readyToMergeLabel)) {
     return false
   }
@@ -48,9 +48,4 @@ const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
   }
 
   return true
-}
-
-module.exports = {
-  prIsReadyForAutoMerge,
-  readyToMergeLabel
 }

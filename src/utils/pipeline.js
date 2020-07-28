@@ -1,6 +1,6 @@
-const {
+import {
   whitespace, newline, newlineCharacters, beginningOfStringOrNewline
-} = require('./regexes')
+} from './regexes'
 
 const stageItem = `${newline}+${whitespace}*\\- \\[(?<checked> |x)\\] (?<itemName>[^${newlineCharacters}]+)`
 const stageName = `${whitespace}*${newline}#* ?\\*{0,2}(?<stage>[a-z0-9]+[^${newlineCharacters}]*):?\\*{0,2}:?`
@@ -14,7 +14,7 @@ const getPipelineBody = (body) => {
   return blockMatch && blockMatch.groups.pipeline
 }
 
-const getPipeline = (body) => {
+export const getPipeline = (body) => {
   const pipeline = getPipelineBody(body)
 
   if (!pipeline) {
@@ -45,7 +45,7 @@ const getPipeline = (body) => {
   })
 }
 
-const getPipelineStage = (body, nameMatcher) => {
+export const getPipelineStage = (body, nameMatcher) => {
   const pipeline = getPipeline(body)
 
   if (!pipeline) {
@@ -56,9 +56,4 @@ const getPipelineStage = (body, nameMatcher) => {
     : stage => nameMatcher(stage.name)
 
   return pipeline.find(matcher) || null
-}
-
-module.exports = {
-  getPipeline,
-  getPipelineStage
 }

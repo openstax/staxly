@@ -13,12 +13,12 @@
 // since probot no longer supports robot.on('slack.message')
 // because probot events assume a payload which contains the GitHub installation id
 
-const {RTMClient, WebClient} = require('@slack/client')
+import {RTMClient, WebClient} from '@slack/client'
 
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'slack'})
   if (!SLACK_BOT_TOKEN) {
     logger.warn('SLACK_BOT_TOKEN missing, skipping Slack integration')

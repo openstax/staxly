@@ -1,5 +1,5 @@
-const {prIsReadyForAutoMerge, readyToMergeLabel} = require('./utils/prIsReadyForAutoMerge')
-const getConnectedPRsForIssue = require('./utils/getConnectedPRsForIssue')
+import {prIsReadyForAutoMerge, readyToMergeLabel} from './utils/prIsReadyForAutoMerge'
+import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue'
 
 const repoWhitelist = [
   'testrepo',
@@ -8,7 +8,7 @@ const repoWhitelist = [
   'testing-stuff'
 ]
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'auto-merge'})
 
   const safeBind = (events, handler) => robot.on(events, context => {
