@@ -1,5 +1,5 @@
 // Requiring our app implementation
-import myProbotApp from '../src'
+import myProbotApp from '../src/index.js'
 const probot = require('probot')
 
 const issuesOpenedPayload = require('./fixtures/issues.opened.json')
