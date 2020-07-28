@@ -1,6 +1,6 @@
 import {
   whitespace, newline, newlineCharacters, beginningOfStringOrNewline
-} from './regexes'
+} from './regexes.js'
 
 const stageItem = `${newline}+${whitespace}*\\- \\[(?<checked> |x)\\] (?<itemName>[^${newlineCharacters}]+)`
 const stageName = `${whitespace}*${newline}#* ?\\*{0,2}(?<stage>[a-z0-9]+[^${newlineCharacters}]*):?\\*{0,2}:?`

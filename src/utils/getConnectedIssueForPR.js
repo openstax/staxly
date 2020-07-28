@@ -1,7 +1,7 @@
 import {
   beginningOfStringOrWhitespace, endOfStringOrWhitespace,
   githubRefGroups, githubIssueLinkGroups, zenhubLinkGroups
-} from './regexes'
+} from './regexes.js'
 
 const targetRegexes = [
   `${beginningOfStringOrWhitespace}for: ${githubRefGroups}${endOfStringOrWhitespace}`,

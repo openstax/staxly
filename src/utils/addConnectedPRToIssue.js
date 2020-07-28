@@ -1,5 +1,5 @@
-import getConnectedPRsForIssue from './getConnectedPRsForIssue'
-import getPRBlock from './getPRBlock'
+import getConnectedPRsForIssue from './getConnectedPRsForIssue.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument context.github

@@ -1,6 +1,6 @@
-import {listPrefix} from './regexes'
-import {anyLink, anyLinkGroups} from './connectedPRRegexes'
-import getPRBlock from './getPRBlock'
+import {listPrefix} from './regexes.js'
+import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument context.github

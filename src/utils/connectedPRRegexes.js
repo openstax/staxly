@@ -1,7 +1,7 @@
 import {
   githubRefGroups, githubPullRequestLinkGroups, zenhubLinkGroups,
   githubRef, githubPullRequestLink, zenhubLink
-} from './regexes'
+} from './regexes.js'
 
 export const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
 

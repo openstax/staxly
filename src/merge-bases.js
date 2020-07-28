@@ -7,7 +7,7 @@ const repoWhitelist = [
   'testrepo'
 ]
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'merge-bases'})
   robot.on([
     'push'

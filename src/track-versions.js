@@ -1,4 +1,4 @@
-import {setVersion} from './utils/versionsBlock'
+import {setVersion} from './utils/versionsBlock.js'
 
 const releaseCardRepos = {
   'testowner/testrepo': [

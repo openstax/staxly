@@ -1,5 +1,5 @@
-import {prIsReadyForAutoMerge, readyToMergeLabel} from './utils/prIsReadyForAutoMerge'
-import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue'
+import {prIsReadyForAutoMerge, readyToMergeLabel} from './utils/prIsReadyForAutoMerge.js'
+import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue.js'
 
 const repoWhitelist = [
   'testrepo',

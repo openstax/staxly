@@ -1,7 +1,7 @@
 // Merge base into PR branch whenever updated
-import getConnectedIssueForPR from './utils/getConnectedIssueForPR'
-import addConnectedPRToIssue from './utils/addConnectedPRToIssue'
-import removeConnectedPRFromIssue from './utils/removeConnectedPRFromIssue'
+import getConnectedIssueForPR from './utils/getConnectedIssueForPR.js'
+import addConnectedPRToIssue from './utils/addConnectedPRToIssue.js'
+import removeConnectedPRFromIssue from './utils/removeConnectedPRFromIssue.js'
 
 const repoWhitelist = [
   'testrepo',

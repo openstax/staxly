@@ -1,5 +1,5 @@
-import {anyLink, anyLinkGroups} from './connectedPRRegexes'
-import getPRBlock from './getPRBlock'
+import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument IssueData
