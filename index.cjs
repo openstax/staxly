@@ -1,10 +1,8 @@
 module.exports = (robot) => {
-  console.log('here1');
-
   import('./src/index.js')
-    .then(mod => {
-      console.log('module', mod);
-      mod(robot)
+    .then(module => module.default(robot))
+    .catch(e => {
+      console.error(e)
+      process.exit(1)
     })
-    .catch(e => console.log(e))
 }
