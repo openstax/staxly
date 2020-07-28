@@ -13,9 +13,10 @@
 // since probot no longer supports robot.on('slack.message')
 // because probot events assume a payload which contains the GitHub installation id
 
-import slackClient from '@slack/client'
+import * as slackClient from '@slack/client'
 
-const {RTMClient, WebClient} = slackClient;
+// babel and node disagree on how to process this import
+const {RTMClient, WebClient} = slackClient.default ? slackClient.default : slackClient;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 
