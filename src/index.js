@@ -9,7 +9,6 @@ import addonSettings from 'probot-addon-settings'
 const {IGNORE_FOR_TESTING} = process.env
 
 export default (robot) => {
-  console.log('asdfasdfasdf');
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
   changelog(robot)
@@ -25,7 +24,7 @@ export default (robot) => {
   }
 
   // 3rd-party addons that we use
-  addonSettings(robot);
+  addonSettings(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {
