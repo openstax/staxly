@@ -20,7 +20,7 @@ export default (robot) => {
   // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
     slackStuff(robot)
-    import('probot-addon-release-notifier').then(robot) // because it uses safe-env and yells loudly
+    import('probot-addon-release-notifier').then(module => module.default(robot)) // because it uses safe-env and yells loudly
   }
 
   // 3rd-party addons that we use

@@ -16,7 +16,7 @@
 import * as slackClient from '@slack/client'
 
 // babel and node disagree on how to process this import
-const {RTMClient, WebClient} = slackClient.default ? slackClient.default : slackClient;
+const {RTMClient, WebClient} = slackClient.default ? slackClient.default : slackClient
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 
