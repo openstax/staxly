@@ -4,7 +4,7 @@
 // - uses .github/config.yml (instead of .github/changelog.yml)
 // - uses probot-config to allow inheriting the config from another repository
 
-const getConfig = require('probot-config')
+import getConfig from 'probot-config'
 
 const Status = Object.seal({
   FAIL: Symbol('failure'),
@@ -13,7 +13,7 @@ const Status = Object.seal({
   PROGRESS: Symbol('pending')
 })
 
-module.exports = (robot) => {
+export default (robot) => {
   robot.on('pull_request.synchronize', checkChangelog)
   robot.on('pull_request.opened', checkChangelog)
   robot.on('pull_request.reopened', checkChangelog)

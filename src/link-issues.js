@@ -1,7 +1,7 @@
 // Merge base into PR branch whenever updated
-const getConnectedIssueForPR = require('./utils/getConnectedIssueForPR')
-const addConnectedPRToIssue = require('./utils/addConnectedPRToIssue')
-const removeConnectedPRFromIssue = require('./utils/removeConnectedPRFromIssue')
+import getConnectedIssueForPR from './utils/getConnectedIssueForPR.js'
+import addConnectedPRToIssue from './utils/addConnectedPRToIssue.js'
+import removeConnectedPRFromIssue from './utils/removeConnectedPRFromIssue.js'
 
 const repoWhitelist = [
   'testrepo',
@@ -11,7 +11,7 @@ const repoWhitelist = [
 
 const name = 'has issue link'
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'link-issues-check'})
   robot.on([
     'pull_request.opened',

@@ -1,6 +1,8 @@
+import trackVersions from '../src/track-versions.js'
+
 const nock = require('nock')
-const trackVersions = require('../src/track-versions')
 const { createProbot } = require('probot')
+
 jest.mock('../src/utils/versionsBlock', () => ({
   setVersion: jest.fn()
 }))
@@ -43,7 +45,7 @@ describe('track-versions', () => {
       }
     })
 
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo', 'asdfasd')
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testrepo', 'asdfasdfasdfasdfasdf')
 
     expect(nock.isDone()).toBe(true)
   })
@@ -75,7 +77,7 @@ describe('track-versions', () => {
       }
     })
 
-    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo', 'asdfasd')
+    expect(setVersion).toHaveBeenCalledWith('body', 'testowner/testotherrepo', 'asdfasdfasdfasdfasdf')
 
     expect(nock.isDone()).toBe(true)
   })

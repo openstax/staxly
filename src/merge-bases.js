@@ -4,10 +4,10 @@ const repoWhitelist = [
   'event-capture-api',
   'rex-web',
   'testing-stuff',
-  'testrepo',
+  'testrepo'
 ]
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'merge-bases'})
   robot.on([
     'push'

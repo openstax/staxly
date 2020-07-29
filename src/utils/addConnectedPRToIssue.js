@@ -1,5 +1,5 @@
-const getConnectedPRsForIssue = require('./getConnectedPRsForIssue')
-const getPRBlock = require('./getPRBlock')
+import getConnectedPRsForIssue from './getConnectedPRsForIssue.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument context.github
@@ -8,7 +8,7 @@ const getPRBlock = require('./getPRBlock')
  *
  * @returns Promise<void>
  */
-module.exports = (github, issueParams, issue, pullRequest) => {
+export default (github, issueParams, issue, pullRequest) => {
   const prs = getConnectedPRsForIssue(issue)
 
   const pullNumber = pullRequest.number

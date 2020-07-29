@@ -1,17 +1,12 @@
-const {
+import {
   githubRefGroups, githubPullRequestLinkGroups, zenhubLinkGroups,
   githubRef, githubPullRequestLink, zenhubLink
-} = require('./regexes')
+} from './regexes.js'
 
-const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
+export const anyLink = `((${githubRef})|(${githubPullRequestLink})|(${zenhubLink}))`
 
-const anyLinkGroups = [
+export const anyLinkGroups = [
   githubRefGroups,
   githubPullRequestLinkGroups,
   zenhubLinkGroups
 ]
-
-module.exports = {
-  anyLinkGroups,
-  anyLink
-}

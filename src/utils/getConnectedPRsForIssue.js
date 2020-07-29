@@ -1,12 +1,12 @@
-const {anyLink, anyLinkGroups} = require('./connectedPRRegexes')
-const getPRBlock = require('./getPRBlock')
+import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument IssueData
  *
  * @returns PullRequestParams | null
  */
-module.exports = (issue) => {
+export default (issue) => {
   const prBlock = getPRBlock(issue.body)
   const links = prBlock && prBlock.match(new RegExp(anyLink, 'gi'))
 

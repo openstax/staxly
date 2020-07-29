@@ -1,22 +1,30 @@
+import changelog from './changelog.js'
+import mergeBases from './merge-bases.js'
+import linkIssues from './link-issues.js'
+import autoMerge from './auto-merge.js'
+import trackVersions from './track-versions.js'
+import slackStuff from './slack-stuff.js'
+import addonSettings from 'probot-addon-settings'
+
 const {IGNORE_FOR_TESTING} = process.env
 
-module.exports = (robot) => {
+export default (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins
 
-  require('./changelog')(robot)
-  require('./merge-bases')(robot)
-  require('./link-issues')(robot)
-  require('./auto-merge')(robot)
-  require('./track-versions')(robot)
+  changelog(robot)
+  mergeBases(robot)
+  linkIssues(robot)
+  autoMerge(robot)
+  trackVersions(robot)
 
   // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
-    require('./slack-stuff')(robot)
-    require('probot-addon-release-notifier')(robot) // because it uses safe-env and yells loudly
+    slackStuff(robot)
+    import('probot-addon-release-notifier').then(module => module.default(robot)) // because it uses safe-env and yells loudly
   }
 
   // 3rd-party addons that we use
-  require('probot-addon-settings')(robot)
+  addonSettings(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {

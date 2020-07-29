@@ -1,4 +1,4 @@
-const {setVersion} = require('./utils/versionsBlock')
+import {setVersion} from './utils/versionsBlock.js'
 
 const releaseCardRepos = {
   'testowner/testrepo': [
@@ -46,7 +46,7 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
     .then(pagePromises => Promise.all(pagePromises))
 }
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'track-versions'})
 
   robot.on(['push'], (context) => {
@@ -54,7 +54,7 @@ module.exports = (robot) => {
     const branch = payload.ref.replace(/^refs\/heads\//, '')
     const repo = payload.repository.full_name
     const versionKey = repo
-    const version = payload.after.substring(0, 7)
+    const version = payload.after
 
     if (branch !== 'master') {
       return

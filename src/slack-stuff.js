@@ -1,10 +1,12 @@
+import slackApi from './slack-api.js'
+
 const SLACK_CHANNEL_REGEXP = /<#([^>|]+)\|([^>]+)>/g // Parse "foo <#C0LA54Q5C|book-tools> bar"
 const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-" is a critsit and don't try to invite myself to that channel
 
-module.exports = (robot) => {
+export default (robot) => {
   const logger = robot.log.child({name: 'slack-stuff'})
   // Ensure the slack-api is loaded
-  require('./slack-api')(robot)
+  slackApi(robot)
 
   if (!robot.slackAdapter) {
     // Slack did not initialize

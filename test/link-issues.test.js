@@ -1,13 +1,13 @@
+import linkIssues from '../src/link-issues.js'
 const nock = require('nock')
-const linkIssues = require('../src/link-issues')
-const { createProbot } = require('probot')
+const probot = require('probot')
 
 describe('link issues', () => {
   let app
 
   beforeEach(() => {
     nock.disableNetConnect()
-    app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+    app = probot.createProbot({ id: 1, cert: 'test', githubToken: 'test' })
     app.load(linkIssues)
   })
 

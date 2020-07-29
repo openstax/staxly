@@ -1,6 +1,6 @@
-const {listPrefix} = require('./regexes')
-const {anyLink, anyLinkGroups} = require('./connectedPRRegexes')
-const getPRBlock = require('./getPRBlock')
+import {listPrefix} from './regexes.js'
+import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import getPRBlock from './getPRBlock.js'
 
 /*
  * @argument context.github
@@ -9,7 +9,7 @@ const getPRBlock = require('./getPRBlock')
  *
  * @returns Promise<void>
  */
-module.exports = (github, issueParams, issue, pullRequest) => {
+export default (github, issueParams, issue, pullRequest) => {
   const pullNumber = pullRequest.number
   const repo = pullRequest.base.repo.name
   const owner = pullRequest.base.repo.owner.login
