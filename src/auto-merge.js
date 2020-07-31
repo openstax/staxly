@@ -39,8 +39,15 @@ export default (robot) => {
     })
   })
 
+  safeBind(['check_run.completed'], context =>
+    Promise.all(context.payload.check_run.check_suite.pull_requests.map(pr => {
+      const pullParams = {pull_number: pr.number, ...context.repo()}
+      return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
+    }))
+  )
+
   safeBind(['check_suite.completed'], context =>
-    Promise.all(context.payload.pull_requests.map(pr => {
+    Promise.all(context.payload.check_suite.pull_requests.map(pr => {
       const pullParams = {pull_number: pr.number, ...context.repo()}
       return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
