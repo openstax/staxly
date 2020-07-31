@@ -42,9 +42,11 @@ describe('auto merge', () => {
     await app.receive({
       name: 'check_suite.completed',
       payload: {
-        pull_requests: [{
-          number: 2
-        }],
+        check_suite: {
+          pull_requests: [{
+            number: 2
+          }],
+        },
         repository: {
           name: 'testrepo',
           owner: {
@@ -101,9 +103,11 @@ describe('auto merge', () => {
     await app.receive({
       name: 'check_suite.completed',
       payload: {
-        pull_requests: [{
-          number: 2
-        }],
+        check_suite: {
+          pull_requests: [{
+            number: 2
+          }]
+        },
         repository: {
           name: 'testrepo',
           owner: {
@@ -126,9 +130,11 @@ describe('auto merge', () => {
     await app.receive({
       name: 'check_suite.completed',
       payload: {
-        pull_requests: [{
-          number: 2
-        }],
+        check_suite: {
+          pull_requests: [{
+            number: 2
+          }]
+        },
         repository: {
           name: 'testrepo',
           owner: {
