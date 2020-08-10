@@ -9,13 +9,7 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
 })
   .then(response => response.data.length > 0)
 
-export const readyToMergeLabel = 'ready to merge'
-
 export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
-  if (!pullRequest.labels.map(({name}) => name).includes(readyToMergeLabel)) {
-    return false
-  }
-
   const loadIssue = async () => {
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
 
