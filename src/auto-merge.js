@@ -1,4 +1,4 @@
-import {prIsReadyForAutoMerge, readyToMergeLabel} from './utils/prIsReadyForAutoMerge.js'
+import {prIsReadyForAutoMerge} from './utils/prIsReadyForAutoMerge.js'
 import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue.js'
 
 const repoWhitelist = [
@@ -53,7 +53,7 @@ export default (robot) => {
     }))
   )
 
-  safeBind(['pull_request.edited', 'pull_request.labeled', 'pull_request_review.submitted'], context => {
+  safeBind(['pull_request.edited', 'pull_request_review.submitted'], context => {
     const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()}
     return checkPR(context, pullParams, context.payload.pull_request)
   })
@@ -87,14 +87,7 @@ export default (robot) => {
 
           logger.info(`PR: ${pullRequest.number} ${response.data.message}`)
 
-          if (response.status === 200) {
-            return context.github.issues.removeLabel({
-              owner: pullParams.owner,
-              repo: pullParams.repo,
-              issue_number: pullParams.pull_number,
-              name: readyToMergeLabel
-            })
-          }
+          return Promise.resolve()
         })
     } else {
       logger.info(`skipping pr ${pullRequest.number} because it is not ready to merge`)

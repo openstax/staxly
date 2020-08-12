@@ -1,8 +1,7 @@
 import autoMerge from '../src/auto-merge.js'
 
 jest.mock('../src/utils/prIsReadyForAutoMerge', () => ({
-  prIsReadyForAutoMerge: jest.fn(),
-  readyToMergeLabel: 'ready to merge'
+  prIsReadyForAutoMerge: jest.fn()
 }))
 jest.mock('../src/utils/getConnectedPRsForIssue')
 
@@ -33,10 +32,6 @@ describe('auto merge', () => {
       .put('/repos/testowner/testrepo/pulls/2/merge')
       .reply(200, {message: 'merged pr'})
 
-    nock('https://api.github.com')
-      .delete('/repos/testowner/testrepo/issues/2/labels/ready%20to%20merge')
-      .reply(200)
-
     prIsReadyForAutoMerge.mockReturnValue(true)
 
     await app.receive({
@@ -45,7 +40,7 @@ describe('auto merge', () => {
         check_suite: {
           pull_requests: [{
             number: 2
-          }],
+          }]
         },
         repository: {
           name: 'testrepo',
@@ -68,10 +63,6 @@ describe('auto merge', () => {
     nock('https://api.github.com')
       .put('/repos/testowner/testrepo/pulls/2/merge')
       .reply(200, {message: 'merged pr'})
-
-    nock('https://api.github.com')
-      .delete('/repos/testowner/testrepo/issues/2/labels/ready%20to%20merge')
-      .reply(200)
 
     prIsReadyForAutoMerge.mockReturnValue(true)
 
