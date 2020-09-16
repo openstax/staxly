@@ -28,10 +28,6 @@ export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) 
     return false
   }
 
-  if (pullRequest.requested_reviewers.length > 0 || pullRequest.requested_teams.length > 0) {
-    return false
-  }
-
   const issue = optionalIssue || await loadIssue(github, pullRequest)
 
   if (!issue) {
