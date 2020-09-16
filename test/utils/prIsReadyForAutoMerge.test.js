@@ -23,6 +23,8 @@ describe('prIsReadyForAutoMerge', () => {
   }
   const pullRequest = {
     number: 234,
+    requested_reviewers: [],
+    requested_teams: [],
     head: {
       ref: 'rando-change',
       repo: {

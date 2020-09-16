@@ -1,4 +1,5 @@
-// Merge base into PR branch whenever updated
+// Merge base into PR branch whenever update
+import {prIsReadyForAutoMerge} from './utils/prIsReadyForAutoMerge'
 
 const repoWhitelist = [
   'event-capture-api',
@@ -16,9 +17,9 @@ export default (robot) => {
   const processPrs = context => ({data}) => {
     const {owner, repo} = context.repo()
 
-    return Promise.all(data.map(pr => {
-      if (pr.draft) {
-        logger.info(`skipping base update for ${owner}/${repo}#${pr.number} because it is a draft`)
+    return Promise.all(data.map(pr => prIsReadyForAutoMerge(context.github, pr).then(isReady => {
+      if (!isReady) {
+        logger.info(`skipping base update for ${owner}/${repo}#${pr.number} because it doesn't look ready`)
         return Promise.resolve()
       }
       logger.info(`updating base for ${owner}/${repo}#${pr.number}`)
@@ -35,7 +36,7 @@ export default (robot) => {
             return Promise.reject(error)
           }
         })
-    }))
+    })))
   }
 
   function checkForPrs (context) {

@@ -9,22 +9,30 @@ const hasSubChanges = (github, pullRequest) => github.pulls.list({
 })
   .then(response => response.data.length > 0)
 
-export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
-  const loadIssue = async () => {
-    const linkedIssueParams = getConnectedIssueForPR(pullRequest)
+const loadIssue = async (github, pullRequest) => {
+  const linkedIssueParams = getConnectedIssueForPR(pullRequest)
 
-    if (!linkedIssueParams) {
-      return null
-    }
-
-    const response = await github.issues.get(linkedIssueParams)
-
-    if (response && response.data) {
-      return response.data
-    }
+  if (!linkedIssueParams) {
+    return null
   }
 
-  const issue = optionalIssue || await loadIssue()
+  const response = await github.issues.get(linkedIssueParams)
+
+  if (response && response.data) {
+    return response.data
+  }
+}
+
+export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
+  if (pullRequest.draft) {
+    return false
+  }
+
+  if (pullRequest.requested_reviewers.length > 0 || pullRequest.requested_teams.length > 0) {
+    return false
+  }
+
+  const issue = optionalIssue || await loadIssue(github, pullRequest)
 
   if (!issue) {
     return false
