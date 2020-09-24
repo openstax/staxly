@@ -11,6 +11,10 @@ const releaseCardRepos = {
     'openstax/open-search',
     'openstax/unified-deployment'
   ],
+  'openstax/business-intel': [
+    'openstax/accounts-deployment',
+    'openstax/accounts'
+  ],
   'TomWoodward/testing-stuff': [
     'TomWoodward/testing-stuff'
   ]
