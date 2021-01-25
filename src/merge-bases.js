@@ -1,10 +1,28 @@
 // Merge base into PR branch whenever updated
 
-const repoWhitelist = [
-  'event-capture-api',
-  'rex-web',
-  'testing-stuff',
-  'testrepo'
+const repoConfigs = [
+  {
+    repo: 'event-capture-api',
+    owner: 'openstax',
+    match: (pr) => pr.draft !== true
+  },
+  {
+    repo: 'rex-web',
+    owner: 'openstax',
+    match: (pr) => pr.draft !== true
+      && !pr.labels.map(({name}) => name).includes('disable-base-merge')
+      && pr.head.ref.indexOf('update-content-') !== 0
+  },
+  {
+    repo: 'testing-stuff',
+    owner: 'tomwoodward',
+    match: (pr) => pr.draft !== true
+  },
+  {
+    repo: 'testrepo',
+    owner: 'testowner',
+    match: (pr) => pr.draft !== true
+  }
 ]
 
 export default (robot) => {
@@ -13,14 +31,15 @@ export default (robot) => {
     'push'
   ], checkForPrs)
 
-  const processPrs = context => ({data}) => {
+  const processPrs = (context, config) => ({data}) => {
     const {owner, repo} = context.repo()
 
     return Promise.all(data.map(pr => {
-      if (pr.draft) {
-        logger.info(`skipping base update for ${owner}/${repo}#${pr.number} because it is a draft`)
+      if (!config.match(pr)) {
+        logger.info(`skipping base update for ${owner}/${repo}#${pr.number} because it doesn't match criteria`)
         return Promise.resolve()
       }
+
       logger.info(`updating base for ${owner}/${repo}#${pr.number}`)
       return context.github.pulls.updateBranch({
         owner,
@@ -44,7 +63,9 @@ export default (robot) => {
     const base = payload.ref.replace(/^refs\/heads\//, '')
     const {owner, repo} = context.repo()
 
-    if (!repoWhitelist.includes(repo)) {
+    const config = repoConfigs.find(config => config.repo === repo && config.owner === owner)
+
+    if (!config) {
       return
     }
 
@@ -57,7 +78,7 @@ export default (robot) => {
         base,
         state: 'open'
       }),
-      processPrs(context)
+      processPrs(context, config)
     )
       .then(pagePromises => Promise.all(pagePromises))
   }
