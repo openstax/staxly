@@ -1,27 +1,27 @@
-import {getItems, getItemValue, setItems} from './configBlock';
+import {getItems, getItemValue, setItems} from './configBlock'
 
 export const getVersions = (body, filter = () => true) => {
-  const items = getItems(body, 'versions', filter);
+  const items = getItems(body, 'versions', filter)
 
   if (!items) {
-    return null;
+    return null
   }
 
-  return Object.entries(items).reduce((result, [name, {value}]) => ({...result, [name]: value}), {});
+  return Object.entries(items).reduce((result, [name, {value}]) => ({...result, [name]: value}), {})
 }
 
 export const getVersion = (body, itemName) => {
-  return getItemValue(body, 'versions', itemName);
+  return getItemValue(body, 'versions', itemName)
 }
 
 export const setVersions = (body, versions) => {
-  const lockedVersions = getItems(body, 'versions', item => item.flags.includes('locked'));
+  const lockedVersions = getItems(body, 'versions', item => item.flags.includes('locked'))
   const newVersions = {
     ...Object.entries(versions).reduce((result, [name, value]) => ({...result, [name]: {value}}), {}),
     ...lockedVersions
-  };
+  }
 
-  return setItems(body, 'versions', newVersions);
+  return setItems(body, 'versions', newVersions)
 }
 
 export const setVersion = (body, itemName, version) => {
