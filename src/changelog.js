@@ -23,7 +23,7 @@ export default (robot) => {
   const itself = _ => _
 
   async function changedFiles (context) {
-    return context.github.paginate(context.github.pulls.listFiles, context.pullRequest(), res => {
+    return context.github.paginate(context.github.pulls.listFiles, context.issue(), res => {
       return res.data.map(itself)
     })
   }
