@@ -1,5 +1,5 @@
 'use strict'
-// Based on github.com/mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d
+// Based on github.com/mikz/probot-changelog#0bd754388782756ec292c661fb4fc0771e3ec777
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
 // - uses probot-config to allow inheriting the config from another repository
@@ -20,14 +20,10 @@ export default (robot) => {
   robot.on('pull_request.labeled', checkChangelog)
   robot.on('pull_request.unlabeled', checkChangelog)
 
-  async function results (context, path = '.') {
-    return context.github.pullRequests.getFiles(context.issue({ path: path, per_page: 1 }))
-  }
-
   const itself = _ => _
 
   async function changedFiles (context) {
-    return context.github.paginate(results(context), res => {
+    return context.github.paginate(context.github.pulls.listFiles, context.pullRequest(), res => {
       return res.data.map(itself)
     })
   }
@@ -98,7 +94,7 @@ export default (robot) => {
       description: descriptionFor(status),
       context: 'changelog'
     })
-    return context.github.repos.createStatus(params)
+    return context.github.repos.createCommitStatus(params)
   }
 
   function log (context, object) {
@@ -112,7 +108,7 @@ export default (robot) => {
     if (!label) { return }
 
     const l = label.toLowerCase()
-    const labels = await context.github.issues.getIssueLabels(context.issue())
+    const labels = await context.github.issues.listLabelsOnIssue(context.issue())
 
     return labels.data.some(label => label.name.toLowerCase() === l)
   }
