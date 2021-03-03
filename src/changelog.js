@@ -1,5 +1,5 @@
 'use strict'
-// Based on github.com/mikz/probot-changelog#0bd754388782756ec292c661fb4fc0771e3ec777
+// Based on github.com/mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
 // - uses probot-config to allow inheriting the config from another repository
@@ -23,7 +23,8 @@ export default (robot) => {
   const itself = _ => _
 
   async function changedFiles (context) {
-    return context.github.paginate(context.github.pulls.listFiles, context.issue(), res => {
+    const merged = context.github.pulls.listFiles.endpoint.merge(context.issue())
+    return context.github.paginate(merged, res => {
       return res.data.map(itself)
     })
   }
@@ -94,7 +95,7 @@ export default (robot) => {
       description: descriptionFor(status),
       context: 'changelog'
     })
-    return context.github.repos.createCommitStatus(params)
+    return context.github.repos.createStatus(params)
   }
 
   function log (context, object) {
