@@ -4,6 +4,8 @@ import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue.js'
 const repoWhitelist = [
   'testrepo',
   'rex-web',
+  'highlights-api',
+  'open-search',
   'unified',
   'testing-stuff'
 ]

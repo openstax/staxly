@@ -6,6 +6,8 @@ import removeConnectedPRFromIssue from './utils/removeConnectedPRFromIssue.js'
 const repoWhitelist = [
   'testrepo',
   'rex-web',
+  'highlights-api',
+  'open-search',
   'testing-stuff'
 ]
 
