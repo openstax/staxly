@@ -20,14 +20,11 @@ export default (robot) => {
   robot.on('pull_request.labeled', checkChangelog)
   robot.on('pull_request.unlabeled', checkChangelog)
 
-  async function results (context, path = '.') {
-    return context.github.pullRequests.getFiles(context.issue({ path: path, per_page: 1 }))
-  }
-
   const itself = _ => _
 
   async function changedFiles (context) {
-    return context.github.paginate(results(context), res => {
+    const merged = context.github.pulls.listFiles.endpoint.merge(context.issue())
+    return context.github.paginate(merged, res => {
       return res.data.map(itself)
     })
   }
@@ -112,7 +109,7 @@ export default (robot) => {
     if (!label) { return }
 
     const l = label.toLowerCase()
-    const labels = await context.github.issues.getIssueLabels(context.issue())
+    const labels = await context.github.issues.listLabelsOnIssue(context.issue())
 
     return labels.data.some(label => label.name.toLowerCase() === l)
   }

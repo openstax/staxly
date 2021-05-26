@@ -7,6 +7,21 @@ const repoConfigs = [
     match: (pr) => pr.draft !== true
   },
   {
+    repo: 'highlights-api',
+    owner: 'openstax',
+    match: (pr) => pr.draft !== true
+  },
+  {
+    repo: 'open-search',
+    owner: 'openstax',
+    match: (pr) => pr.draft !== true
+  },
+  {
+    repo: 'unified-deployment',
+    owner: 'openstax',
+    match: (pr) => pr.draft !== true
+  },
+  {
     repo: 'rex-web',
     owner: 'openstax',
     match: (pr) => pr.draft !== true &&
