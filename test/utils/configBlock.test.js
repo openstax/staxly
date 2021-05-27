@@ -1,5 +1,17 @@
-import {getItems, getItemValue, setItems, setItem} from '../../src/utils/configBlock.js'
+import {getBlocks, getItems, getItemValue, setItems, setItem} from '../../src/utils/configBlock.js'
 
+const exampleBlocks = `# configs
+- thing1: foo
+- thing2: stuff1, stuff2 +csv +asdf
+
+# versions
+- openstax/rex-web (sha): dfde202
+- openstax/rex-web (release id): master/dfde202 +locked
+- openstax/highlights-api (sha): 8575ef7 +locked
+- openstax/highlights-api (ami): ami-000167d12cf19dce1, ami-123 +csv
+
+
+`
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
 - openstax/rex-web (release id): master/dfde202 +locked
@@ -14,6 +26,22 @@ const expected = {
   'openstax/highlights-api (ami)': {value: ['ami-000167d12cf19dce1', 'ami-123'], flags: []}
 }
 
+describe('getBlocks', () => {
+  test('finds blocks', () => {
+    const result = getBlocks(exampleBlocks)
+    expect(result).toEqual([
+      {items: {thing1: {value: 'foo', flags: []}, thing2: {value: ['stuff1', 'stuff2'], flags: ['asdf']}}, name: 'configs'},
+      {items: expected, name: 'versions'}
+    ])
+  })
+  test('skips invalid blocks', () => {
+    const result = getBlocks('   ' + exampleBlocks)
+    expect(result).toEqual([
+      {items: expected, name: 'versions'}
+    ])
+  })
+})
+
 describe('getItems', () => {
   test('resolves basic block', () => {
     const result = getItems(exampleBlock, 'versions')
@@ -23,6 +51,16 @@ describe('getItems', () => {
   test('resolves with text before', () => {
     const result = getItems('asdf\n\rasdf\n\rasdf\n\r' + exampleBlock, 'versions')
     expect(result).toEqual(expected)
+  })
+
+  test('doesnt resolve with whitespace before first line', () => {
+    const result = getItems('   ' + exampleBlock, 'versions')
+    expect(result).toEqual(null)
+  })
+
+  test('doesnt resolve with text before first line', () => {
+    const result = getItems('asdf' + exampleBlock, 'versions')
+    expect(result).toEqual(null)
   })
 
   test('resolves with text around', () => {

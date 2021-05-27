@@ -1,10 +1,25 @@
-import { whitespace, beginningOfStringOrNewline, newline, newlineCharacters } from './regexes.js'
+import { whitespace, beginningOfStringOrNewline, whitespaceCharacters, newline, newlineCharacters } from './regexes.js'
 
 const flag = ` ?\\+(?<flag_name>[^ ${newlineCharacters}-+]+)`
 const flags = `(${flag})+`
 const blockItem = `${whitespace}*\\- (?<item_name>[^:]+): (?<item_value>[^${newlineCharacters}]+?)(?<item_flags>${flags})?${newline}+`
 const blockItems = `${newline}+(${blockItem})+`
-const itemBlockRegex = (name = '[^:]+') => `${beginningOfStringOrNewline}(?<block>#* ?\\*{0,2}(?<block_name>${name}):?\\*{0,2}:?(?<block_items>${blockItems}))`
+const itemBlockInnerRegex = (name = `[^:${whitespaceCharacters}${newlineCharacters}]+`) =>
+  `(?<block>#* ?\\*{0,2}(?<block_name>${name}):?\\*{0,2}:?(?<block_items>${blockItems}))`
+const itemBlockRegex = (name) => `${beginningOfStringOrNewline}${itemBlockInnerRegex(name)}`
+
+export const getBlocks = (body) => {
+  return body.match(new RegExp(itemBlockInnerRegex(), 'g'))
+    .map(blockText => {
+      const name = blockText.match(new RegExp(itemBlockRegex())).groups.block_name
+      // group match doesn't assert beginning of string or newline, so this
+      // might actually fail
+      const items = getItems(body, name)
+
+      return items ? {name, items} : null
+    })
+    .filter(block => block !== null)
+}
 
 const getBlock = (body, blockName) => {
   const blockMatch = body.match(new RegExp(itemBlockRegex(blockName)))
