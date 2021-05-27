@@ -2,7 +2,7 @@ import { whitespace, beginningOfStringOrNewline, whitespaceCharacters, newline, 
 
 const flag = ` ?\\+(?<flag_name>[^ ${newlineCharacters}-+]+)`
 const flags = `(${flag})+`
-const blockItem = `${whitespace}*\\- (?<item_name>[^:]+): (?<item_value>[^${newlineCharacters}]+?)(?<item_flags>${flags})?${newline}+`
+const blockItem = `${whitespace}*\\- (?<item_name>[^:]+): (?<item_value>[^${newlineCharacters}]+?)(?<item_flags>${flags})?${newline}{1}`
 const blockItems = `${newline}+(${blockItem})+`
 const itemBlockInnerRegex = (name = `[^:${whitespaceCharacters}${newlineCharacters}]+`) =>
   `(?<block>#* ?\\*{0,2}(?<block_name>${name}):?\\*{0,2}:?(?<block_items>${blockItems}))`
@@ -16,7 +16,7 @@ export const getBlocks = (body) => {
       // might actually fail
       const items = getItems(body, name)
 
-      return items ? {name, items} : null
+      return items ? {name, items, body: blockText} : null
     })
     .filter(block => block !== null)
 }
