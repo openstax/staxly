@@ -35,7 +35,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#234'},
+      { ...issue, body: 'pull requests:\n- [ ] openstax/rex-web#234' },
       pullRequest
     )
     expect(github.issues.update).not.toHaveBeenCalled()
@@ -45,7 +45,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#111'},
+      { ...issue, body: 'pull requests:\n- [ ] openstax/rex-web#111' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -57,7 +57,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#111'},
+      { ...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#111' },
       {
         ...pullRequest,
         base: {
@@ -79,7 +79,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:'},
+      { ...issue, body: 'pull requests:' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -91,7 +91,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\nasdf'},
+      { ...issue, body: 'pull requests:\nasdf' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -103,7 +103,7 @@ describe('addConnectedPRToIssue', () => {
     addConnectedPRToIssue(
       github,
       issueParams,
-      {...issue, body: 'asdf'},
+      { ...issue, body: 'asdf' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({

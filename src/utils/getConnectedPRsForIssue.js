@@ -1,4 +1,4 @@
-import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import { anyLink, anyLinkGroups } from './connectedPRRegexes.js'
 import getPRBlock from './getPRBlock.js'
 
 /*
@@ -15,5 +15,5 @@ export default (issue) => {
     return result ? result.groups : null
   })
     .filter(params => !!params)
-    .map(({number, ...params}) => ({...params, pull_number: number}))
+    .map(({ number, ...params }) => ({ ...params, pull_number: number }))
 }

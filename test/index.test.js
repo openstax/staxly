@@ -13,7 +13,7 @@ describe('My Probot app', () => {
   let app, github
 
   beforeEach(() => {
-    app = new probot.Application({githubToken: 'fake-token'})
+    app = new probot.Application({ githubToken: 'fake-token' })
     // Initialize the app based on the code from index.js
     app.load(myProbotApp)
     // This is an easy way to mock out the GitHub API

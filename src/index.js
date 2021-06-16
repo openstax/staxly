@@ -6,7 +6,7 @@ import trackVersions from './track-versions.js'
 import slackStuff from './slack-stuff.js'
 import addonSettings from 'probot-addon-settings'
 
-const {IGNORE_FOR_TESTING} = process.env
+const { IGNORE_FOR_TESTING } = process.env
 
 export default (robot) => {
   robot.events.setMaxListeners(100) // Since we use multiple plugins

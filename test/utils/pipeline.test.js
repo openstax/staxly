@@ -1,4 +1,4 @@
-const {getPipeline, getPipelineStage} = require('../../src/utils/pipeline')
+const { getPipeline, getPipelineStage } = require('../../src/utils/pipeline')
 
 const examplePipeline = `# pipeline
 1A-PRE DESIGN
@@ -20,25 +20,25 @@ const expected = [
     'name': '1A-PRE DESIGN',
     'complete': false,
     'items': [
-      {'complete': false, 'name': 'PDM approves UX LoFi Design'},
-      {'complete': false, 'name': 'PDM approves UX HiFi Design'}
+      { 'complete': false, 'name': 'PDM approves UX LoFi Design' },
+      { 'complete': false, 'name': 'PDM approves UX HiFi Design' }
     ]
   },
   {
     'name': '1C-DESIGN',
     'complete': true,
     'items': [
-      {'complete': true, 'name': 'PDM approves UX HiFi Design'}
+      { 'complete': true, 'name': 'PDM approves UX HiFi Design' }
     ]
   },
   {
     'name': '2B-REVIEW',
     'complete': false,
     'items': [
-      {'complete': false, 'name': 'Developer approves change'},
-      {'complete': true, 'name': 'UX approves change'},
-      {'complete': false, 'name': 'QA approves change'},
-      {'complete': true, 'name': 'PDM approves change'}
+      { 'complete': false, 'name': 'Developer approves change' },
+      { 'complete': true, 'name': 'UX approves change' },
+      { 'complete': false, 'name': 'QA approves change' },
+      { 'complete': true, 'name': 'PDM approves change' }
     ]
   }
 ]

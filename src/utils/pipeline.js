@@ -28,7 +28,7 @@ export const getPipeline = (body) => {
     const itemBodies = stageBody.match(new RegExp(stageItem, 'gi'))
 
     const items = itemBodies.map(itemBody => {
-      const {checked, itemName} = itemBody.match(new RegExp(stageItem, 'i')).groups
+      const { checked, itemName } = itemBody.match(new RegExp(stageItem, 'i')).groups
       return {
         complete: checked === 'x',
         name: itemName

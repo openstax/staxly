@@ -7,7 +7,7 @@ jest.mock('../src/utils/versionsBlock', () => ({
   setVersion: jest.fn()
 }))
 
-const {setVersion} = require('../src/utils/versionsBlock')
+const { setVersion } = require('../src/utils/versionsBlock')
 
 describe('track-versions', () => {
   let app
@@ -21,12 +21,12 @@ describe('track-versions', () => {
   test('updates issues', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
-      .query({'labels': 'release', 'state': 'open'})
-      .reply(200, [{number: 5, body: 'body', labels: []}])
+      .query({ 'labels': 'release', 'state': 'open' })
+      .reply(200, [{ number: 5, body: 'body', labels: [] }])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
-      .reply(200, {number: 5})
+      .reply(200, { number: 5 })
 
     setVersion.mockReturnValue('newbody')
 
@@ -53,12 +53,12 @@ describe('track-versions', () => {
   test('updates issues from other repo', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
-      .query({'labels': 'release', 'state': 'open'})
-      .reply(200, [{number: 5, body: 'body', labels: []}])
+      .query({ 'labels': 'release', 'state': 'open' })
+      .reply(200, [{ number: 5, body: 'body', labels: [] }])
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/issues/5', request => request.body === 'newbody')
-      .reply(200, {number: 5})
+      .reply(200, { number: 5 })
 
     setVersion.mockReturnValue('newbody')
 
@@ -85,8 +85,8 @@ describe('track-versions', () => {
   test('skips issues with "locked" label', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/issues')
-      .query({'labels': 'release', 'state': 'open'})
-      .reply(200, [{number: 5, body: 'body', labels: [{name: 'locked'}]}])
+      .query({ 'labels': 'release', 'state': 'open' })
+      .reply(200, [{ number: 5, body: 'body', labels: [{ name: 'locked' }] }])
 
     await app.receive({
       name: 'push',

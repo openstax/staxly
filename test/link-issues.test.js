@@ -14,11 +14,11 @@ describe('link issues', () => {
   test('fails if there is no link', async () => {
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'failure')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     await app.receive({
       name: 'pull_request.opened',
@@ -45,7 +45,7 @@ describe('link issues', () => {
   test('fails with an invalid link', async () => {
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/4')
@@ -53,7 +53,7 @@ describe('link issues', () => {
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'failure')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     await app.receive({
       name: 'pull_request.opened',
@@ -80,11 +80,11 @@ describe('link issues', () => {
   test('fails with an invalid link (long body)', async () => {
     nock('https://api.github.com')
       .post('/repos/openstax/rex-web/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/check-runs/5', body => body.conclusion === 'failure')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     await app.receive({
       name: 'pull_request.edited',
@@ -119,15 +119,15 @@ describe('link issues', () => {
     }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/123')
-      .reply(200, {body: 'pull requests:\n- [ ] testowner/testrepo#2'})
+      .reply(200, { body: 'pull requests:\n- [ ] testowner/testrepo#2' })
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     await app.receive({
       name: 'pull_request.opened',
@@ -157,15 +157,15 @@ describe('link issues', () => {
     }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/123')
-      .reply(200, {body: '', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 123})
+      .reply(200, { body: '', repo: { name: 'rex-web', owner: { login: 'openstax' } }, number: 123 })
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/issues/123', body => body.body === '\n\npull requests:\n- [ ] testowner/testrepo#2')
@@ -199,19 +199,19 @@ describe('link issues', () => {
     }
     nock('https://api.github.com')
       .post('/repos/testowner/testrepo/check-runs')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/123')
-      .reply(200, {body: '', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 123})
+      .reply(200, { body: '', repo: { name: 'rex-web', owner: { login: 'openstax' } }, number: 123 })
 
     nock('https://api.github.com')
       .patch('/repos/testowner/testrepo/check-runs/5', body => body.conclusion === 'success')
-      .reply(200, {id: 5})
+      .reply(200, { id: 5 })
 
     nock('https://api.github.com')
       .get('/repos/openstax/rex-web/issues/234')
-      .reply(200, {body: 'pull requests:\n- [ ] testowner/testrepo#2', repo: {name: 'rex-web', owner: {login: 'openstax'}}, number: 234})
+      .reply(200, { body: 'pull requests:\n- [ ] testowner/testrepo#2', repo: { name: 'rex-web', owner: { login: 'openstax' } }, number: 234 })
 
     nock('https://api.github.com')
       .patch('/repos/openstax/rex-web/issues/234', body => body.body === 'pull requests:')

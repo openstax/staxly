@@ -21,11 +21,11 @@ describe('My Probot app', () => {
   test('updates branch', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls?base=master&state=open')
-      .reply(200, [{number: 5, base}])
+      .reply(200, [{ number: 5, base }])
 
     nock('https://api.github.com')
       .put('/repos/testowner/testrepo/pulls/5/update-branch')
-      .reply(200, {number: 5})
+      .reply(200, { number: 5 })
 
     // Simulates delivery of an issues.opened webhook
     await app.receive({
@@ -42,7 +42,7 @@ describe('My Probot app', () => {
   test('skips draft', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls?base=master&state=open')
-      .reply(200, [{number: 5, base, draft: true}])
+      .reply(200, [{ number: 5, base, draft: true }])
 
     // Simulates delivery of an issues.opened webhook
     await app.receive({
@@ -62,7 +62,7 @@ describe('My Probot app', () => {
       name: 'push',
       payload: {
         ref: 'refs/heads/master',
-        repository: {...base, name: 'randomrepo'}
+        repository: { ...base, name: 'randomrepo' }
       }
     })
 

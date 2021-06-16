@@ -1,4 +1,4 @@
-import {getPipelineStage} from './pipeline.js'
+import { getPipelineStage } from './pipeline.js'
 import getConnectedIssueForPR from './getConnectedIssueForPR.js'
 
 const hasSubChanges = (github, pullRequest) => github.pulls.list({
