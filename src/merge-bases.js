@@ -24,9 +24,9 @@ const repoConfigs = [
   {
     repo: 'rex-web',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true
-      && !pr.labels.map(({name}) => name).includes('disable-base-merge')
-      && pr.head.ref.indexOf('update-content-') !== 0
+    match: (pr) => pr.draft !== true &&
+      !pr.labels.map(({ name }) => name).includes('disable-base-merge') &&
+      pr.head.ref.indexOf('update-content-') !== 0
   },
   {
     repo: 'testing-stuff',
@@ -41,13 +41,13 @@ const repoConfigs = [
 ]
 
 export default (robot) => {
-  const logger = robot.log.child({name: 'merge-bases'})
+  const logger = robot.log.child({ name: 'merge-bases' })
   robot.on([
     'push'
   ], checkForPrs)
 
-  const processPrs = (context, config) => ({data}) => {
-    const {owner, repo} = context.repo()
+  const processPrs = (context, config) => ({ data }) => {
+    const { owner, repo } = context.repo()
 
     return Promise.all(data.map(pr => {
       if (!config.match(pr)) {
@@ -73,10 +73,10 @@ export default (robot) => {
   }
 
   function checkForPrs (context) {
-    const {payload} = context
+    const { payload } = context
 
     const base = payload.ref.replace(/^refs\/heads\//, '')
-    const {owner, repo} = context.repo()
+    const { owner, repo } = context.repo()
 
     const config = repoConfigs.find(config => config.repo === repo && config.owner === owner)
 

@@ -35,7 +35,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#123'},
+      { ...issue, body: 'pull requests:\n- [ ] openstax/rex-web#123' },
       pullRequest
     )
     expect(github.issues.update).not.toHaveBeenCalled()
@@ -45,7 +45,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#234'},
+      { ...issue, body: 'pull requests:\n- [ ] openstax/rex-web#234' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -57,7 +57,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#234'},
+      { ...issue, body: 'pull requests:\n- [ ] OpenStax/rex-web#234' },
       {
         ...pullRequest,
         base: {
@@ -79,7 +79,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] https://github.com/openstax/rex-web/pulls/234'},
+      { ...issue, body: 'pull requests:\n- [ ] https://github.com/openstax/rex-web/pulls/234' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -91,7 +91,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] https://app.zenhub.com/workspaces/openstax-unified-5b71aabe3815ff014b102258/issues/openstax/rex-web/234'},
+      { ...issue, body: 'pull requests:\n- [ ] https://app.zenhub.com/workspaces/openstax-unified-5b71aabe3815ff014b102258/issues/openstax/rex-web/234' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -103,7 +103,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'pull requests:\n- [ ] openstax/rex-web#111\n- [ ] openstax/rex-web#234\n- [ ] openstax/rex-web#555'},
+      { ...issue, body: 'pull requests:\n- [ ] openstax/rex-web#111\n- [ ] openstax/rex-web#234\n- [ ] openstax/rex-web#555' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -115,7 +115,7 @@ describe('removeConnectedPRFromIssue', () => {
     removeConnectedPRFromIssue(
       github,
       issueParams,
-      {...issue, body: 'asdf\nasdf\nasdf\npull requests:\n- [ ] openstax/rex-web#234\nasdf\nasdf\n'},
+      { ...issue, body: 'asdf\nasdf\nasdf\npull requests:\n- [ ] openstax/rex-web#234\nasdf\nasdf\n' },
       pullRequest
     )
     expect(github.issues.update).toHaveBeenCalledWith(expect.objectContaining({

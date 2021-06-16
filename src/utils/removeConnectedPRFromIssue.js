@@ -1,5 +1,5 @@
-import {listPrefix} from './regexes.js'
-import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import { listPrefix } from './regexes.js'
+import { anyLink, anyLinkGroups } from './connectedPRRegexes.js'
 import getPRBlock from './getPRBlock.js'
 
 /*

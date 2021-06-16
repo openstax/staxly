@@ -1,4 +1,4 @@
-import {prIsReadyForAutoMerge} from './utils/prIsReadyForAutoMerge.js'
+import { prIsReadyForAutoMerge } from './utils/prIsReadyForAutoMerge.js'
 import getConnectedPRsForIssue from './utils/getConnectedPRsForIssue.js'
 
 const repoWhitelist = [
@@ -11,7 +11,7 @@ const repoWhitelist = [
 ]
 
 export default (robot) => {
-  const logger = robot.log.child({name: 'auto-merge'})
+  const logger = robot.log.child({ name: 'auto-merge' })
 
   const safeBind = (events, handler) => robot.on(events, context => {
     if (!repoWhitelist.includes(context.payload.repository.name)) {
@@ -29,34 +29,34 @@ export default (robot) => {
     }
 
     const [branch] = branches
-    return context.github.pulls.list({...context.repo(), head: `openstax:${branch.name}`}).then(response => {
+    return context.github.pulls.list({ ...context.repo(), head: `openstax:${branch.name}` }).then(response => {
       const prs = response.data
       if (prs.length !== 1) {
         return
       }
 
       const [pr] = prs
-      const pullParams = {pull_number: pr.number, ...context.repo()}
+      const pullParams = { pull_number: pr.number, ...context.repo() }
       return checkPR(context, pullParams, pr)
     })
   })
 
   safeBind(['check_run.completed'], context =>
     Promise.all(context.payload.check_run.check_suite.pull_requests.map(pr => {
-      const pullParams = {pull_number: pr.number, ...context.repo()}
+      const pullParams = { pull_number: pr.number, ...context.repo() }
       return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
   safeBind(['check_suite.completed'], context =>
     Promise.all(context.payload.check_suite.pull_requests.map(pr => {
-      const pullParams = {pull_number: pr.number, ...context.repo()}
+      const pullParams = { pull_number: pr.number, ...context.repo() }
       return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
   safeBind(['pull_request.edited', 'pull_request_review.submitted'], context => {
-    const pullParams = {pull_number: context.payload.pull_request.number, ...context.repo()}
+    const pullParams = { pull_number: context.payload.pull_request.number, ...context.repo() }
     return checkPR(context, pullParams, context.payload.pull_request)
   })
 
@@ -75,11 +75,11 @@ export default (robot) => {
     }
 
     if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
-      return context.github.pulls.merge({...pullParams, merge_method: 'squash'})
+      return context.github.pulls.merge({ ...pullParams, merge_method: 'squash' })
         .catch(error => error.status === 405
           // trying to fake the way octokit handles successful requests here
           // because there is no way to get it to handle 405s in a reasonable way
-          ? Promise.resolve({status: error.status, data: {message: error.message}})
+          ? Promise.resolve({ status: error.status, data: { message: error.message } })
           : Promise.reject(error)
         )
         .then(response => {

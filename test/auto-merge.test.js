@@ -26,11 +26,11 @@ describe('auto merge', () => {
   test('passes after check run completes', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {number: 2, draft: false, state: 'open'})
+      .reply(200, { number: 2, draft: false, state: 'open' })
 
     nock('https://api.github.com')
       .put('/repos/testowner/testrepo/pulls/2/merge')
-      .reply(200, {message: 'merged pr'})
+      .reply(200, { message: 'merged pr' })
 
     prIsReadyForAutoMerge.mockReturnValue(true)
 
@@ -57,12 +57,12 @@ describe('auto merge', () => {
   test('passes after commit status updated', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls')
-      .query({'head': 'openstax:coolbranch'})
-      .reply(200, [{number: 2, draft: false, state: 'open'}])
+      .query({ head: 'openstax:coolbranch' })
+      .reply(200, [{ number: 2, draft: false, state: 'open' }])
 
     nock('https://api.github.com')
       .put('/repos/testowner/testrepo/pulls/2/merge')
-      .reply(200, {message: 'merged pr'})
+      .reply(200, { message: 'merged pr' })
 
     prIsReadyForAutoMerge.mockReturnValue(true)
 
@@ -87,7 +87,7 @@ describe('auto merge', () => {
   test('does nothing when merged', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {number: 2, draft: false, state: 'merged'})
+      .reply(200, { number: 2, draft: false, state: 'merged' })
 
     prIsReadyForAutoMerge.mockReturnValue(true)
 
@@ -114,7 +114,7 @@ describe('auto merge', () => {
   test('does nothing when not ready', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls/2')
-      .reply(200, {number: 2, draft: false, state: 'open'})
+      .reply(200, { number: 2, draft: false, state: 'open' })
 
     prIsReadyForAutoMerge.mockReturnValue(false)
 

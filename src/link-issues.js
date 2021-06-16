@@ -14,7 +14,7 @@ const repoWhitelist = [
 const name = 'has issue link'
 
 export default (robot) => {
-  const logger = robot.log.child({name: 'link-issues-check'})
+  const logger = robot.log.child({ name: 'link-issues-check' })
   robot.on([
     'pull_request.opened',
     'pull_request.edited',
@@ -32,7 +32,7 @@ export default (robot) => {
       name,
       head_sha: context.payload.pull_request.head.sha,
       status: 'in_progress',
-      output: {title: name, summary: 'processing'}
+      output: { title: name, summary: 'processing' }
     }))
 
     const linkedIssueParams = getConnectedIssueForPR(pullRequest)
@@ -48,18 +48,18 @@ export default (robot) => {
       conclusion: linkedIssue ? 'success' : 'failure',
       output: linkedIssue
         ? {
-          title: 'all is as it should be',
-          summary: 'good job linking to that issue! :+1:'
-        }
+            title: 'all is as it should be',
+            summary: 'good job linking to that issue! :+1:'
+          }
         : {
-          title: 'please add an issue reference',
-          summary: 'please add a link to the issue this PR is for to the PR description',
-          text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
-        }
+            title: 'please add an issue reference',
+            summary: 'please add a link to the issue this PR is for to the PR description',
+            text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
+          }
     }))
 
     if (context.payload.action === 'edited' && context.payload.changes.body) {
-      const previousIssueParams = getConnectedIssueForPR({...pullRequest, body: context.payload.changes.body.from})
+      const previousIssueParams = getConnectedIssueForPR({ ...pullRequest, body: context.payload.changes.body.from })
       const previousIssue = previousIssueParams && await context.github.issues.get(previousIssueParams)
         .then(response => response.data)
         .catch(() => null)
