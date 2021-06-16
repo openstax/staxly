@@ -1,14 +1,14 @@
-import fetch from "node-fetch"
-import * as sax from "sax"
+import fetch from 'node-fetch'
+import * as sax from 'sax'
 
 const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
 const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
 
 export default (app) => {
-  app.on("create", async (context) => {
+  app.on('create', async (context) => {
     // NOTE: if we miss webhooks look into persistence
 
-    app.log.info("recieved webhook.")
+    app.log.info('recieved webhook.')
 
     // Do we need to filter events?
     if (context.payload.ref_type !== 'tag') { return }
@@ -23,11 +23,11 @@ export default (app) => {
 
     const repo = context.payload.repository.name
 
-    var books = []
+    const books = []
     const parser = sax.parser()
     parser.onopentag = (node) => {
-      if (node.name == 'BOOK') {
-        books.push(node.attributes['SLUG'])
+      if (node.name === 'BOOK') {
+        books.push(node.attributes.SLUG)
       }
     }
     parser.write(content.data).close()
@@ -60,7 +60,7 @@ export default (app) => {
           })
 
           app.log.info(response.status.toString())
-          if (response.status != 200) { throw new Error("waaaaah!") }
+          if (response.status !== 200) { throw new Error('waaaaah!') }
         }
       }
 
@@ -77,7 +77,7 @@ export default (app) => {
       headers: { 'Content-Type': 'application/json' },
 
       body: JSON.stringify({
-        'text':
+        text:
           `CORGI job(s) ${jobStatus} for ${bookList}`
       })
     })
