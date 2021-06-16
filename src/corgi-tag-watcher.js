@@ -3,7 +3,7 @@ const fetch = require("node-fetch")
 const sax = require("sax")
 
 const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
-const SLACK_URL = `https://hooks.slack.com/services/${process.env.SLACK_SECRET}`
+const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
 
 export = (app) => {
   app.on("create", async (context) => {
