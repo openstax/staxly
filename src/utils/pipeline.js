@@ -6,7 +6,7 @@ const stageItem = `${newline}+${whitespace}*\\- \\[(?<checked> |x)\\] (?<itemNam
 const stageName = `${whitespace}*${newline}#* ?\\*{0,2}(?<stage>[a-z0-9]+[^${newlineCharacters}]*):?\\*{0,2}:?`
 const stageBlock = `${stageName}(${whitespace}*${stageItem})+`
 
-const pipelineHeading = `#* ?\\*{0,2}pipeline:?\\*{0,2}:?`
+const pipelineHeading = '#* ?\\*{0,2}pipeline:?\\*{0,2}:?'
 const pipelineBlock = `${beginningOfStringOrNewline}${pipelineHeading}${whitespace}*(?<pipeline>(${stageBlock})+)`
 
 const getPipelineBody = (body) => {

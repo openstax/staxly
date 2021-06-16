@@ -57,7 +57,7 @@ describe('auto merge', () => {
   test('passes after commit status updated', async () => {
     nock('https://api.github.com')
       .get('/repos/testowner/testrepo/pulls')
-      .query({ 'head': 'openstax:coolbranch' })
+      .query({ head: 'openstax:coolbranch' })
       .reply(200, [{ number: 2, draft: false, state: 'open' }])
 
     nock('https://api.github.com')

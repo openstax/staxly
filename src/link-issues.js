@@ -48,14 +48,14 @@ export default (robot) => {
       conclusion: linkedIssue ? 'success' : 'failure',
       output: linkedIssue
         ? {
-          title: 'all is as it should be',
-          summary: 'good job linking to that issue! :+1:'
-        }
+            title: 'all is as it should be',
+            summary: 'good job linking to that issue! :+1:'
+          }
         : {
-          title: 'please add an issue reference',
-          summary: 'please add a link to the issue this PR is for to the PR description',
-          text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
-        }
+            title: 'please add an issue reference',
+            summary: 'please add a link to the issue this PR is for to the PR description',
+            text: 'for example `for: openstax/cool-repo#5`. `for: <github or zenhub url>` also work'
+          }
     }))
 
     if (context.payload.action === 'edited' && context.payload.changes.body) {
