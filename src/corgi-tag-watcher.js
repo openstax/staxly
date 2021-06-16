@@ -1,4 +1,3 @@
-import { Probot } from "Probot"
 import fetch from "node-fetch"
 import * as sax from "sax"
 
