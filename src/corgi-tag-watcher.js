@@ -17,7 +17,7 @@ export default (app) => {
     // get books in repo
     const contentRequest = context.repo({ path: 'META-INF/books.xml' })
     const contentMetadata = await context.octokit.repos.getContent(contentRequest)
-    const contentData = contentMetadata.data as any
+    const contentData = contentMetadata.data
     const content = await context.octokit.request(contentData.download_url)
 
     // app.log.info(content.data)
