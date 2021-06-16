@@ -17,6 +17,7 @@ export default (robot) => {
   linkIssues(robot)
   autoMerge(robot)
   trackVersions(robot)
+  corgiTagWatcher(robot)
 
   // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
