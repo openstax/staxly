@@ -1,11 +1,11 @@
-const { Probot } = require("Probot")
-const fetch = require("node-fetch")
-const sax = require("sax")
+import { Probot } from "Probot"
+import fetch from "node-fetch"
+import * as sax from "sax"
 
 const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
 const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
 
-export = (app) => {
+export default (app) => {
   app.on("create", async (context) => {
     // NOTE: if we miss webhooks look into persistence
 
