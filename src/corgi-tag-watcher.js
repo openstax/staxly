@@ -28,7 +28,7 @@ export default (app) => {
     const parser = sax.parser()
     parser.onopentag = (node) => {
       if (node.name == 'BOOK') {
-        books.push(node.attributes['SLUG'] as string)
+        books.push(node.attributes['SLUG'])
       }
     }
     parser.write(content.data).close()
