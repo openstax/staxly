@@ -5,7 +5,6 @@ import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
 import corgiTagWatcher from './corgi-tag-watcher.js'
 import slackStuff from './slack-stuff.js'
-import addonSettings from 'probot-addon-settings'
 
 const { IGNORE_FOR_TESTING } = process.env
 
@@ -24,9 +23,6 @@ export default (robot) => {
     slackStuff(robot)
     import('probot-addon-release-notifier').then(module => module.default(robot)) // because it uses safe-env and yells loudly
   }
-
-  // 3rd-party addons that we use
-  addonSettings(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {
