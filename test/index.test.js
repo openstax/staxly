@@ -1,6 +1,6 @@
 // Requiring our app implementation
 import myProbotApp from '../src/index.js'
-const probot = require('probot')
+const { Probot } = require('probot')
 
 const issuesOpenedPayload = require('./fixtures/issues.opened.json')
 
@@ -13,7 +13,8 @@ describe('My Probot app', () => {
   let app, github
 
   beforeEach(() => {
-    app = new probot.Application({ githubToken: 'fake-token' })
+    app = new probot.Probot({ githubToken: 'fake-token' })
+    //app = new Probot({ appId: 1234, cert: 'test', githubToken: 'test' })
     // Initialize the app based on the code from index.js
     app.load(myProbotApp)
     // This is an easy way to mock out the GitHub API
@@ -33,7 +34,7 @@ describe('My Probot app', () => {
       payload: issuesOpenedPayload
     })
 
-    // This test passes if the code in your index.js file calls `context.github.issues.createComment`
+    // This test passes if the code in your index.js file calls `context.octokit.issues.createComment`
     expect(github.issues.createComment).toHaveBeenCalled()
   })
 
@@ -45,7 +46,7 @@ describe('My Probot app', () => {
       payload: issuesOpenedPayload
     })
 
-    // This test passes if the code in your index.js file DOES NOT call `context.github.issues.createComment`
+    // This test passes if the code in your index.js file DOES NOT call `context.octokit.issues.createComment`
     expect(github.issues.createComment).not.toHaveBeenCalled()
   })
 })

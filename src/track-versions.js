@@ -28,7 +28,7 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
       .filter(issue => !issue.labels.map(({ name }) => name).includes('locked'))
       .map(issue => {
         logger.info(`updating version "${versionKey}" in ${masterRepo}#${issue.number} to "${version}"`)
-        return context.github.issues.update({
+        return context.octokit.issues.update({
           owner,
           repo,
           issue_number: issue.number,
@@ -38,8 +38,8 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
     )
   }
 
-  return context.github.paginate(
-    context.github.issues.listForRepo.endpoint.merge({
+  return context.octokit.paginate(
+    context.octokit.issues.listForRepo.endpoint.merge({
       owner,
       repo,
       labels: 'release',

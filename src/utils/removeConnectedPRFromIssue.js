@@ -3,7 +3,7 @@ import { anyLink, anyLinkGroups } from './connectedPRRegexes.js'
 import getPRBlock from './getPRBlock.js'
 
 /*
- * @argument context.github
+ * @argument context.octokit
  * @argument IssueData
  * @argument PullRequestData
  *

@@ -6,7 +6,7 @@ jest.mock('../src/utils/prIsReadyForAutoMerge', () => ({
 jest.mock('../src/utils/getConnectedPRsForIssue')
 
 const nock = require('nock')
-const { createProbot } = require('probot')
+const { Probot, createProbot } = require('probot')
 const { prIsReadyForAutoMerge } = require('../src/utils/prIsReadyForAutoMerge')
 
 describe('auto merge', () => {
@@ -14,7 +14,8 @@ describe('auto merge', () => {
 
   beforeEach(() => {
     nock.disableNetConnect()
-    app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+    // app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+    app = new Probot({ appId: 1234, cert: 'test', githubToken: 'test' })
     app.load(autoMerge)
   })
 

@@ -56,7 +56,7 @@ export default (robot) => {
       }
 
       logger.info(`updating base for ${owner}/${repo}#${pr.number}`)
-      return context.github.pulls.updateBranch({
+      return context.octokit.pulls.updateBranch({
         owner,
         repo,
         pull_number: pr.number
@@ -72,7 +72,7 @@ export default (robot) => {
     }))
   }
 
-  function checkForPrs (context) {
+  function checkForPrs(context) {
     const { payload } = context
 
     const base = payload.ref.replace(/^refs\/heads\//, '')
@@ -86,8 +86,8 @@ export default (robot) => {
 
     logger.info(`received push event for ${base}`)
 
-    return context.github.paginate(
-      context.github.pulls.list.endpoint.merge({
+    return context.octokit.paginate(
+      context.octokit.pulls.list.endpoint.merge({
         owner,
         repo,
         base,
