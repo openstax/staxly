@@ -1,12 +1,14 @@
 import fetch from 'node-fetch'
 import sax from 'sax'
-
-const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
-const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
+import { ensureEnv } from './utils/ensureEnv'
 
 export default (app) => {
   app.on('create', async (context) => {
+    const CORGI_URL = `https://${ensureEnv('CORGI_URL')}.openstax.org/api/jobs/`
+    const SLACK_URL = `https://hooks.slack.com/services/${ensureEnv('CORGI_SLACK_SECRET')}`
+
     // NOTE: if we miss webhooks look into persistence
+    const logger = robot.log.child({ name: 'corgi-tag-watcher' })
 
     app.log.info('recieved webhook.')
 
