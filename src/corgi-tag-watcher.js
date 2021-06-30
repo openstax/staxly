@@ -4,7 +4,7 @@ import { ensureEnv } from './utils/ensureEnv'
 
 export default (app) => {
   app.on('create', async (context) => {
-    const CORGI_URL = `https://${ensureEnv('CORGI_URL')}.openstax.org/api/jobs/`
+    const CORGI_URL = `https://${ensureEnv('CORGI_HOSTNAME')}/api/jobs/`
     const SLACK_URL = `https://hooks.slack.com/services/${ensureEnv('CORGI_SLACK_SECRET')}`
 
     // NOTE: if we miss webhooks look into persistence
