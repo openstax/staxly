@@ -74,6 +74,7 @@ export default (app) => {
       bookList += `\n - ${book}`
     })
 
+    logger.info('Attempting to send slack message to channel')
     await fetch(SLACK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
