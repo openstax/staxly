@@ -66,7 +66,7 @@ export default (robot) => {
     ))
   )
 
-  async function checkPR(context, pullParams, pullRequest, issue) {
+  async function checkPR (context, pullParams, pullRequest, issue) {
     logger.info(`checking pr ${pullRequest.number}`)
 
     if (pullRequest.draft || pullRequest.state !== 'open') {

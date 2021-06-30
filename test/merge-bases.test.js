@@ -1,7 +1,7 @@
 import mergeBases from '../src/merge-bases.js'
 
 const nock = require('nock')
-const { Probot, createProbot } = require('probot')
+const { Probot } = require('probot')
 
 const base = {
   name: 'testrepo',
@@ -14,7 +14,6 @@ describe('My Probot app', () => {
 
   beforeEach(() => {
     nock.disableNetConnect()
-    // app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
     app = new Probot({ appId: 1234, cert: 'test', githubToken: 'test' })
     app.load(mergeBases)
   })

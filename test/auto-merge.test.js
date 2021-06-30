@@ -6,7 +6,7 @@ jest.mock('../src/utils/prIsReadyForAutoMerge', () => ({
 jest.mock('../src/utils/getConnectedPRsForIssue')
 
 const nock = require('nock')
-const { Probot, createProbot } = require('probot')
+const { Probot } = require('probot')
 const { prIsReadyForAutoMerge } = require('../src/utils/prIsReadyForAutoMerge')
 
 describe('auto merge', () => {

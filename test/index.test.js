@@ -1,6 +1,6 @@
-const nock = require("nock");
 // Requiring our app implementation
 import myProbotApp from '../src/index.js'
+const nock = require('nock')
 const { Probot, ProbotOctokit } = require('probot')
 
 const issuesOpenedPayload = require('./fixtures/issues.opened.json')
@@ -11,27 +11,27 @@ test('that we can run tests', () => {
 })
 
 describe('My Probot app', () => {
-  let app, github, scope
+  let app, scope
 
   beforeEach(() => {
-    nock.disableNetConnect();
+    nock.disableNetConnect()
     app = new Probot({
-      githubToken: "test",
+      githubToken: 'test',
       // Disable throttling & retrying requests for easier testing
       Octokit: ProbotOctokit.defaults({
         retry: { enabled: false },
-        throttle: { enabled: false },
-      }),
-    });
-
-    myProbotApp(app, { "test": "notreal" });
-
-    scope = nock("https://api.github.com")
-      .post("/repos/Codertocat/Hello-World/issues/2/comments", (body) => {
-        return true;
+        throttle: { enabled: false }
       })
-      .reply(200);
-  });
+    })
+
+    myProbotApp(app, { test: 'notreal' })
+
+    scope = nock('https://api.github.com')
+      .post('/repos/Codertocat/Hello-World/issues/2/comments', (body) => {
+        return true
+      })
+      .reply(200)
+  })
 
   test('creates a comment when the magic issue is opened', async () => {
     // Simulates delivery of an issues.opened webhook

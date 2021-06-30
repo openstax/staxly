@@ -22,7 +22,7 @@ export default (robot) => {
 
   const itself = _ => _
 
-  async function changedFiles(context) {
+  async function changedFiles (context) {
     const merged = context.octokit.pulls.listFiles.endpoint.merge(context.issue())
     return context.octokit.paginate(merged, res => {
       return res.data.map(itself)
@@ -31,11 +31,11 @@ export default (robot) => {
 
   const slash = '/'
 
-  function isRegexp(pattern) {
+  function isRegexp (pattern) {
     return pattern.startsWith(slash) && pattern.endsWith(slash)
   }
 
-  function matches(filename, patterns) {
+  function matches (filename, patterns) {
     return patterns.some(pattern => {
       if (isRegexp(pattern)) {
         return filename.match(pattern.substr(1, pattern.length - 2))
@@ -47,7 +47,7 @@ export default (robot) => {
 
   const allowedStatuses = ['modified', 'added']
 
-  function changelogStatus(config, changes) {
+  function changelogStatus (config, changes) {
     const changelog = changes[config.filename || 'CHANGELOG.md']
     const include = config.include || []
     const exclude = config.exclude || []
@@ -72,7 +72,7 @@ export default (robot) => {
     return Status.SUCCESS
   }
 
-  function descriptionFor(status) {
+  function descriptionFor (status) {
     switch (status) {
       case Status.SUCCESS:
         return 'changelog entry included'
@@ -85,7 +85,7 @@ export default (robot) => {
     }
   }
 
-  async function setStatus(context, status) {
+  async function setStatus (context, status) {
     log(context, { status: status })
 
     const params = context.repo({
@@ -98,14 +98,14 @@ export default (robot) => {
     return context.octokit.repos.createStatus(params)
   }
 
-  function log(context, object) {
+  function log (context, object) {
     const ctx = { event: context.event, action: context.payload.action }
     const url = context.payload.pull_request.html_url
 
     robot.log(ctx, context.issue({ url, ...object }))
   }
 
-  async function hasLabel(context, label) {
+  async function hasLabel (context, label) {
     if (!label) { return }
 
     const l = label.toLowerCase()
@@ -114,13 +114,13 @@ export default (robot) => {
     return labels.data.some(label => label.name.toLowerCase() === l)
   }
 
-  async function skipChangelog(context, config) {
+  async function skipChangelog (context, config) {
     const skipLabel = config.skipLabel || 'skip-changelog'
 
     return hasLabel(context, skipLabel)
   }
 
-  async function checkChangelog(context) {
+  async function checkChangelog (context) {
     const config = await getConfig(context, 'config.yml')
 
     if (!config || !config.changelog) {

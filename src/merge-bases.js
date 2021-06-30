@@ -72,7 +72,7 @@ export default (robot) => {
     }))
   }
 
-  function checkForPrs(context) {
+  function checkForPrs (context) {
     const { payload } = context
 
     const base = payload.ref.replace(/^refs\/heads\//, '')

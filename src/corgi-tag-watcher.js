@@ -8,9 +8,9 @@ export default (app) => {
     const SLACK_URL = `https://hooks.slack.com/services/${ensureEnv('CORGI_SLACK_SECRET')}`
 
     // NOTE: if we miss webhooks look into persistence
-    const logger = robot.log.child({ name: 'corgi-tag-watcher' })
+    const logger = app.log.child({ name: 'corgi-tag-watcher' })
 
-    app.log.info('recieved webhook.')
+    logger.info('recieved webhook.')
 
     // Do we need to filter events?
     if (context.payload.ref_type !== 'tag') { return }
@@ -21,7 +21,7 @@ export default (app) => {
     const contentData = contentMetadata.data
     const content = await context.octokit.request(contentData.download_url)
 
-    // app.log.info(content.data)
+    // logger.info(content.data)
 
     const repo = context.payload.repository.name
 
@@ -44,8 +44,8 @@ export default (app) => {
           // 3: git-pdf
           // 4: git-distribution-preview
 
-          app.log.info(`collection_id: ${repo}/${slug}`)
-          app.log.info(`job_type_id: ${jobType}`)
+          logger.info(`collection_id: ${repo}/${slug}`)
+          logger.info(`job_type_id: ${jobType}`)
 
           const payload = {
             collection_id: `${repo}/${slug}`,
@@ -61,7 +61,7 @@ export default (app) => {
             body: JSON.stringify(payload)
           })
 
-          app.log.info(response.status.toString())
+          logger.info(response.status.toString())
           if (response.status !== 200) { throw new Error('waaaaah!') }
         }
       }
