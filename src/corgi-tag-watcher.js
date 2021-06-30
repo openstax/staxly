@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import sax from 'sax'
-import { ensureEnv } from './utils/ensureEnv'
+import { ensureEnv } from './utils/ensureEnv.js'
 
 export default (app) => {
   app.on('create', async (context) => {
