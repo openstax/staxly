@@ -9,7 +9,6 @@ import slackStuff from './slack-stuff.js'
 const { IGNORE_FOR_TESTING } = process.env
 
 export default (robot, { getRouter }) => {
-  throw new Error("blargh")
   // robot.events.setMaxListeners(100) // Since we use multiple plugins
 
   changelog(robot)
