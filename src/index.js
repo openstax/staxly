@@ -5,12 +5,11 @@ import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
 import corgiTagWatcher from './corgi-tag-watcher.js'
 import slackStuff from './slack-stuff.js'
-import { getRouter } from 'probot'
 
 const { IGNORE_FOR_TESTING } = process.env
 
-export default (robot) => {
-  //robot.events.setMaxListeners(100) // Since we use multiple plugins
+export default (robot, { getRouter }) => {
+  // robot.events.setMaxListeners(100) // Since we use multiple plugins
 
   changelog(robot)
   mergeBases(robot)
@@ -33,9 +32,11 @@ export default (robot) => {
     }
   })
 
-  // Add a ping route
-  const app = getRouter('/staxly')
-  app.get('/_ping', (req, res) => {
-    res.send('Pong')
-  })
+  if (getRouter) {
+    // Add a ping route
+    const app = getRouter('/staxly')
+    app.get('/_ping', (req, res) => {
+      res.send('Pong')
+    })
+  }
 }
