@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import * as sax from 'sax'
+import { sax } from 'sax'
 
 const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
 const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
