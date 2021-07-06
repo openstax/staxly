@@ -21,7 +21,6 @@ export default (robot, { getRouter }) => {
   // Addons that are noisy during tests
   if (!IGNORE_FOR_TESTING) {
     slackStuff(robot)
-    // import('probot-addon-release-notifier').then(module => module.default(robot)) // because it uses safe-env and yells loudly
   }
 
   // Just for testing. Comment on an issue when the issue has a specific URL

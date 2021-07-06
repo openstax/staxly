@@ -1,6 +1,13 @@
 import fetch from 'node-fetch'
+<<<<<<< Updated upstream
 import sax from 'sax'
 import { ensureEnv } from './utils/ensureEnv.js'
+=======
+import { sax } from 'sax'
+
+const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
+const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
+>>>>>>> Stashed changes
 
 export default (app) => {
   app.on('create', async (context) => {
