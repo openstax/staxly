@@ -6,7 +6,6 @@ export default (app) => {
   app.on('create', async (context) => {
     const CORGI_URL = `https://${ensureEnv('CORGI_HOSTNAME')}/api/jobs/`
     const SLACK_URL = `https://hooks.slack.com/services/${ensureEnv('CORGI_SLACK_SECRET')}`
-    console.log(context.payload)
     // NOTE: if we miss webhooks look into persistence
     const logger = app.log.child({ name: 'corgi-tag-watcher' })
 
@@ -56,7 +55,6 @@ export default (app) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           })
-          console.log('@')
           logger.info(response.status.toString())
           if (response.status !== 200) { throw new Error('CORGI is not responding!') }
         }
