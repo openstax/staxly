@@ -1,19 +1,12 @@
 import fetch from 'node-fetch'
-<<<<<<< Updated upstream
 import sax from 'sax'
 import { ensureEnv } from './utils/ensureEnv.js'
-=======
-import { sax } from 'sax'
-
-const CORGI_URL = `https://${process.env.CORGI_URL}.openstax.org/api/jobs/`
-const SLACK_URL = `https://hooks.slack.com/services/${process.env.CORGI_SLACK_SECRET}`
->>>>>>> Stashed changes
 
 export default (app) => {
   app.on('create', async (context) => {
     const CORGI_URL = `https://${ensureEnv('CORGI_HOSTNAME')}/api/jobs/`
     const SLACK_URL = `https://hooks.slack.com/services/${ensureEnv('CORGI_SLACK_SECRET')}`
-
+    console.log(context.payload)
     // NOTE: if we miss webhooks look into persistence
     const logger = app.log.child({ name: 'corgi-tag-watcher' })
 
@@ -21,14 +14,10 @@ export default (app) => {
 
     // Do we need to filter events?
     if (context.payload.ref_type !== 'tag') { return }
-
     // get books in repo
     const contentRequest = context.repo({ path: 'META-INF/books.xml' })
     const contentMetadata = await context.octokit.repos.getContent(contentRequest)
-    const contentData = contentMetadata.data
-    const content = await context.octokit.request(contentData.download_url)
-
-    // logger.info(content.data)
+    const content = Buffer.from(contentMetadata.data.content, contentMetadata.data.encoding)
 
     const repo = context.payload.repository.name
 
@@ -39,7 +28,7 @@ export default (app) => {
         books.push(node.attributes.SLUG)
       }
     }
-    parser.write(content.data).close()
+    parser.write(content).close()
 
     // send job details to CORGI API
     // make request per book + job type
@@ -67,9 +56,9 @@ export default (app) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           })
-
+          console.log('@')
           logger.info(response.status.toString())
-          if (response.status !== 200) { throw new Error('waaaaah!') }
+          if (response.status !== 200) { throw new Error('CORGI is not responding!') }
         }
       }
 
