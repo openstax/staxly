@@ -29,7 +29,7 @@ export default (robot) => {
     }
 
     const [branch] = branches
-    return context.github.pulls.list({ ...context.repo(), head: `openstax:${branch.name}` }).then(response => {
+    return context.octokit.pulls.list({ ...context.repo(), head: `openstax:${branch.name}` }).then(response => {
       const prs = response.data
       if (prs.length !== 1) {
         return
@@ -44,14 +44,14 @@ export default (robot) => {
   safeBind(['check_run.completed'], context =>
     Promise.all(context.payload.check_run.check_suite.pull_requests.map(pr => {
       const pullParams = { pull_number: pr.number, ...context.repo() }
-      return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
+      return context.octokit.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
   safeBind(['check_suite.completed'], context =>
     Promise.all(context.payload.check_suite.pull_requests.map(pr => {
       const pullParams = { pull_number: pr.number, ...context.repo() }
-      return context.github.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
+      return context.octokit.pulls.get(pullParams).then(response => checkPR(context, pullParams, response.data))
     }))
   )
 
@@ -62,7 +62,7 @@ export default (robot) => {
 
   safeBind(['issues.edited'], context =>
     Promise.all(getConnectedPRsForIssue(context.payload.issue).map(prParams =>
-      context.github.pulls.get(prParams).then(response => checkPR(context, prParams, response.data, context.payload.issue))
+      context.octokit.pulls.get(prParams).then(response => checkPR(context, prParams, response.data, context.payload.issue))
     ))
   )
 
@@ -74,8 +74,8 @@ export default (robot) => {
       return
     }
 
-    if (await prIsReadyForAutoMerge(context.github, pullRequest, issue)) {
-      return context.github.pulls.merge({ ...pullParams, merge_method: 'squash' })
+    if (await prIsReadyForAutoMerge(context.octokit, pullRequest, issue)) {
+      return context.octokit.pulls.merge({ ...pullParams, merge_method: 'squash' })
         .catch(error => error.status === 405
           // trying to fake the way octokit handles successful requests here
           // because there is no way to get it to handle 405s in a reasonable way

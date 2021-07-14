@@ -1,7 +1,7 @@
 import trackVersions from '../src/track-versions.js'
 
 const nock = require('nock')
-const { createProbot } = require('probot')
+const { Probot } = require('probot')
 
 jest.mock('../src/utils/versionsBlock', () => ({
   setVersion: jest.fn()
@@ -14,7 +14,7 @@ describe('track-versions', () => {
 
   beforeEach(() => {
     nock.disableNetConnect()
-    app = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+    app = new Probot({ appId: 1234, cert: 'test', githubToken: 'test' })
     app.load(trackVersions)
   })
 

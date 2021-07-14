@@ -7,7 +7,8 @@ describe('link issues', () => {
 
   beforeEach(() => {
     nock.disableNetConnect()
-    app = probot.createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+    app = new probot.Probot({ appId: process.env.APP_ID, cert: 'test', githubToken: 'test' })
+    // app = probot.createProbot({ appId: process.env.APP_ID, cert: 'test', githubToken: 'test' })
     app.load(linkIssues)
   })
 
