@@ -1,7 +1,7 @@
 import corgiTagWatcher from '../src/corgi-tag-watcher.js'
 
 const nock = require('nock')
-const { Probot, createProbot } = require('probot')
+const { Probot } = require('probot')
 
 const base = {
   name: 'testrepo',
@@ -11,7 +11,7 @@ const base = {
 }
 
 describe('tag trigger', () => {
-  let app
+  let app, github, corgi, slack
 
   beforeEach(() => {
     nock.disableNetConnect()
@@ -20,140 +20,95 @@ describe('tag trigger', () => {
 
     app = new Probot({ appId: 1234, cert: 'test', githubToken: 'test' })
     app.load(corgiTagWatcher)
+
+    const xml = `<container>
+                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
+                    </container>`
+
+    github = nock('https://api.github.com')
+      .get('/repos/testowner/testrepo/contents/META-INF%2Fbooks.xml')
+      .reply(200, {
+        content: Buffer.from(xml).toString('base64'),
+        encoding: 'base64'
+      })
+
+    corgi = nock('https://corgi-hostname')
+      .post('/api/jobs/')
+
+    slack = nock('https://hooks.slack.com')
+      .post('/services/dummy-secret')
+      .reply(200, {})
   })
 
   afterEach(() => {
     nock.cleanAll()
   })
 
-  test('does nothing if payload.reftype is not tag', async () => {
-    const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
-                    </container>`
-    const github = nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/contents/META-INF%2Fbooks.xml')
-      .reply(200, {
-        content: Buffer.from(xml).toString('base64'),
-        encoding: 'base64'
+  describe('corgi job successfully queues', () => {
+    beforeEach(() => { corgi = corgi.reply(200, {}) })
+
+    test('does nothing if payload.reftype is not tag', async () => {
+      await app.receive({
+        name: 'create',
+        payload: {
+          ref: 'refs/heads/main',
+          ref_type: 'branch',
+          master_branch: 'main',
+          description: 'asdf',
+          repository: base
+        }
       })
 
-    const corgi = nock('https://corgi-hostname')
-      .post('/api/jobs/')
-      .reply(200, {})
-
-    const slack = nock('https://hooks.slack.com')
-      .post('/services/dummy-secret')
-      .reply(200, {})
-
-    await app.receive({
-      name: 'create',
-      payload: {
-        ref: 'refs/heads/main',
-        ref_type: 'branch',
-        master_branch: 'main',
-        description: 'asdf',
-        repository: base
-      }
+      expect(github.isDone()).toBe(false)
     })
 
-    expect(github.isDone()).toBe(false)
+    test('queues job with corgi if payload.reftype is tag', async () => {
+      await app.receive({
+        name: 'create',
+        payload: {
+          ref: 'refs/heads/main',
+          ref_type: 'tag',
+          master_branch: 'main',
+          description: 'asdf',
+          repository: base
+        }
+      })
+
+      expect(corgi.isDone()).toBe(true)
+    })
+
+    test('notifies slack', async () => {
+      await app.receive({
+        name: 'create',
+        payload: {
+          ref: 'refs/heads/main',
+          ref_type: 'tag',
+          master_branch: 'main',
+          description: 'asdf',
+          repository: base
+        }
+      })
+
+      expect(slack.isDone()).toBe(true)
+    })
   })
 
-  test('queues job with corgi if payload.reftype is tag', async () => {
-    const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
-                    </container>`
-    const github = nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/contents/META-INF%2Fbooks.xml')
-      .reply(200, {
-        content: Buffer.from(xml).toString('base64'),
-        encoding: 'base64'
+  describe('corgi job fails to queue', () => {
+    beforeEach(() => { corgi = corgi.reply(500, {}) })
+
+    test('notifies slack', async () => {
+      await app.receive({
+        name: 'create',
+        payload: {
+          ref: 'refs/heads/main',
+          ref_type: 'tag',
+          master_branch: 'main',
+          description: 'asdf',
+          repository: base
+        }
       })
 
-    const corgi = nock('https://corgi-hostname')
-      .post('/api/jobs/')
-      .reply(200, {})
-
-    const slack = nock('https://hooks.slack.com')
-      .post('/services/dummy-secret')
-      .reply(200, {})
-
-    await app.receive({
-      name: 'create',
-      payload: {
-        ref: 'refs/heads/main',
-        ref_type: 'tag',
-        master_branch: 'main',
-        description: 'asdf',
-        repository: base
-      }
+      expect(slack.isDone()).toBe(true)
     })
-
-    expect(corgi.isDone()).toBe(true)
-  })
-
-  test('notifies slack if corgi job successfully queues', async () => {
-    const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
-                    </container>`
-    const github = nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/contents/META-INF%2Fbooks.xml')
-      .reply(200, {
-        content: Buffer.from(xml).toString('base64'),
-        encoding: 'base64'
-      })
-
-    const corgi = nock('https://corgi-hostname')
-      .post('/api/jobs/')
-      .reply(200, {})
-
-    const slack = nock('https://hooks.slack.com')
-      .post('/services/dummy-secret')
-      .reply(200, {})
-
-    await app.receive({
-      name: 'create',
-      payload: {
-        ref: 'refs/heads/main',
-        ref_type: 'tag',
-        master_branch: 'main',
-        description: 'asdf',
-        repository: base
-      }
-    })
-
-    expect(slack.isDone()).toBe(true)
-  })
-  test('notifies slack if corgi job fails to queue', async () => {
-    const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
-                    </container>`
-    const github = nock('https://api.github.com')
-      .get('/repos/testowner/testrepo/contents/META-INF%2Fbooks.xml')
-      .reply(200, {
-        content: Buffer.from(xml).toString('base64'),
-        encoding: 'base64'
-      })
-
-    const corgi = nock('https://corgi-hostname')
-      .post('/api/jobs/')
-      .reply(500, {})
-
-    const slack = nock('https://hooks.slack.com')
-      .post('/services/dummy-secret')
-      .reply(200, {})
-
-    await app.receive({
-      name: 'create',
-      payload: {
-        ref: 'refs/heads/main',
-        ref_type: 'tag',
-        master_branch: 'main',
-        description: 'asdf',
-        repository: base
-      }
-    })
-
-    expect(slack.isDone()).toBe(true)
   })
 })
