@@ -60,7 +60,7 @@ export default (robot) => {
     const versionKey = repo
     const version = payload.after
 
-    if (branch !== 'master') {
+    if (branch !== payload.repository.default_branch) {
       return
     }
 
