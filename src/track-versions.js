@@ -15,6 +15,9 @@ const releaseCardRepos = {
     'openstax/accounts-deployment',
     'openstax/accounts'
   ],
+  'philschatz/staxly-test': [
+    'philschatz/staxly-test'
+  ],
   'TomWoodward/testing-stuff': [
     'TomWoodward/testing-stuff'
   ]
