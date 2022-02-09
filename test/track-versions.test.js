@@ -33,14 +33,15 @@ describe('track-versions', () => {
     await app.receive({
       name: 'push',
       payload: {
-        ref: 'refs/heads/master',
+        ref: 'refs/heads/main',
         after: 'asdfasdfasdfasdfasdf',
         repository: {
           name: 'testrepo',
           full_name: 'testowner/testrepo',
           owner: {
             name: 'testowner'
-          }
+          },
+          default_branch: 'main'
         }
       }
     })
@@ -72,7 +73,8 @@ describe('track-versions', () => {
           full_name: 'testowner/testotherrepo',
           owner: {
             name: 'testowner'
-          }
+          },
+          default_branch: 'master'
         }
       }
     })
@@ -98,7 +100,28 @@ describe('track-versions', () => {
           full_name: 'testowner/testotherrepo',
           owner: {
             name: 'testowner'
-          }
+          },
+          default_branch: 'master'
+        }
+      }
+    })
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  test('noops pushes to non-default branches', async () => {
+    await app.receive({
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        after: 'asdfasdfasdfasdfasdf',
+        repository: {
+          name: 'testotherrepo',
+          full_name: 'testowner/testotherrepo',
+          owner: {
+            name: 'testowner'
+          },
+          default_branch: 'main'
         }
       }
     })
@@ -117,7 +140,8 @@ describe('track-versions', () => {
           name: 'randomrepo',
           owner: {
             name: 'testowner'
-          }
+          },
+          default_branch: 'master'
         }
       }
     })

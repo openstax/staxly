@@ -9,7 +9,6 @@ import slackStuff from './slack-stuff.js'
 const { IGNORE_FOR_TESTING } = process.env
 
 export default (robot, { getRouter }) => {
-
   changelog(robot)
   mergeBases(robot)
   linkIssues(robot)

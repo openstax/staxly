@@ -15,6 +15,9 @@ const releaseCardRepos = {
     'openstax/accounts-deployment',
     'openstax/accounts'
   ],
+  'philschatz/staxly-test': [
+    'philschatz/staxly-test'
+  ],
   'TomWoodward/testing-stuff': [
     'TomWoodward/testing-stuff'
   ]
@@ -60,7 +63,7 @@ export default (robot) => {
     const versionKey = repo
     const version = payload.after
 
-    if (branch !== 'master') {
+    if (branch !== payload.repository.default_branch) {
       return
     }
 
