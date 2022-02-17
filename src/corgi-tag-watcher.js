@@ -9,7 +9,7 @@ export default (app) => {
     // NOTE: if we miss webhooks look into persistence
     const logger = app.log.child({ name: 'corgi-tag-watcher' })
 
-    logger.info('recieved webhook.')
+    logger.info('received webhook.')
 
     // Do we need to filter events?
     if (context.payload.ref_type !== 'tag') { return }
@@ -24,7 +24,7 @@ export default (app) => {
     const parser = sax.parser()
     parser.onopentag = (node) => {
       if (node.name === 'BOOK') {
-        books.push(node.attributes.SLUG)
+        books.push([node.attributes.SLUG, 'STYLE' in node.attributes ? node.attributes.STYLE : 'dummy'])
       }
     }
     parser.write(content).close()
@@ -34,7 +34,7 @@ export default (app) => {
     let jobStatus = 'failed to queue'
 
     try {
-      for (const slug of books) {
+      for (const [slug, style] of books) {
         for (const jobType of [3, 4]) {
           // 3: git-pdf
           // 4: git-distribution-preview
@@ -47,7 +47,7 @@ export default (app) => {
             job_type_id: jobType,
             status_id: 1,
             version: `${context.payload.ref}`,
-            style: 'business-ethics' // TODO: add style to META-INF
+            style: style
           }
 
           const response = await fetch(CORGI_URL, {

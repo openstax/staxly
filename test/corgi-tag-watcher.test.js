@@ -22,7 +22,8 @@ describe('tag trigger', () => {
     app.load(corgiTagWatcher)
 
     const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
+                        <book slug="book-slug1" style="business-ethics" href="../collections/book-slug1.collection.xml" />
+                        <book slug="book-slug2" href="../collections/book-slug1.collection.xml" />
                     </container>`
 
     github = nock('https://api.github.com')
