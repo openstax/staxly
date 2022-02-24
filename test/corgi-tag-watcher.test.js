@@ -90,9 +90,6 @@ describe('tag trigger', () => {
           repository: base
         }
       })
-      if (!corgi.isDone()) {
-        console.error('pending mocks: %j', corgi.pendingMocks())
-      }
 
       expect(corgi.isDone()).toBe(true)
       expect(slack.isDone()).toBe(true)
