@@ -24,7 +24,12 @@ export default (app) => {
     const parser = sax.parser()
     parser.onopentag = (node) => {
       if (node.name === 'BOOK') {
-        books.push([node.attributes.SLUG, 'STYLE' in node.attributes ? node.attributes.STYLE : 'dummy'])
+        books.push([
+          node.attributes.SLUG,
+          'STYLE' in node.attributes && node.attributes.STYLE !== ''
+            ? node.attributes.STYLE
+            : 'dummy'
+        ])
       }
     }
     parser.write(content).close()
@@ -41,6 +46,7 @@ export default (app) => {
 
           logger.info(`collection_id: ${repo}/${slug}`)
           logger.info(`job_type_id: ${jobType}`)
+          logger.info(`style: ${style}`)
 
           const payload = {
             collection_id: `${repo}/${slug}`,
