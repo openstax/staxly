@@ -24,7 +24,7 @@ export default (app) => {
     const parser = sax.parser()
     parser.onopentag = (node) => {
       if (node.name === 'BOOK') {
-        books.push([node.attributes.SLUG, 'default'])
+        books.push(node.attributes.SLUG)
       }
     }
     parser.write(content).close()
@@ -34,21 +34,20 @@ export default (app) => {
     let jobStatus = 'failed to queue'
 
     try {
-      for (const [slug, style] of books) {
+      for (const slug of books) {
         for (const jobType of [3, 4]) {
           // 3: git-pdf
           // 4: git-distribution-preview
 
           logger.info(`collection_id: ${repo}/${slug}`)
           logger.info(`job_type_id: ${jobType}`)
-          logger.info(`style: ${style}`)
 
           const payload = {
             collection_id: `${repo}/${slug}`,
             job_type_id: jobType,
             status_id: 1,
             version: `${context.payload.ref}`,
-            style: style
+            style: 'default'
           }
 
           const response = await fetch(CORGI_URL, {
