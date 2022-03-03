@@ -24,12 +24,7 @@ export default (app) => {
     const parser = sax.parser()
     parser.onopentag = (node) => {
       if (node.name === 'BOOK') {
-        books.push([
-          node.attributes.SLUG,
-          'STYLE' in node.attributes && node.attributes.STYLE !== ''
-            ? node.attributes.STYLE
-            : 'dummy'
-        ])
+        books.push([node.attributes.SLUG, 'default'])
       }
     }
     parser.write(content).close()

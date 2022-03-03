@@ -49,16 +49,7 @@ describe('tag trigger', () => {
   describe('corgi job successfully queues', () => {
     beforeEach(() => {
       corgi = corgi
-        .post(jobsApi, body => {
-          return (
-            body.collection_id === 'testrepo/book-slug1' && body.style === 'business-ethics'
-          ) || (
-            [
-              'testrepo/book-slug2',
-              'testrepo/book-slug3'
-            ].includes(body.collection_id) && body.style === 'dummy'
-          )
-        })
+        .post(jobsApi, body => body.style === 'default')
         .times(6) // Two requests per slug
         .reply(200, {})
     })
