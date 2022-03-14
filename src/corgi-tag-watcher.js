@@ -9,7 +9,7 @@ export default (app) => {
     // NOTE: if we miss webhooks look into persistence
     const logger = app.log.child({ name: 'corgi-tag-watcher' })
 
-    logger.info('recieved webhook.')
+    logger.info('received webhook.')
 
     // Do we need to filter events?
     if (context.payload.ref_type !== 'tag') { return }
@@ -47,7 +47,7 @@ export default (app) => {
             job_type_id: jobType,
             status_id: 1,
             version: `${context.payload.ref}`,
-            style: 'business-ethics' // TODO: add style to META-INF
+            style: 'default'
           }
 
           const response = await fetch(CORGI_URL, {

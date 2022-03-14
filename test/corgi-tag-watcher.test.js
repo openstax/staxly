@@ -12,6 +12,7 @@ const base = {
 
 describe('tag trigger', () => {
   let app, github, corgi, slack
+  const jobsApi = '/api/jobs/'
 
   beforeEach(() => {
     nock.disableNetConnect()
@@ -22,7 +23,9 @@ describe('tag trigger', () => {
     app.load(corgiTagWatcher)
 
     const xml = `<container>
-                        <book slug="book-slug1" href="../collections/book-slug1.collection.xml" />
+                        <book slug="book-slug1" style="business-ethics" href="../collections/book-slug1.collection.xml" />
+                        <book slug="book-slug2" href="../collections/book-slug1.collection.xml" />
+                        <book slug="book-slug3" style="" href="../collections/book-slug1.collection.xml" />
                     </container>`
 
     github = nock('https://api.github.com')
@@ -33,7 +36,6 @@ describe('tag trigger', () => {
       })
 
     corgi = nock('https://corgi-hostname')
-      .post('/api/jobs/')
 
     slack = nock('https://hooks.slack.com')
       .post('/services/dummy-secret')
@@ -45,7 +47,12 @@ describe('tag trigger', () => {
   })
 
   describe('corgi job successfully queues', () => {
-    beforeEach(() => { corgi = corgi.reply(200, {}) })
+    beforeEach(() => {
+      corgi = corgi
+        .post(jobsApi, body => body.style === 'default')
+        .times(6) // Two requests per slug
+        .reply(200, {})
+    })
 
     test('does nothing if payload.reftype is not tag', async () => {
       await app.receive({
@@ -59,6 +66,7 @@ describe('tag trigger', () => {
         }
       })
 
+      expect(corgi.isDone()).toBe(false)
       expect(github.isDone()).toBe(false)
     })
 
@@ -75,6 +83,7 @@ describe('tag trigger', () => {
       })
 
       expect(corgi.isDone()).toBe(true)
+      expect(slack.isDone()).toBe(true)
     })
 
     test('notifies slack', async () => {
@@ -89,12 +98,13 @@ describe('tag trigger', () => {
         }
       })
 
+      expect(corgi.isDone()).toBe(true)
       expect(slack.isDone()).toBe(true)
     })
   })
 
   describe('corgi job fails to queue', () => {
-    beforeEach(() => { corgi = corgi.reply(500, {}) })
+    beforeEach(() => { corgi = corgi.post(jobsApi).reply(500, {}) })
 
     test('notifies slack', async () => {
       await app.receive({
