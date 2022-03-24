@@ -5,6 +5,7 @@ import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
 import corgiTagWatcher from './corgi-tag-watcher.js'
 import slackStuff from './slack-stuff.js'
+import addonSettings from 'probot-addon-settings'
 
 const { IGNORE_FOR_TESTING } = process.env
 
@@ -20,6 +21,9 @@ export default (robot, { getRouter }) => {
   if (!IGNORE_FOR_TESTING) {
     slackStuff(robot)
   }
+
+  // 3rd-party addons that we use
+  addonSettings(robot)
 
   // Just for testing. Comment on an issue when the issue has a specific URL
   robot.on('issues.opened', async context => {
