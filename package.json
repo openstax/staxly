@@ -15,7 +15,7 @@
     "dev": "nodemon",
     "lint": "standard --fix",
     "start": "probot run ./index.cjs",
-    "test": "IGNORE_FOR_TESTING=true jest && standard --fix",
+    "test": "IGNORE_FOR_TESTING=true jest --coverage && standard --fix",
     "test:debug": "NODE_ENV=development IGNORE_FOR_TESTING=true node --inspect-brk $(npm bin)/jest -i --updateSnapshot",
     "test:watch": "IGNORE_FOR_TESTING=true jest --watch --notify --notifyMode=change --coverage"
   },
