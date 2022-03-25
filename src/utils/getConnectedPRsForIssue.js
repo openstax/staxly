@@ -12,6 +12,7 @@ export default (issue) => {
 
   return (links || []).map(link => {
     const result = anyLinkGroups.reduce((result, regex) => result || link.match(new RegExp(regex, 'i')), null)
+    /* istanbul ignore next */
     return result ? result.groups : null
   })
     .filter(params => !!params)

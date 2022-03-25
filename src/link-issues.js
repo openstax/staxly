@@ -23,6 +23,7 @@ export default (robot) => {
 
   async function checkPR (context) {
     const pullRequest = context.payload.pull_request
+    /* istanbul ignore if */
     if (!repoWhitelist.includes(context.payload.repository.name)) {
       return
     }
@@ -62,8 +63,9 @@ export default (robot) => {
       const previousIssueParams = getConnectedIssueForPR({ ...pullRequest, body: context.payload.changes.body.from })
       const previousIssue = previousIssueParams && await context.octokit.issues.get(previousIssueParams)
         .then(response => response.data)
-        .catch(() => null)
+        .catch(/* istanbul ignore next */ () => null)
 
+      /* istanbul ignore else */
       if (previousIssue && (!linkedIssue || previousIssue.number !== linkedIssue.number)) {
         await removeConnectedPRFromIssue(context.octokit, previousIssueParams, previousIssue, pullRequest)
       }

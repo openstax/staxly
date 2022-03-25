@@ -18,12 +18,14 @@ const loadIssue = async (github, pullRequest) => {
 
   const response = await github.issues.get(linkedIssueParams)
 
+  /* istanbul ignore next */
   if (response && response.data) {
     return response.data
   }
 }
 
 export const prIsReadyForAutoMerge = async (github, pullRequest, optionalIssue) => {
+  /* istanbul ignore if */
   if (pullRequest.draft) {
     return false
   }

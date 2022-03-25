@@ -4,34 +4,34 @@ const repoConfigs = [
   {
     repo: 'event-capture-api',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true
   },
   {
     repo: 'highlights-api',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true
   },
   {
     repo: 'open-search',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true
   },
   {
     repo: 'unified-deployment',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true
   },
   {
     repo: 'rex-web',
     owner: 'openstax',
-    match: (pr) => pr.draft !== true &&
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true &&
       !pr.labels.map(({ name }) => name).includes('disable-base-merge') &&
       pr.head.ref.indexOf('update-content-') !== 0
   },
   {
     repo: 'testing-stuff',
     owner: 'tomwoodward',
-    match: (pr) => pr.draft !== true
+    match: /* istanbul ignore next */ (pr) => pr.draft !== true
   },
   {
     repo: 'testrepo',
@@ -61,7 +61,7 @@ export default (robot) => {
         repo,
         pull_number: pr.number
       })
-        .catch(error => {
+        .catch(/* istanbul ignore next */ error => {
           if (error.status === 422) {
             // 422 is returned when there is a merge conflict, don't explode on these errors
             logger.info(`github response (422): ${error.message}`)
