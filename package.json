@@ -20,24 +20,24 @@
     "test:watch": "IGNORE_FOR_TESTING=true jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
-    "@slack/client": "^4.0.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "probot": "^12.0.0",
+    "@slack/client": "^5.0.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "probot": "^12.2.2",
     "probot-addon-settings": "github:probot/settings#14755e17e4a76a4d3c5c6bdfbdca5d2e4c3b2922",
     "probot-config": "^1.1.0",
     "sax": "^1.2.4",
-    "smee-client": "^1.0.1"
+    "smee-client": "^1.2.2"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
     "jest": "^26.1.0",
-    "nock": "^12.0.0",
-    "nodemon": "^1.14.11",
-    "standard": "^16"
+    "nock": "^13.2.4",
+    "nodemon": "^2.0.15",
+    "standard": "^16.0.4"
   },
   "engines": {
     "node": ">= 12.13.1",
