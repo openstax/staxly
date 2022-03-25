@@ -24,6 +24,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "probot": "^12.0.0",
+    "probot-addon-settings": "github:probot/settings#14755e17e4a76a4d3c5c6bdfbdca5d2e4c3b2922",
     "probot-config": "^1.1.0",
     "sax": "^1.2.4",
     "smee-client": "^1.0.1"
