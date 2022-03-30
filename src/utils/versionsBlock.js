@@ -27,7 +27,7 @@ export const getVersions = (body, filter = () => true) => {
 
 export const getVersion = (body, itemName) => {
   const versions = getVersions(body)
-
+  /* istanbul ignore if */
   if (!versions) {
     return null
   }

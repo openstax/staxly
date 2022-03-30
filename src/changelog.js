@@ -3,6 +3,7 @@
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
 // - uses probot-config to allow inheriting the config from another repository
+/* istanbul ignore file */
 
 import getConfig from 'probot-config'
 

@@ -16,6 +16,7 @@ export default (github, issueParams, issue, pullRequest) => {
 
   const prBlock = getPRBlock(issue.body)
 
+  /* istanbul ignore if */
   if (!prBlock) {
     return
   }

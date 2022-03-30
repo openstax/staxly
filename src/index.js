@@ -18,6 +18,7 @@ export default (robot, { getRouter }) => {
   corgiTagWatcher(robot)
 
   // Addons that are noisy during tests
+  /* istanbul ignore if */
   if (!IGNORE_FOR_TESTING) {
     slackStuff(robot)
   }
@@ -33,6 +34,7 @@ export default (robot, { getRouter }) => {
     }
   })
 
+  /* istanbul ignore if */
   if (getRouter) {
     // Add a ping route
     const app = getRouter('/staxly')
