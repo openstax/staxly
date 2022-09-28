@@ -6,6 +6,7 @@ const repoWhitelist = [
   'rex-web',
   'highlights-api',
   'open-search',
+  'assessments',
   'unified',
   'testing-stuff'
 ]
