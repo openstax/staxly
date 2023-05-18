@@ -9,7 +9,10 @@ const releaseCardRepos = {
     'openstax/rex-web',
     'openstax/highlights-api',
     'openstax/open-search',
-    'openstax/unified-deployment'
+    'openstax/unified-deployment',
+    'openstax/lti-gateway',
+    'openstax/assignments',
+    'openstax/assessments',
   ],
   'openstax/business-intel': [
     'openstax/accounts-deployment',
