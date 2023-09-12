@@ -3,7 +3,6 @@ import mergeBases from './merge-bases.js'
 import linkIssues from './link-issues.js'
 import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
-import corgiTagWatcher from './corgi-tag-watcher.js'
 import slackStuff from './slack-stuff.js'
 import addonSettings from 'probot-addon-settings'
 
@@ -15,7 +14,6 @@ export default (robot, { getRouter }) => {
   linkIssues(robot)
   autoMerge(robot)
   trackVersions(robot)
-  corgiTagWatcher(robot)
 
   // Addons that are noisy during tests
   /* istanbul ignore if */

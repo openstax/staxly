@@ -27,7 +27,6 @@ These are 3rd-party plugins that are included in this bot:
 - [autolabeler](https://github.com/probot/autolabeler): Automatically label Issues and Pull Requests based on logic in the `.github/config.yml` file
 - [probot-app-todos](https://github.com/uber-workflow/probot-app-todos): Help create Issues when code contains a "TO DO" (no spaces)
 - [release-notifier](https://github.com/release-notifier/release-notifier): When a tag is created add a comment on the Pull Request denoting which release it was included in
-- [corgi-tag-watcher](https://github.com/openstax/corgi-tag-trigger): When a tag is created start a job in [CORGI](https://github.com/openstax/output-producer-service) and notify in Slack
 
 # Contributing
 
