@@ -12,7 +12,9 @@ const releaseCardRepos = {
     'openstax/unified-deployment',
     'openstax/lti-gateway',
     'openstax/assignments',
-    'openstax/assessments'
+    'openstax/assessments',
+    'openstax/ancillary-service',
+    'openstax/openstax-resource-names'
   ],
   'openstax/business-intel': [
     'openstax/accounts-deployment',
