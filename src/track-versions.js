@@ -13,7 +13,7 @@ const releaseCardRepos = {
     'openstax/lti-gateway',
     'openstax/assignments',
     'openstax/assessments',
-    'openstax/ancillaries',
+    'openstax/ancillary-service',
     'openstax/openstax-resource-names'
   ],
   'openstax/business-intel': [
