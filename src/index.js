@@ -1,6 +1,5 @@
 import changelog from './changelog.js'
 import mergeBases from './merge-bases.js'
-import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
 import slackStuff from './slack-stuff.js'
 import addonSettings from 'probot-addon-settings'
@@ -10,7 +9,6 @@ const { IGNORE_FOR_TESTING } = process.env
 export default (robot, { getRouter }) => {
   changelog(robot)
   mergeBases(robot)
-  autoMerge(robot)
   trackVersions(robot)
 
   // Addons that are noisy during tests
