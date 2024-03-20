@@ -1,6 +1,5 @@
 import changelog from './changelog.js'
 import mergeBases from './merge-bases.js'
-import linkIssues from './link-issues.js'
 import autoMerge from './auto-merge.js'
 import trackVersions from './track-versions.js'
 import slackStuff from './slack-stuff.js'
@@ -11,7 +10,6 @@ const { IGNORE_FOR_TESTING } = process.env
 export default (robot, { getRouter }) => {
   changelog(robot)
   mergeBases(robot)
-  linkIssues(robot)
   autoMerge(robot)
   trackVersions(robot)
 
