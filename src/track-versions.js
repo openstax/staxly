@@ -5,11 +5,13 @@ const releaseCardRepos = {
     'testowner/testrepo',
     'testowner/testotherrepo'
   ],
-  'openstax/unified': [
+  'openstax/unified:rex-release': [
     'openstax/rex-web',
     'openstax/highlights-api',
     'openstax/open-search',
-    'openstax/unified-deployment',
+    'openstax/unified-deployment'
+  ],
+  'openstax/unified:assignable-release': [
     'openstax/lti-gateway',
     'openstax/assignments',
     'openstax/assessments',
@@ -29,7 +31,8 @@ const releaseCardRepos = {
 }
 
 const updateReleaseCards = (logger, context, masterRepo, versionKey, version) => {
-  const [owner, repo] = masterRepo.split('/')
+  const [owner, repoAndLabel] = masterRepo.split('/')
+  const [repo, label] = repoAndLabel.split(':')
 
   const processIssues = ({ data }) => {
     return Promise.all(data
@@ -50,7 +53,7 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
     context.octokit.issues.listForRepo.endpoint.merge({
       owner,
       repo,
-      labels: 'release',
+      labels: label || 'release',
       state: 'open'
     }),
     processIssues
