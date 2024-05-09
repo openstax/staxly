@@ -1,4 +1,4 @@
-import {setVersion} from './utils/versionsBlock.js'
+import { setVersion } from './utils/versionsBlock.js'
 
 const releaseCardRepos = {
   'testowner/testrepo': [
@@ -9,11 +9,19 @@ const releaseCardRepos = {
     'openstax/rex-web',
     'openstax/highlights-api',
     'openstax/open-search',
-    'openstax/unified-deployment'
+    'openstax/unified-deployment',
+    'openstax/lti-gateway',
+    'openstax/assignments',
+    'openstax/assessments',
+    'openstax/ancillary-service',
+    'openstax/openstax-resource-names'
   ],
   'openstax/business-intel': [
     'openstax/accounts-deployment',
     'openstax/accounts'
+  ],
+  'philschatz/staxly-test': [
+    'philschatz/staxly-test'
   ],
   'TomWoodward/testing-stuff': [
     'TomWoodward/testing-stuff'
@@ -23,12 +31,12 @@ const releaseCardRepos = {
 const updateReleaseCards = (logger, context, masterRepo, versionKey, version) => {
   const [owner, repo] = masterRepo.split('/')
 
-  const processIssues = ({data}) => {
+  const processIssues = ({ data }) => {
     return Promise.all(data
-      .filter(issue => !issue.labels.map(({name}) => name).includes('locked'))
+      .filter(issue => !issue.labels.map(({ name }) => name).includes('locked'))
       .map(issue => {
         logger.info(`updating version "${versionKey}" in ${masterRepo}#${issue.number} to "${version}"`)
-        return context.github.issues.update({
+        return context.octokit.issues.update({
           owner,
           repo,
           issue_number: issue.number,
@@ -38,8 +46,8 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
     )
   }
 
-  return context.github.paginate(
-    context.github.issues.listForRepo.endpoint.merge({
+  return context.octokit.paginate(
+    context.octokit.issues.listForRepo.endpoint.merge({
       owner,
       repo,
       labels: 'release',
@@ -51,16 +59,16 @@ const updateReleaseCards = (logger, context, masterRepo, versionKey, version) =>
 }
 
 export default (robot) => {
-  const logger = robot.log.child({name: 'track-versions'})
+  const logger = robot.log.child({ name: 'track-versions' })
 
   robot.on(['push'], (context) => {
-    const {payload} = context
+    const { payload } = context
     const branch = payload.ref.replace(/^refs\/heads\//, '')
     const repo = payload.repository.full_name
     const versionKey = repo
     const version = payload.after
 
-    if (branch !== 'master') {
+    if (branch !== payload.repository.default_branch) {
       return
     }
 

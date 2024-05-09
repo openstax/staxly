@@ -1,4 +1,4 @@
-import {getVersions, getVersion, setVersions, setVersion} from '../../src/utils/versionsBlock.js'
+import { getVersions, getVersion, setVersions, setVersion } from '../../src/utils/versionsBlock.js'
 
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
@@ -65,7 +65,7 @@ describe('getVersion', () => {
 
 describe('setVersions', () => {
   test('sets versions', () => {
-    const newVersions = {...expected, 'openstax/rex-web (sha)': 'foobar'}
+    const newVersions = { ...expected, 'openstax/rex-web (sha)': 'foobar' }
     const result = setVersions(`asdf
 asdf
 ${exampleBlock}asdf

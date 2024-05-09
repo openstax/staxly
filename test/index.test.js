@@ -1,6 +1,7 @@
 // Requiring our app implementation
 import myProbotApp from '../src/index.js'
-const probot = require('probot')
+const nock = require('nock')
+const { Probot, ProbotOctokit } = require('probot')
 
 const issuesOpenedPayload = require('./fixtures/issues.opened.json')
 
@@ -10,20 +11,26 @@ test('that we can run tests', () => {
 })
 
 describe('My Probot app', () => {
-  let app, github
+  let app, scope
 
   beforeEach(() => {
-    app = new probot.Application({githubToken: 'fake-token'})
-    // Initialize the app based on the code from index.js
-    app.load(myProbotApp)
-    // This is an easy way to mock out the GitHub API
-    github = {
-      issues: {
-        createComment: jest.fn().mockReturnValue(Promise.resolve({}))
-      }
-    }
-    // Passes the mocked out GitHub API into out app instance
-    app.auth = () => Promise.resolve(github)
+    nock.disableNetConnect()
+    app = new Probot({
+      githubToken: 'test',
+      // Disable throttling & retrying requests for easier testing
+      Octokit: ProbotOctokit.defaults({
+        retry: { enabled: false },
+        throttle: { enabled: false }
+      })
+    })
+
+    myProbotApp(app, { test: 'notreal' })
+
+    scope = nock('https://api.github.com')
+      .post('/repos/Codertocat/Hello-World/issues/2/comments', (body) => {
+        return true
+      })
+      .reply(200)
   })
 
   test('creates a comment when the magic issue is opened', async () => {
@@ -33,8 +40,8 @@ describe('My Probot app', () => {
       payload: issuesOpenedPayload
     })
 
-    // This test passes if the code in your index.js file calls `context.github.issues.createComment`
-    expect(github.issues.createComment).toHaveBeenCalled()
+    // This test passes if the code in your index.js file calls `context.octokit.issues.createComment`
+    expect(scope.isDone()).toBe(true)
   })
 
   test('does not create a comment when a regular issue is opened', async () => {
@@ -45,8 +52,8 @@ describe('My Probot app', () => {
       payload: issuesOpenedPayload
     })
 
-    // This test passes if the code in your index.js file DOES NOT call `context.github.issues.createComment`
-    expect(github.issues.createComment).not.toHaveBeenCalled()
+    // This test passes if the code in your index.js file DOES NOT call `context.octokit.issues.createComment`
+    expect(scope.isDone()).toBe(false)
   })
 })
 

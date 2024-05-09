@@ -16,12 +16,14 @@
 import * as slackClient from '@slack/client'
 
 // babel and node disagree on how to process this import
-const {RTMClient, WebClient} = slackClient.default ? slackClient.default : slackClient
+/* istanbul ignore next */
+const { RTMClient, WebClient } = slackClient.default ? slackClient.default : slackClient
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 const SLACK_GITHUB_INSTALL_ID = process.env.SLACK_GITHUB_INSTALL_ID
 
+/* istanbul ignore next */
 export default (robot) => {
-  const logger = robot.log.child({name: 'slack'})
+  const logger = robot.log.child({ name: 'slack' })
   if (!SLACK_BOT_TOKEN) {
     logger.warn('SLACK_BOT_TOKEN missing, skipping Slack integration')
     return
@@ -50,32 +52,39 @@ export default (robot) => {
         callback(value)
       })
     }
+
     getBrain () {
       return rtmAuthenticationInfo
     }
+
     isMe (userId) {
       return rtmAuthenticationInfo.self.id === userId
     }
+
     myName () {
       return rtmAuthenticationInfo.self.name
     }
+
     async isMemberOfChannel (channelId) {
       const channel = await this.getChannelById(channelId)
       return channel.is_member
     }
+
     async getChannelById (channelId) {
-      const data = await webClient.conversations.info({channel: channelId})
+      const data = await webClient.conversations.info({ channel: channelId })
       return data.channel
     }
+
     async getUserById (userId) {
-      const data = await webClient.users.info({user: userId})
+      const data = await webClient.users.info({ user: userId })
       return data.user
     }
+
     async getGithubUserBySlackUserIdOrNull (slackUserId) {
       const slackUser = await this.getUserById(slackUserId)
-      const {fields} = slackUser.profile
+      const { fields } = slackUser.profile
       if (fields) { // Not all users have fields
-        const githubField = fields['Xf0MQDURNX']
+        const githubField = fields.Xf0MQDURNX
         if (githubField) {
           return githubField.value
         }
@@ -91,12 +100,14 @@ export default (robot) => {
         case 'message_deleted':
         case 'deleted':
         default:
-          throw new Error(`BUG: Cannot get timestamp for a deleted message. Well, I can but you should not be doing things based on deleted messages`)
+          throw new Error('BUG: Cannot get timestamp for a deleted message. Well, I can but you should not be doing things based on deleted messages')
       }
     }
+
     getMessagePermalink (channelId, messageTs) {
       return `https://${this.getBrain().team.domain}.slack.com/archives/${channelId}/p${messageTs.replace('.', '')}`
     }
+
     async convertTextToGitHub (text) {
       const USER_REGEXP = /<@([^>]*)/
       let match
@@ -111,22 +122,25 @@ export default (robot) => {
       }
       return text
     }
+
     async addReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
       try {
-        return await webClient.reactions.add({name: reactionEmoji, channel: message.channel, timestamp: ts})
+        return await webClient.reactions.add({ name: reactionEmoji, channel: message.channel, timestamp: ts })
       } catch (err) {
         // already reacted
-        logger.trace(err, `Slack already reacted to the message`)
+        logger.trace(err, 'Slack already reacted to the message')
       }
     }
+
     async removeReaction (reactionEmoji, message) {
       const ts = this.getMessageTimestamp(message)
-      return webClient.reactions.remove({name: reactionEmoji, channel: message.channel, timestamp: ts})
+      return webClient.reactions.remove({ name: reactionEmoji, channel: message.channel, timestamp: ts })
     }
+
     async sendDM (userId, messageText) {
-      const {channel: {id: dmChannelId}} = await webClient.im.open({user: userId})
-      await webClient.chat.postMessage({text: messageText, channel: dmChannelId, as_user: true})
+      const { channel: { id: dmChannelId } } = await webClient.im.open({ user: userId })
+      await webClient.chat.postMessage({ text: messageText, channel: dmChannelId, as_user: true })
     }
   }()
 

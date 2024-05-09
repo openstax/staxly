@@ -3,6 +3,7 @@
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
 // - uses probot-config to allow inheriting the config from another repository
+/* istanbul ignore file */
 
 import getConfig from 'probot-config'
 
@@ -23,8 +24,8 @@ export default (robot) => {
   const itself = _ => _
 
   async function changedFiles (context) {
-    const merged = context.github.pulls.listFiles.endpoint.merge(context.issue())
-    return context.github.paginate(merged, res => {
+    const merged = context.octokit.pulls.listFiles.endpoint.merge(context.issue())
+    return context.octokit.paginate(merged, res => {
       return res.data.map(itself)
     })
   }
@@ -95,7 +96,7 @@ export default (robot) => {
       description: descriptionFor(status),
       context: 'changelog'
     })
-    return context.github.repos.createStatus(params)
+    return context.octokit.repos.createStatus(params)
   }
 
   function log (context, object) {
@@ -109,7 +110,7 @@ export default (robot) => {
     if (!label) { return }
 
     const l = label.toLowerCase()
-    const labels = await context.github.issues.listLabelsOnIssue(context.issue())
+    const labels = await context.octokit.issues.listLabelsOnIssue(context.issue())
 
     return labels.data.some(label => label.name.toLowerCase() === l)
   }

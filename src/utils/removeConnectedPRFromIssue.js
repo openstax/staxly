@@ -1,9 +1,9 @@
-import {listPrefix} from './regexes.js'
-import {anyLink, anyLinkGroups} from './connectedPRRegexes.js'
+import { listPrefix } from './regexes.js'
+import { anyLink, anyLinkGroups } from './connectedPRRegexes.js'
 import getPRBlock from './getPRBlock.js'
 
 /*
- * @argument context.github
+ * @argument context.octokit
  * @argument IssueData
  * @argument PullRequestData
  *
@@ -16,6 +16,7 @@ export default (github, issueParams, issue, pullRequest) => {
 
   const prBlock = getPRBlock(issue.body)
 
+  /* istanbul ignore if */
   if (!prBlock) {
     return
   }

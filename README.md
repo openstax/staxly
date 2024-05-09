@@ -28,7 +28,6 @@ These are 3rd-party plugins that are included in this bot:
 - [probot-app-todos](https://github.com/uber-workflow/probot-app-todos): Help create Issues when code contains a "TO DO" (no spaces)
 - [release-notifier](https://github.com/release-notifier/release-notifier): When a tag is created add a comment on the Pull Request denoting which release it was included in
 
-
 # Contributing
 
 To make development approachable to many types of contributors, there are several ways to get your awesome code up and running.
