@@ -5,13 +5,13 @@ const releaseCardRepos = {
     'testowner/testrepo',
     'testowner/testotherrepo'
   ],
-  'openstax/unified:rex-release': [
+  'openstax/unified': [
     'openstax/rex-web',
     'openstax/highlights-api',
     'openstax/open-search',
     'openstax/unified-deployment'
   ],
-  'openstax/unified:assignable-release': [
+  'openstax/assignable': [
     'openstax/lti-gateway',
     'openstax/assignments',
     'openstax/assessments',
