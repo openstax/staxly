@@ -1,4 +1,4 @@
-import {getBlocks, getItems, getItemValue, setItems, setItem} from '../../src/utils/configBlock.js'
+import { getBlocks, getItems, getItemValue, setItems, setItem } from '../../src/utils/configBlock.js'
 
 const exampleBlock = `# versions
 - openstax/rex-web (sha): dfde202
@@ -8,10 +8,10 @@ const exampleBlock = `# versions
 `
 
 const expected = {
-  'openstax/rex-web (sha)': {value: 'dfde202', flags: []},
-  'openstax/rex-web (release id)': {value: 'master/dfde202', flags: ['locked']},
-  'openstax/highlights-api (sha)': {value: '8575ef7', flags: ['locked']},
-  'openstax/highlights-api (ami)': {value: ['ami-000167d12cf19dce1', 'ami-123'], flags: []}
+  'openstax/rex-web (sha)': { value: 'dfde202', flags: [] },
+  'openstax/rex-web (release id)': { value: 'master/dfde202', flags: ['locked'] },
+  'openstax/highlights-api (sha)': { value: '8575ef7', flags: ['locked'] },
+  'openstax/highlights-api (ami)': { value: ['ami-000167d12cf19dce1', 'ami-123'], flags: [] }
 }
 
 const otherExampleBlock = `# configs
@@ -28,14 +28,14 @@ describe('getBlocks', () => {
   test('finds blocks', () => {
     const result = getBlocks(exampleBlocks)
     expect(result).toEqual([
-      {items: {thing1: {value: 'foo', flags: []}, thing2: {value: ['stuff1', 'stuff2'], flags: ['asdf']}}, name: 'configs', body: otherExampleBlock},
-      {items: expected, name: 'versions', body: exampleBlock}
+      { items: { thing1: { value: 'foo', flags: [] }, thing2: { value: ['stuff1', 'stuff2'], flags: ['asdf'] } }, name: 'configs', body: otherExampleBlock },
+      { items: expected, name: 'versions', body: exampleBlock }
     ])
   })
   test('skips invalid blocks', () => {
     const result = getBlocks('   ' + exampleBlocks)
     expect(result).toEqual([
-      {items: expected, name: 'versions', body: exampleBlock}
+      { items: expected, name: 'versions', body: exampleBlock }
     ])
   })
 })
@@ -101,7 +101,7 @@ describe('getItemValue', () => {
 
 describe('setVersions', () => {
   test('sets versions', () => {
-    const newVersions = {...expected, 'openstax/rex-web (sha)': {value: 'foobar'}}
+    const newVersions = { ...expected, 'openstax/rex-web (sha)': { value: 'foobar' } }
     const result = setItems(`asdf
 asdf
 ${exampleBlock}asdf
@@ -122,8 +122,8 @@ asdf
   test('updates flags', () => {
     const newVersions = {
       ...expected,
-      'openstax/rex-web (sha)': {value: 'foobar'},
-      'openstax/rex-web (release id)': {value: 'foobar2', flags: ['locked', 'bam']}
+      'openstax/rex-web (sha)': { value: 'foobar' },
+      'openstax/rex-web (release id)': { value: 'foobar2', flags: ['locked', 'bam'] }
     }
     const result = setItems(`asdf
 asdf
