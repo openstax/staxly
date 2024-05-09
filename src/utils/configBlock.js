@@ -51,7 +51,7 @@ export const getItems = (body, blockName, filter = () => true) => {
     .map(item => item.flags.includes('csv')
       ? {
           ...item,
-          value: item.value.split(new RegExp(', *')),
+          value: item.value.split(/, */),
           flags: item.flags.filter(flag => flag !== 'csv')
         }
       : item)
