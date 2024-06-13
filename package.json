@@ -40,7 +40,7 @@
     "standard": "^16.0.4"
   },
   "engines": {
-    "node": "14.x"
+    "node": "20.x"
   },
   "standard": {
     "parser": "babel-eslint",
