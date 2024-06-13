@@ -1,4 +1,4 @@
-import { getItems, getItemValue, setItems } from './configBlock'
+import { getItems, getItemValue, setItems } from './configBlock.js'
 
 export const getVersions = (body, filter = () => true) => {
   const items = getItems(body, 'versions', filter)
