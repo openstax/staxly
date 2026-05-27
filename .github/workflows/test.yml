@@ -4,15 +4,15 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '14'
+        node-version: '22'
         cache: yarn
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
     - run: yarn test
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v4
       with:
         verbose: true
