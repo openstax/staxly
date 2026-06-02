@@ -1,4 +1,4 @@
-FROM node:8.9.4-alpine
+FROM node:22-alpine
 
 # These packages will seldom change so we run these first to cache them.
 RUN apk update && \
