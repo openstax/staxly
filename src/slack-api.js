@@ -72,7 +72,11 @@ export default (robot) => {
       }
       logger.trace(`slack_event ${name}`, payload)
       for (const listener of listeners) {
-        await listener(value)
+        try {
+          await listener(value)
+        } catch (err) {
+          logger.error(err, `Unhandled error in slack listener for ${name}`)
+        }
       }
     }
 

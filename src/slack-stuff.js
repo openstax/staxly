@@ -59,7 +59,7 @@ export default (robot) => {
         // This bot is already in the channel so post there
         // Construct the permalink
         const permalink = robot.slackAdapter.getMessagePermalink(message.channel, message.ts)
-        if (!permalink) return
+        if (!permalink) continue
         logger.info(`Posting to ${channelName}: ${permalink}`)
         await slack.sendMessage(`This channel was mentioned in <#${message.channel}> at ${permalink}`, channelId)
         try {
@@ -71,7 +71,7 @@ export default (robot) => {
         // Don't invite the bot to critsit channels. They are faar to common and only last for a little while
         logger.debug(`Ignoring invite request to critsit channel #${channelName}`)
       } else {
-        const sender = robot.slackAdapter.getUserById(message.user)
+        const sender = await robot.slackAdapter.getUserById(message.user)
         logger.info(`Asking ${sender.name} (${message.user}) to invite me to ${channelName} because I have not been invited yet`)
         const botName = robot.slackAdapter.getBrain()?.self.name ?? 'staxly'
         await robot.slackAdapter.sendDM(message.user, `:wave: Hello. I was unable to let <#${channelId}> know that you referred to them. If you think it might be useful to let them know, please type \`/invite @${botName} #${channelName}\` into the Slack text box below.\n\nIf not, sorry about the inconvenience. You can file an issue at https://github.com/openstax/staxly/issues/new`)
