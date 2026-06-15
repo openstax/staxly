@@ -6,11 +6,14 @@ const CRITSIT_PREFIX_REGEXP = /^[xy]-/ // Any channel beginning with "x-" or "y-
 /* istanbul ignore next */
 export default (robot) => {
   const logger = robot.log.child({ name: 'slack-stuff' })
-  // Ensure the slack-api is loaded
-  slackApi(robot)
+  try {
+    slackApi(robot)
+  } catch (err) {
+    logger.error('Slack failed to initialize', err)
+    return
+  }
 
   if (!robot.slackAdapter) {
-    // Slack did not initialize
     return
   }
 
