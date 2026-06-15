@@ -1,4 +1,4 @@
-const { getPipeline, getPipelineStage } = require('../../src/utils/pipeline')
+import { getPipeline, getPipelineStage } from '../../src/utils/pipeline'
 
 const examplePipeline = `# pipeline
 1A-PRE DESIGN

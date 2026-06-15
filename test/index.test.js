@@ -1,9 +1,7 @@
-// Requiring our app implementation
 import myProbotApp from '../src/index.js'
-const nock = require('nock')
-const { Probot, ProbotOctokit } = require('probot')
-
-const issuesOpenedPayload = require('./fixtures/issues.opened.json')
+import nock from 'nock'
+import { Probot, ProbotOctokit } from 'probot'
+import issuesOpenedPayload from './fixtures/issues.opened.json'
 
 test('that we can run tests', () => {
   // your real tests go here

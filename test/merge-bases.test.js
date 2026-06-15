@@ -1,7 +1,6 @@
 import mergeBases from '../src/merge-bases.js'
-
-const nock = require('nock')
-const { Probot } = require('probot')
+import nock from 'nock'
+import { Probot } from 'probot'
 
 const base = {
   name: 'testrepo',
