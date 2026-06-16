@@ -1,4 +1,4 @@
-const { prIsReadyForAutoMerge } = require('../../src/utils/prIsReadyForAutoMerge')
+import { prIsReadyForAutoMerge } from '../../src/utils/prIsReadyForAutoMerge'
 
 const completedPipeline = `# pipeline
 2B-REVIEW

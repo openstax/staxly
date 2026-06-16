@@ -1,13 +1,11 @@
 import trackVersions from '../src/track-versions.js'
-
-const nock = require('nock')
-const { Probot } = require('probot')
+import nock from 'nock'
+import { Probot } from 'probot'
+import { setVersion } from '../src/utils/versionsBlock'
 
 jest.mock('../src/utils/versionsBlock', () => ({
   setVersion: jest.fn()
 }))
-
-const { setVersion } = require('../src/utils/versionsBlock')
 
 describe('track-versions', () => {
   let app
