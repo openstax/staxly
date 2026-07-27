@@ -40,6 +40,11 @@
       "description": "Which GitHub installation number that is used when GitHub communication is initiated by Slack (since the installation is not known at that point in time)",
       "required": false
     },
+    "WEBHOOK_PATH": {
+      "description": "Path Probot listens on for GitHub webhook POSTs. Kept at '/' since that's what the GitHub App's webhook URL is already configured to.",
+      "required": false,
+      "value": "/"
+    },
     "WEBHOOK_PROXY_URL": {
       "description": "Proxy URL for webhooks (used by the dev PullRequests since each dyno cannot register with GitHubwhen it spins up",
       "required": false
