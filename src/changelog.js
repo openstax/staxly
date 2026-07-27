@@ -22,7 +22,7 @@ export default (robot) => {
   const itself = _ => _
 
   async function changedFiles (context) {
-    const merged = context.octokit.pulls.listFiles.endpoint.merge(context.issue())
+    const merged = context.octokit.pulls.listFiles.endpoint.merge(context.pullRequest())
     return context.octokit.paginate(merged, res => {
       return res.data.map(itself)
     })
@@ -94,14 +94,14 @@ export default (robot) => {
       description: descriptionFor(status),
       context: 'changelog'
     })
-    return context.octokit.repos.createStatus(params)
+    return context.octokit.repos.createCommitStatus(params)
   }
 
   function log (context, object) {
     const ctx = { event: context.event, action: context.payload.action }
     const url = context.payload.pull_request.html_url
 
-    robot.log(ctx, context.issue({ url, ...object }))
+    robot.log.info(ctx, context.issue({ url, ...object }))
   }
 
   async function hasLabel (context, label) {
