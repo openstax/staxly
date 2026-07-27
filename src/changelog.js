@@ -2,10 +2,8 @@
 // Based on github.com/mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
-// - uses probot-config to allow inheriting the config from another repository
+// - uses context.config() to allow inheriting the config from another repository
 /* istanbul ignore file */
-
-import getConfig from 'probot-config'
 
 const Status = Object.seal({
   FAIL: Symbol('failure'),
@@ -122,7 +120,7 @@ export default (robot) => {
   }
 
   async function checkChangelog (context) {
-    const config = await getConfig(context, 'config.yml')
+    const config = await context.config('config.yml')
 
     if (!config || !config.changelog) {
       // don't try to run analysis without a config
