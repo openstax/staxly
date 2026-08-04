@@ -101,7 +101,7 @@ export default (robot) => {
     const ctx = { event: context.event, action: context.payload.action }
     const url = context.payload.pull_request.html_url
 
-    robot.log.info(ctx, context.issue({ url, ...object }))
+    robot.log.info({ ...ctx, ...context.issue({ url, ...object }) })
   }
 
   async function hasLabel (context, label) {
