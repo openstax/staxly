@@ -2,10 +2,8 @@
 // Based on github.com/mikz/probot-changelog#8441e070926211ad32b5f0430c9fe30a26f97c6d
 // but modified in the following ways:
 // - uses .github/config.yml (instead of .github/changelog.yml)
-// - uses probot-config to allow inheriting the config from another repository
+// - uses context.config() to allow inheriting the config from another repository
 /* istanbul ignore file */
-
-import getConfig from 'probot-config'
 
 const Status = Object.seal({
   FAIL: Symbol('failure'),
@@ -24,7 +22,7 @@ export default (robot) => {
   const itself = _ => _
 
   async function changedFiles (context) {
-    const merged = context.octokit.pulls.listFiles.endpoint.merge(context.issue())
+    const merged = context.octokit.pulls.listFiles.endpoint.merge(context.pullRequest())
     return context.octokit.paginate(merged, res => {
       return res.data.map(itself)
     })
@@ -96,14 +94,14 @@ export default (robot) => {
       description: descriptionFor(status),
       context: 'changelog'
     })
-    return context.octokit.repos.createStatus(params)
+    return context.octokit.repos.createCommitStatus(params)
   }
 
   function log (context, object) {
     const ctx = { event: context.event, action: context.payload.action }
     const url = context.payload.pull_request.html_url
 
-    robot.log(ctx, context.issue({ url, ...object }))
+    robot.log.info({ ...ctx, ...context.issue({ url, ...object }) })
   }
 
   async function hasLabel (context, label) {
@@ -122,7 +120,7 @@ export default (robot) => {
   }
 
   async function checkChangelog (context) {
-    const config = await getConfig(context, 'config.yml')
+    const config = await context.config('config.yml')
 
     if (!config || !config.changelog) {
       // don't try to run analysis without a config

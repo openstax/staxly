@@ -25,7 +25,6 @@
     "express": "^4.17.3",
     "probot": "^13.4.7",
     "probot-addon-settings": "github:probot/settings#v4.1.11",
-    "probot-config": "^1.1.0",
     "sax": "^1.2.4",
     "smee-client": "^1.2.2"
   },
